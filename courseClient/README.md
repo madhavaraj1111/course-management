@@ -94,4 +94,6 @@ npm install react-router-dom
 
 Setting up of the AppRoutes for the pages
 
+4.Setting the intial slices and store
 
+Initializing the storage Middleware and connecting react and redux in main.jsx using Provider
