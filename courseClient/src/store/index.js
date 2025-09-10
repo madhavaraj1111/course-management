@@ -10,9 +10,8 @@ const store = configureStore({
     progress: progressReducer,
     ui: uiReducer,
   },
-  middleware: (getDefaultMiddleware) => {
-    getDefaultMiddleware().concat(storageMiddleware);
-  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(storageMiddleware),
 });
 
 export default store;

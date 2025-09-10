@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import CourseList from "../pages/CourseList";
 import CourseDetail from "../pages/CourseDetail";
-import CourseCreate from "../pages/CourseCreate";
+import CourseCreate from "../pages/CourseCreate.jsx";
 import NotFound from "../pages/NotFound";
 
 const AppRoutes = () => {

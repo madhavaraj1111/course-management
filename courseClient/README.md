@@ -97,3 +97,7 @@ Setting up of the AppRoutes for the pages
 4.Setting the intial slices and store
 
 Initializing the storage Middleware and connecting react and redux in main.jsx using Provider
+
+5.CourseCreation
+   RichTextEditor.jsx added code
+   
