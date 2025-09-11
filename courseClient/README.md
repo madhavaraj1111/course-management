@@ -103,3 +103,24 @@ RichTextEditor.jsx added code using react-quill-new
 
 Intial code for the  courseCreation form https://gist.github.com/madhavaraj1111/911b4a5cd924cf89dc605710663f2d0f
 
+
+Sprint 1: Project Setup & Course Creation (Week 1)
+1. Project Setup
+Done--
+ Initialize project with Vite + React 
+ Configure ESLint and Prettier 
+ Set up project structure
+ Set up basic navigation with React Router 
+ Configure Redux Toolkit store with initial slices
+
+2. Course Creation Form
+Done--
+ Title with validation (10–60 chars)
+ Description with Quill.js RichTextEditor 
+ Thumbnail (URL) 
+ Category dropdown 
+ Difficulty dropdown 
+ Course Content (sections & lessons) 
+ Lesson contents with RichTextEditor
+Partial Done--
+ Initial browser storage save/load -- Currently saving to local storage but needs to load back populate but it is needed for the edit / update of the course.
