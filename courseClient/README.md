@@ -99,5 +99,7 @@ Setting up of the AppRoutes for the pages
 Initializing the storage Middleware and connecting react and redux in main.jsx using Provider
 
 5.CourseCreation
-   RichTextEditor.jsx added code
-   
+RichTextEditor.jsx added code using react-quill-new
+
+Intial code for the  courseCreation form https://gist.github.com/madhavaraj1111/911b4a5cd924cf89dc605710663f2d0f
+
