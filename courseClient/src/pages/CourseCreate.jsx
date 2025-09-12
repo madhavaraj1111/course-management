@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 import { addCourse } from "../store/slices/coursesSlice";
 import RichTextEditor from "../components/RichTextEditor";
 
 const CourseCreate = () => {
   const dispatch = useDispatch();
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  // State Variables
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
@@ -26,33 +33,38 @@ const CourseCreate = () => {
   };
 
   // This handles the submitted data
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (title.length < 10 || title.length > 60) {
-      alert("Title must be 10-60 characters");
-      return;
-    }
-
-    const course = {
-      title,
-      description,
-      thumbnail,
-      category,
-      difficulty,
-      sections,
-    };
-
-    // Adding course using dispatch
-    dispatch(addCourse(course));
-
-    // Resetting form fields
-    setTitle("");
-    setDescription("");
-    setThumbnail("");
-    setCategory("");
-    setDifficulty("Beginner");
-    setSections([]);
+  const onSubmit = (data) => {
+    console.log("Form Submitted:", data);
+    reset();
   };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // if (title.length < 10 || title.length > 60) {
+  //   //   alert("Title must be 10-60 characters");
+  //   //   return;
+  //   // }
+
+  //   const course = {
+  //     title,
+  //     description,
+  //     thumbnail,
+  //     category,
+  //     difficulty,
+  //     sections,
+  //   };
+
+  //   // Adding course using dispatch
+  //   dispatch(addCourse(course));
+
+  //   // Resetting form fields
+  //   setTitle("");
+  //   setDescription("");
+  //   setThumbnail("");
+  //   setCategory("");
+  //   setDifficulty("Beginner");
+  //   setSections([]);
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -67,7 +79,7 @@ const CourseCreate = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="px-6 py-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-6">
             {/* Basic Information Section */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
@@ -83,15 +95,33 @@ const CourseCreate = () => {
                   <input
                     type="text"
                     placeholder="Enter a compelling title (10-60 characters)"
-                    value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    {...register("title", {
+                      required: "Title is required",
+                      minLength: {
+                        value: 10,
+                        message: "Title must be at least 10 characters",
+                      },
+                      maxLength: {
+                        value: 60,
+                        message: "Title should not exceed 60 characters",
+                      },
+                    })}
                   />
+                  {errors.title && (
+                    <span className="block pt-2 text-sm text-red-500">
+                      {errors.title.message}
+                    </span>
+                  )}
+
+                  {/* Title length count */}
                   <p className="mt-1 text-xs text-gray-500">
                     {title.length}/60 characters
                   </p>
                 </div>
 
+                {/* Course Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
