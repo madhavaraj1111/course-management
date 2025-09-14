@@ -1,70 +1,53 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 import { addCourse } from "../store/slices/coursesSlice";
 import RichTextEditor from "../components/RichTextEditor";
+import store from "../store";
 
 const CourseCreate = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
-  // State Variables
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
-  const [category, setCategory] = useState("");
-  const [difficulty, setDifficulty] = useState("Beginner");
-  const [sections, setSections] = useState([]);
+    control,
+    watch,
+    setValue,
+    getValues,
+  } = useForm({
+    defaultValues: { sections: [] },
+  });
+
+  const titleValue = watch("title") || "";
+  const sections = watch("sections") || [];
 
   // Adding Sections fields using this
   const addSection = () => {
-    setSections([...sections, { title: "", description: "", lessons: [] }]);
+    const currentSections = getValues("sections") || [];
+    setValue("sections", [
+      ...currentSections,
+      { title: "", description: "", lessons: [] },
+    ]);
   };
 
   // Adding lesson fields using this
   const addLesson = (sectionIndex) => {
-    const updatedSections = [...sections];
-    updatedSections[sectionIndex].lessons.push({ title: "", description: "" });
-    setSections(updatedSections);
+    const currentSections = getValues("sections");
+    currentSections[sectionIndex].lessons.push({ title: "", description: "" });
+    setValue("sections", currentSections);
   };
 
   // This handles the submitted data
   const onSubmit = (data) => {
-    console.log("Form Submitted:", data);
+    console.log("Form data:", data);
+    dispatch(addCourse(data));
+    navigate("/courses");
     reset();
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // if (title.length < 10 || title.length > 60) {
-  //   //   alert("Title must be 10-60 characters");
-  //   //   return;
-  //   // }
-
-  //   const course = {
-  //     title,
-  //     description,
-  //     thumbnail,
-  //     category,
-  //     difficulty,
-  //     sections,
-  //   };
-
-  //   // Adding course using dispatch
-  //   dispatch(addCourse(course));
-
-  //   // Resetting form fields
-  //   setTitle("");
-  //   setDescription("");
-  //   setThumbnail("");
-  //   setCategory("");
-  //   setDifficulty("Beginner");
-  //   setSections([]);
-  // };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -95,8 +78,6 @@ const CourseCreate = () => {
                   <input
                     type="text"
                     placeholder="Enter a compelling title (10-60 characters)"
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     {...register("title", {
                       required: "Title is required",
                       minLength: {
@@ -108,16 +89,16 @@ const CourseCreate = () => {
                         message: "Title should not exceed 60 characters",
                       },
                     })}
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
                   {errors.title && (
                     <span className="block pt-2 text-sm text-red-500">
                       {errors.title.message}
                     </span>
                   )}
-
-                  {/* Title length count */}
+                  {/* Title length */}
                   <p className="mt-1 text-xs text-gray-500">
-                    {title.length}/60 characters
+                    {titleValue.length}/60 characters
                   </p>
                 </div>
 
@@ -126,10 +107,22 @@ const CourseCreate = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
                   </label>
-                  <RichTextEditor
-                    value={description}
-                    onChange={setDescription}
+                  <Controller
+                    name="description"
+                    control={control}
+                    rules={{ required: "Description is required" }}
+                    render={({ field }) => (
+                      <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
                   />
+                  {errors.description && (
+                    <span className="block pt-2 text-sm text-red-500">
+                      {errors.description.message}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -142,10 +135,16 @@ const CourseCreate = () => {
                   <input
                     type="text"
                     placeholder="Paste your image URL here"
-                    value={thumbnail}
-                    onChange={(e) => setThumbnail(e.target.value)}
+                    {...register("thumbnail", {
+                      required: "Thumbnail is required",
+                    })}
                     className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
+                  {errors.thumbnail && (
+                    <span className="block pt-2 text-sm text-red-500">
+                      {errors.thumbnail.message}
+                    </span>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -154,8 +153,9 @@ const CourseCreate = () => {
                     Category
                   </label>
                   <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    {...register("category", {
+                      required: "Category is required",
+                    })}
                     className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   >
                     <option value="">Select Category</option>
@@ -164,6 +164,11 @@ const CourseCreate = () => {
                     <option value="Business">Business</option>
                     <option value="Marketing">Marketing</option>
                   </select>
+                  {errors.category && (
+                    <span className="block pt-2 text-sm text-red-500">
+                      {errors.category.message}
+                    </span>
+                  )}
                 </div>
 
                 {/* Difficulty */}
@@ -172,21 +177,26 @@ const CourseCreate = () => {
                     Difficulty Level
                   </label>
                   <select
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
+                    {...register("difficulty", {
+                      required: "Difficulty is required",
+                    })}
                     className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Advanced">Advanced</option>
                   </select>
+                  {errors.difficulty && (
+                    <span className="block pt-2 text-sm text-red-500">
+                      {errors.difficulty.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Sections & Lessons */}
             <div className="mb-8">
-              {/* Add section */}
               <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-700">
                   Course Content
@@ -194,51 +204,20 @@ const CourseCreate = () => {
                 <button
                   type="button"
                   onClick={addSection}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
                 >
-                  <svg
-                    className="-ml-1 mr-2 h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
                   Add Section
                 </button>
               </div>
 
               {sections.length === 0 ? (
-                // Show No sections if not Clicked Add sections
                 <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
                   <h3 className="mt-2 text-sm font-medium text-gray-900">
                     No sections yet
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Get started by creating your first section.
-                  </p>
                 </div>
               ) : (
-                // Show sections fields if have clicked
                 <div className="space-y-4">
-                  {/* Sections Adding */}
                   {sections.map((section, i) => (
                     <div
                       key={i}
@@ -248,130 +227,98 @@ const CourseCreate = () => {
                         <h3 className="text-lg font-medium text-gray-800">
                           Section {i + 1}
                         </h3>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {section.lessons.length}{" "}
-                          {section.lessons.length === 1 ? "lesson" : "lessons"}
-                        </span>
                       </div>
 
                       <div className="p-4 space-y-4">
                         {/* Section Title */}
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Section Title
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Section Title"
-                            value={section.title}
-                            onChange={(e) => {
-                              const updated = [...sections];
-                              updated[i].title = e.target.value;
-                              setSections(updated);
-                            }}
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          placeholder="Section Title"
+                          {...register(`sections.${i}.title`, {
+                            required: "Section title is required",
+                          })}
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm"
+                        />
+                        {errors.sections?.[i]?.title && (
+                          <span className="text-sm text-red-500">
+                            {errors.sections[i].title.message}
+                          </span>
+                        )}
 
                         {/* Section Description */}
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Section Description
-                          </label>
-                          <RichTextEditor
-                            value={section.description}
-                            onChange={(val) => {
-                              const updated = [...sections];
-                              updated[i].description = val;
-                              setSections(updated);
-                            }}
-                          />
-                        </div>
-
-                        <div>
-                          {/* Add lesson button*/}
-                          <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-md font-medium text-gray-700">
-                              Lessons
-                            </h4>
-                            <button
-                              type="button"
-                              onClick={() => addLesson(i)}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                              <svg
-                                className="-ml-0.5 mr-1 h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              Add Lesson
-                            </button>
-                          </div>
-
-                          {/* Lessons Adding */}
-                          {section.lessons.length === 0 ? (
-                            // Show No lessons if not Clicked Add lessons
-                            <div className="text-center py-4 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                              <p className="text-sm text-gray-500">
-                                No lessons in this section yet
-                              </p>
-                            </div>
-                          ) : (
-                            // Show lessons fields if Add Lessons clicked
-                            <div className="space-y-3">
-                              {section.lessons.map((lesson, j) => (
-                                <div
-                                  key={j}
-                                  className="bg-white rounded-lg border border-gray-200 p-4"
-                                >
-                                  <div className="flex items-start">
-                                    <div className="flex-shrink-0 mt-1.5 mr-3">
-                                      {/* Lesson count */}
-                                      <div className="h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center">
-                                        <span className="text-xs font-medium text-indigo-800">
-                                          {j + 1}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="flex-1">
-                                      {/* Lesson title */}
-                                      <input
-                                        type="text"
-                                        placeholder="Lesson Title"
-                                        value={lesson.title}
-                                        onChange={(e) => {
-                                          const updated = [...sections];
-                                          updated[i].lessons[j].title =
-                                            e.target.value;
-                                          setSections(updated);
-                                        }}
-                                        className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mb-2"
-                                      />
-
-                                      {/* Lesson description */}
-                                      <RichTextEditor
-                                        value={lesson.description}
-                                        onChange={(val) => {
-                                          const updated = [...sections];
-                                          updated[i].lessons[j].description =
-                                            val;
-                                          setSections(updated);
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
+                        <Controller
+                          name={`sections.${i}.description`}
+                          control={control}
+                          rules={{
+                            required: "Section description is required",
+                          }}
+                          render={({ field }) => (
+                            <RichTextEditor
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           )}
-                        </div>
+                        />
+                        {errors.sections?.[i]?.description && (
+                          <span className="text-sm text-red-500">
+                            {errors.sections[i].description.message}
+                          </span>
+                        )}
+
+                        {/* Lessons */}
+                        <button
+                          type="button"
+                          onClick={() => addLesson(i)}
+                          className="inline-flex items-center px-3 py-1.5 border text-xs rounded-md bg-indigo-600 text-white"
+                        >
+                          Add Lesson
+                        </button>
+
+                        {section.lessons.map((lesson, j) => (
+                          <div
+                            key={j}
+                            className="bg-white rounded-lg border p-4"
+                          >
+                            {/* Lesson Title */}
+                            <input
+                              type="text"
+                              placeholder="Lesson Title"
+                              {...register(`sections.${i}.lessons.${j}.title`, {
+                                required: "Lesson title is required",
+                              })}
+                              className="block w-full rounded-md border px-3 py-2 mb-2"
+                            />
+                            {errors.sections?.[i]?.lessons?.[j]?.title && (
+                              <span className="text-sm text-red-500">
+                                {errors.sections[i].lessons[j].title.message}
+                              </span>
+                            )}
+
+                            {/* Lesson description */}
+                            <Controller
+                              name={`sections.${i}.lessons.${j}.description`}
+                              control={control}
+                              rules={{
+                                required: "Lesson description is required",
+                              }}
+                              render={({ field }) => (
+                                <RichTextEditor
+                                  value={field.value}
+                                  onChange={field.onChange}
+                                />
+                              )}
+                            />
+                            {errors.sections?.[i]?.lessons?.[j]
+                              ?.description && (
+                              <span className="text-sm text-red-500">
+                                {
+                                  errors.sections[i].lessons[j].description
+                                    .message
+                                }
+                              </span>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -381,10 +328,9 @@ const CourseCreate = () => {
 
             {/* Form Action */}
             <div className="flex justify-end pt-4 border-t border-gray-200">
-              {/* Submit Button */}
               <button
                 type="submit"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
               >
                 Save Course
               </button>
