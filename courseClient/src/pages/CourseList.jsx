@@ -16,12 +16,15 @@ const CourseList = () => {
       {/* Main container - centered and well-aligned */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         {/* Header section - perfectly centered */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 lg:mb-12  p-4 sm:p-6 rounded-lg shadow-lg">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 sm:mb-0">
-            All Courses
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 lg:mb-12  p-4 sm:p-6 rounded-lg shadow-lg bg-gray-500/10">
+          <h1 className="text-2xl sm:text-3xl text-white font-extrabold  mb-4 sm:mb-0">
+            Course List
           </h1>
           <button
-            className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="px-6 py-3 rounded transition-transform duration-200 
+             hover:scale-110 text-white shadow-white 
+             hover:text-cyan-500 border border-transparent hover:border-transparent 
+             shadow-md border-t hover:border-t-cyan-500 border-t-white/30 hover:shadow-cyan-500 cursor-pointer font-semibold"
             onClick={handleReturn}
           >
             Add Course
