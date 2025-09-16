@@ -137,7 +137,7 @@ const CourseCard = ({ course }) => {
                           key={lessonIndex}
                           className="text-sm text-gray-600 flex items-center"
                         >
-                          <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
+                          <div className="w-1.5 h-1.5 bg-red-400 rounded-full mr-3"></div>
                           {lesson.title}
                         </li>
                       ))}
@@ -155,7 +155,7 @@ const CourseCard = ({ course }) => {
             <div className="border-t border-gray-300 pt-4 flex justify-end relative z-10">
               <div className="flex gap-5">
                 {/* Edit */}
-                <button className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-200  rounded transition-colors">
+                <button className="p-2 transition-all text-gray-400 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-200 rounded">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -169,7 +169,7 @@ const CourseCard = ({ course }) => {
                   </svg>
                 </button>
                 {/* Delete */}
-                <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-colors">
+                <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-all">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
