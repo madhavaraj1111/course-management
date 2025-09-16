@@ -1,17 +1,27 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteCourse } from "../store/slices/coursesSlice";
 
 // Color themes for the cover glow
 const cardColors = {
-  Programming: "from-sky-500 to-sky-900",
-  Design: "from-teal-500 to-teal-900",
-  Marketing: "from-rose-500 to-rose-900",
-  Business: "from-amber-500 to-amber-900",
-  Default: "from-purple-500 to-purple-900",
+  Programming: "from-sky-500/20 to-sky-900",
+  Design: "from-teal-500 to-teal-900/20",
+  Marketing: "from-rose-500/30 to-rose-900",
+  Business: "from-amber-500 to-amber-900/20",
+  Default: "from-purple-500/20 to-purple-900",
 };
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course,index }) => {
+  const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const cardColorGradient = cardColors[course.category] || cardColors.Default;
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete "${course.title}"?`)) {
+      dispatch(deleteCourse(index));
+    }
+  };
 
   return (
     <div
@@ -169,7 +179,10 @@ const CourseCard = ({ course }) => {
                   </svg>
                 </button>
                 {/* Delete */}
-                <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-all">
+                <button
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-all"
+                  onClick={handleDelete}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"

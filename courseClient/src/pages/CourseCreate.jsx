@@ -95,7 +95,7 @@ const CourseCreate = () => {
                         message: "Title should not exceed 60 characters",
                       },
                     })}
-                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white placeholder-white/50 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="outline-none mt-1 block w-full rounded-md bg-white/10  border-white/20 px-4 py-2 text-white placeholder-white/50 placeholder:text-sm shadow-sm focus:border-indigo-300  focus:ring-indigo-200 focus:ring-opacity-50"
                   />
                   {errors.title && (
                     <span className="block pt-2 text-sm text-red-300">
@@ -163,14 +163,45 @@ const CourseCreate = () => {
                     {...register("category", {
                       required: "Category is required",
                     })}
-                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="w-full rounded-lg px-4 py-2 text-white text-sm
+      bg-white/5 border border-white/20 
+      shadow-sm placeholder-white/50
+       outline-none"
                   >
-                    <option value="" className="bg-navy-800">Select Category</option>
-                    <option value="Programming" className="bg-navy-800">Programming</option>
-                    <option value="Design" className="bg-navy-800">Design</option>
-                    <option value="Business" className="bg-navy-800">Business</option>
-                    <option value="Marketing" className="bg-navy-800">Marketing</option>
+                    <option
+                      value=""
+                      disabled
+                      selected
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Select Category
+                    </option>
+                    <option
+                      value="Programming"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Programming
+                    </option>
+                    <option
+                      value="Design"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Design
+                    </option>
+                    <option
+                      value="Business"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Business
+                    </option>
+                    <option
+                      value="Marketing"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Marketing
+                    </option>
                   </select>
+
                   {errors.category && (
                     <span className="block pt-2 text-sm text-red-300">
                       {errors.category.message}
@@ -187,12 +218,28 @@ const CourseCreate = () => {
                     {...register("difficulty", {
                       required: "Difficulty is required",
                     })}
-                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="w-full rounded-lg px-4 py-2 text-white text-sm border border-white/20  shadow-sm placeholder-white/50 outline-none"
                   >
-                    <option value="Beginner" className="bg-navy-800">Beginner</option>
-                    <option value="Intermediate" className="bg-navy-800">Intermediate</option>
-                    <option value="Advanced" className="bg-navy-800">Advanced</option>
+                    <option
+                      value="Beginner"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Beginner
+                    </option>
+                    <option
+                      value="Intermediate"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Intermediate
+                    </option>
+                    <option
+                      value="Advanced"
+                      className="bg-gray-900/80 text-white"
+                    >
+                      Advanced
+                    </option>
                   </select>
+
                   {errors.difficulty && (
                     <span className="block pt-2 text-sm text-red-300">
                       {errors.difficulty.message}
@@ -211,9 +258,9 @@ const CourseCreate = () => {
                 <button
                   type="button"
                   onClick={addSection}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-500/80 hover:bg-indigo-500 backdrop-blur-sm"
+                  className=" inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-700/80 hover:bg-cyan-600 cursor-pointer backdrop-blur-sm"
                 >
-                  Add Section
+                  + Add Section
                 </button>
               </div>
 
@@ -228,14 +275,16 @@ const CourseCreate = () => {
                   {sections.map((section, i) => (
                     <div
                       key={i}
-                      className="bg-white/5 rounded-lg border border-white/10 overflow-hidden"
+                      className="rounded-lg border border-white/10 overflow-hidden"
                     >
+                      {/* Section Label */}
                       <div className="bg-white/10 px-4 py-3 border-b border-white/10 flex justify-between items-center">
                         <h3 className="text-lg font-medium text-white">
                           Section {i + 1}
                         </h3>
                       </div>
 
+                      {/* Section Body (no background now, only border around whole box) */}
                       <div className="p-4 space-y-4">
                         {/* Section Title */}
                         <input
@@ -244,7 +293,7 @@ const CourseCreate = () => {
                           {...register(`sections.${i}.title`, {
                             required: "Section title is required",
                           })}
-                          className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-white placeholder-white/50 shadow-sm"
+                          className="mt-1 block w-full rounded-md border  border-white/70 px-3 py-2 text-white shadow-sm placeholder:text-sm"
                         />
                         {errors.sections?.[i]?.title && (
                           <span className="text-sm text-red-300">
@@ -277,7 +326,7 @@ const CourseCreate = () => {
                         <button
                           type="button"
                           onClick={() => addLesson(i)}
-                          className="inline-flex items-center px-3 py-1.5 border text-xs rounded-md bg-indigo-500/80 text-white backdrop-blur-sm"
+                          className="inline-flex items-center px-3 py-1.5 cursor-pointer text-xs rounded-md bg-cyan-700 text-white backdrop-blur-sm"
                         >
                           Add Lesson
                         </button>
@@ -285,16 +334,16 @@ const CourseCreate = () => {
                         {section.lessons.map((lesson, j) => (
                           <div
                             key={j}
-                            className="bg-white/5 rounded-lg border border-white/10 p-4"
+                            className="rounded-lg border border-white/10 p-4"
                           >
                             {/* Lesson Title */}
                             <input
                               type="text"
-                              placeholder="Lesson Title"
+                              placeholder="Lesson Title here..."
                               {...register(`sections.${i}.lessons.${j}.title`, {
                                 required: "Lesson title is required",
                               })}
-                              className="block w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 mb-2 text-white placeholder-white/50"
+                              className="block w-full rounded-md outline-none border  px-3 py-2 mb-2 border-white/70 text-white placeholder-white/50"
                             />
                             {errors.sections?.[i]?.lessons?.[j]?.title && (
                               <span className="text-sm text-red-300">
@@ -339,7 +388,7 @@ const CourseCreate = () => {
             <div className="flex justify-end pt-4 border-t border-white/20">
               <button
                 type="submit"
-                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-indigo-500/80 hover:bg-indigo-500 backdrop-blur-sm"
+                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-cyan-800/80 hover:bg-cyan-700 cursor-pointer backdrop-blur-sm"
               >
                 Save Course
               </button>

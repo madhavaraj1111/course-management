@@ -81,7 +81,12 @@ const CourseList = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         {/* Header Section */}
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-8 p-4 rounded-lg shadow-lg bg-gray-500/10">
-          <h1 className="text-2xl sm:text-3xl text-white font-extrabold">
+          <h1
+            className="text-3xl sm:text-4xl font-extrabold 
+    text-transparent bg-clip-text 
+    bg-gradient-to-r from-white/80 to-white/40 
+    drop-shadow-lg"
+          >
             Course List
           </h1>
 
@@ -93,62 +98,80 @@ const CourseList = () => {
               placeholder="Search by title or category..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="px-4 py-2 rounded bg-gray-700 text-white 
-                 focus:outline-none focus:ring-2 focus:ring-cyan-500
-                 w-full sm:w-60"
+              className="w-full sm:w-60 px-4 py-2 rounded-lg text-white text-sm
+      bg-white/10 backdrop-blur-md shadow-sm placeholder-white/50
+      outline-none focus:outline-none"
             />
-
             {/* Category Filter */}
             <select
               value={filterCategory}
               onChange={handleCategoryChange}
-              className="px-4 py-2 rounded bg-gray-700 text-white 
-                 focus:outline-none focus:ring-2 focus:ring-cyan-500
-                 w-full sm:w-auto"
+              className="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm
+      bg-white/10 backdrop-blur-md shadow-sm
+      outline-none focus:outline-none"
             >
-              <option value="all">All Categories</option>
-              <option value="programming">Programming</option>
-              <option value="design">Design</option>
-              <option value="business">Business</option>
-              <option value="marketing">Marketing</option>
+              <option value="all" className="bg-gray-900/80 text-white">
+                All Categories
+              </option>
+              <option value="programming" className="bg-gray-900/80 text-white">
+                Programming
+              </option>
+              <option value="design" className="bg-gray-900/80 text-white">
+                Design
+              </option>
+              <option value="business" className="bg-gray-900/80 text-white">
+                Business
+              </option>
+              <option value="marketing" className="bg-gray-900/80 text-white">
+                Marketing
+              </option>
             </select>
-
             {/* Difficulty Filter */}
             <select
               value={filterDifficulty}
               onChange={handleDifficultyChange}
-              className="px-4 py-2 rounded bg-gray-700 text-white 
-                 focus:outline-none focus:ring-2 focus:ring-cyan-500
-                 w-full sm:w-auto"
+              className="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm
+      bg-white/10 backdrop-blur-md shadow-sm
+      outline-none focus:outline-none"
             >
-              <option value="all">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
+              <option value="all" className="bg-gray-900/80 text-white">
+                All Levels
+              </option>
+              <option value="beginner" className="bg-gray-900/80 text-white">
+                Beginner
+              </option>
+              <option
+                value="intermediate"
+                className="bg-gray-900/80 text-white"
+              >
+                Intermediate
+              </option>
+              <option value="advanced" className="bg-gray-900/80 text-white">
+                Advanced
+              </option>
             </select>
-
             {/* Sort */}
             <select
               value={sortOption}
               onChange={handleSortChange}
-              className="px-4 py-2 rounded bg-gray-700 text-white 
-                 focus:outline-none focus:ring-2 focus:ring-cyan-500
-                 w-full sm:w-auto"
+              className="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm
+      bg-white/10 backdrop-blur-md shadow-sm
+      outline-none focus:outline-none"
             >
-              <option value="title-asc">Title (A-Z)</option>
-              <option value="title-desc">Title (Z-A)</option>
+              <option value="title-asc" className="bg-gray-900/80 text-white">
+                Title (A-Z)
+              </option>
+              <option value="title-desc" className="bg-gray-900/80 text-white">
+                Title (Z-A)
+              </option>
             </select>
-
-            {/* Add Course */}
+            {/* Add Course */}{" "}
             <button
               onClick={handleReturn}
-              className="px-6 py-3 rounded transition-transform duration-200 
-                 hover:scale-110 text-white shadow-white hover:text-cyan-500
-                 border border-transparent shadow-md border-t hover:border-t-cyan-500
-                 border-t-white/30 hover:shadow-cyan-500 cursor-pointer font-semibold
-                 w-full sm:w-auto"
+              className="px-6 py-3 rounded transition-transform duration-200 hover:scale-110 text-white shadow-white hover:text-cyan-500 border border-transparent shadow-md border-t hover:border-t-cyan-500 border-t-white/30 hover:shadow-cyan-500 cursor-pointer font-semibold w-full sm:w-auto"
             >
-              Add Course
+              {" "}
+              Add Course{" "}
             </button>
           </div>
         </div>
@@ -156,9 +179,17 @@ const CourseList = () => {
         {/* Course Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-12 place-items-center">
           {currentCourses.length > 0 ? (
-            currentCourses.map((course, index) => (
-              <CourseCard key={index} course={course} />
-            ))
+            currentCourses.map((course, index) => {
+              // Find the actual index in the original courses array
+              const actualIndex = courses.findIndex((c) => c === course);
+              return (
+                <CourseCard
+                  key={actualIndex}
+                  course={course}
+                  index={actualIndex}
+                />
+              );
+            })
           ) : (
             <p className="text-white text-center col-span-full">
               No courses found.

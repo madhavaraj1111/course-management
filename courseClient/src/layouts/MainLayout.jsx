@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <div
       className="min-h-screen w-screen flex items-center justify-center 
-      bg-primary"
+      from-cyan-950 via-primary to-primary bg-gradient-to-br "
     >
       <Outlet />
     </div>
