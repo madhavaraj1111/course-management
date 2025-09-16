@@ -104,7 +104,7 @@ Included validation for the input fields
 
 Intial code for the courseCreation form https://gist.github.com/madhavaraj1111/911b4a5cd924cf89dc605710663f2d0f
 
-Sprint 1: Project Setup & Course Creation (Week 1)
+6.Sprint 1: Project Setup & Course Creation (Week 1)
 
 1. Project Setup
    Done--
@@ -125,3 +125,13 @@ Sprint 1: Project Setup & Course Creation (Week 1)
    Lesson contents with RichTextEditor
    Partial Done--
    Initial browser storage save/load -- Currently saving to local storage but needs to load back populate but it is needed for the edit / update of the course.
+
+
+7.Sprint 2 start
+
+--> Course Card Display.
+--> Designing of the card like book
+--> Show title,thumbnail course inner content sections and lessons
+--> Pagination to show up 10 cards per page
+
+
