@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { addCourse } from "../store/slices/coursesSlice";
 import RichTextEditor from "../components/RichTextEditor";
 import store from "../store";
+import CourseCard from "../components/CourseCard";
 
 const CourseCreate = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,10 @@ const CourseCreate = () => {
   });
 
   const titleValue = watch("title") || "";
+  const descriptionValue = watch("description") || "";
+  const thumbnailValue = watch("thumbnail") || "";
+  const categoryValue = watch("category") || "Default";
+  const difficultyValue = watch("difficulty") || "Beginner";
   const sections = watch("sections") || [];
 
   // Adding Sections fields using this
@@ -50,14 +55,15 @@ const CourseCreate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          <div className="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h1 className="text-3xl font-bold text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-10">
+        {/* Left: Form */}
+        <div className="flex-1 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-white/20">
+            <h1 className="text-3xl font-bold text-white drop-shadow">
               Create New Course
             </h1>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-white/80">
               Fill out the form below to create a new course
             </p>
           </div>
@@ -65,14 +71,14 @@ const CourseCreate = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-6">
             {/* Basic Information Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-white/30">
                 Basic Information
               </h2>
 
               {/* Title */}
               <div className="grid grid-cols-1 gap-6 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-white mb-1">
                     Course Title
                   </label>
                   <input
@@ -89,22 +95,22 @@ const CourseCreate = () => {
                         message: "Title should not exceed 60 characters",
                       },
                     })}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white placeholder-white/50 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   />
                   {errors.title && (
-                    <span className="block pt-2 text-sm text-red-500">
+                    <span className="block pt-2 text-sm text-red-300">
                       {errors.title.message}
                     </span>
                   )}
                   {/* Title length */}
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-white/70">
                     {titleValue.length}/60 characters
                   </p>
                 </div>
 
                 {/* Course Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-white mb-1">
                     Description
                   </label>
                   <Controller
@@ -115,11 +121,12 @@ const CourseCreate = () => {
                       <RichTextEditor
                         value={field.value}
                         onChange={field.onChange}
+                        glassMode={true}
                       />
                     )}
                   />
                   {errors.description && (
-                    <span className="block pt-2 text-sm text-red-500">
+                    <span className="block pt-2 text-sm text-red-300">
                       {errors.description.message}
                     </span>
                   )}
@@ -129,7 +136,7 @@ const CourseCreate = () => {
               {/* Thumbnail */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-white mb-1">
                     Thumbnail URL
                   </label>
                   <input
@@ -138,10 +145,10 @@ const CourseCreate = () => {
                     {...register("thumbnail", {
                       required: "Thumbnail is required",
                     })}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white placeholder-white/50 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   />
                   {errors.thumbnail && (
-                    <span className="block pt-2 text-sm text-red-500">
+                    <span className="block pt-2 text-sm text-red-300">
                       {errors.thumbnail.message}
                     </span>
                   )}
@@ -149,23 +156,23 @@ const CourseCreate = () => {
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-white mb-1">
                     Category
                   </label>
                   <select
                     {...register("category", {
                       required: "Category is required",
                     })}
-                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   >
-                    <option value="">Select Category</option>
-                    <option value="Programming">Programming</option>
-                    <option value="Design">Design</option>
-                    <option value="Business">Business</option>
-                    <option value="Marketing">Marketing</option>
+                    <option value="" className="bg-navy-800">Select Category</option>
+                    <option value="Programming" className="bg-navy-800">Programming</option>
+                    <option value="Design" className="bg-navy-800">Design</option>
+                    <option value="Business" className="bg-navy-800">Business</option>
+                    <option value="Marketing" className="bg-navy-800">Marketing</option>
                   </select>
                   {errors.category && (
-                    <span className="block pt-2 text-sm text-red-500">
+                    <span className="block pt-2 text-sm text-red-300">
                       {errors.category.message}
                     </span>
                   )}
@@ -173,21 +180,21 @@ const CourseCreate = () => {
 
                 {/* Difficulty */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-white mb-1">
                     Difficulty Level
                   </label>
                   <select
                     {...register("difficulty", {
                       required: "Difficulty is required",
                     })}
-                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-4 py-2 text-white shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   >
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
+                    <option value="Beginner" className="bg-navy-800">Beginner</option>
+                    <option value="Intermediate" className="bg-navy-800">Intermediate</option>
+                    <option value="Advanced" className="bg-navy-800">Advanced</option>
                   </select>
                   {errors.difficulty && (
-                    <span className="block pt-2 text-sm text-red-500">
+                    <span className="block pt-2 text-sm text-red-300">
                       {errors.difficulty.message}
                     </span>
                   )}
@@ -197,22 +204,22 @@ const CourseCreate = () => {
 
             {/* Sections & Lessons */}
             <div className="mb-8">
-              <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-700">
+              <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/30">
+                <h2 className="text-xl font-semibold text-white">
                   Course Content
                 </h2>
                 <button
                   type="button"
                   onClick={addSection}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-500/80 hover:bg-indigo-500 backdrop-blur-sm"
                 >
                   Add Section
                 </button>
               </div>
 
               {sections.length === 0 ? (
-                <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">
+                <div className="text-center py-8 bg-white/5 rounded-lg border-2 border-dashed border-white/20">
+                  <h3 className="mt-2 text-sm font-medium text-white">
                     No sections yet
                   </h3>
                 </div>
@@ -221,10 +228,10 @@ const CourseCreate = () => {
                   {sections.map((section, i) => (
                     <div
                       key={i}
-                      className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
+                      className="bg-white/5 rounded-lg border border-white/10 overflow-hidden"
                     >
-                      <div className="bg-white px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-                        <h3 className="text-lg font-medium text-gray-800">
+                      <div className="bg-white/10 px-4 py-3 border-b border-white/10 flex justify-between items-center">
+                        <h3 className="text-lg font-medium text-white">
                           Section {i + 1}
                         </h3>
                       </div>
@@ -237,10 +244,10 @@ const CourseCreate = () => {
                           {...register(`sections.${i}.title`, {
                             required: "Section title is required",
                           })}
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm"
+                          className="mt-1 block w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-white placeholder-white/50 shadow-sm"
                         />
                         {errors.sections?.[i]?.title && (
-                          <span className="text-sm text-red-500">
+                          <span className="text-sm text-red-300">
                             {errors.sections[i].title.message}
                           </span>
                         )}
@@ -256,11 +263,12 @@ const CourseCreate = () => {
                             <RichTextEditor
                               value={field.value}
                               onChange={field.onChange}
+                              glassMode={true}
                             />
                           )}
                         />
                         {errors.sections?.[i]?.description && (
-                          <span className="text-sm text-red-500">
+                          <span className="text-sm text-red-300">
                             {errors.sections[i].description.message}
                           </span>
                         )}
@@ -269,7 +277,7 @@ const CourseCreate = () => {
                         <button
                           type="button"
                           onClick={() => addLesson(i)}
-                          className="inline-flex items-center px-3 py-1.5 border text-xs rounded-md bg-indigo-600 text-white"
+                          className="inline-flex items-center px-3 py-1.5 border text-xs rounded-md bg-indigo-500/80 text-white backdrop-blur-sm"
                         >
                           Add Lesson
                         </button>
@@ -277,7 +285,7 @@ const CourseCreate = () => {
                         {section.lessons.map((lesson, j) => (
                           <div
                             key={j}
-                            className="bg-white rounded-lg border p-4"
+                            className="bg-white/5 rounded-lg border border-white/10 p-4"
                           >
                             {/* Lesson Title */}
                             <input
@@ -286,10 +294,10 @@ const CourseCreate = () => {
                               {...register(`sections.${i}.lessons.${j}.title`, {
                                 required: "Lesson title is required",
                               })}
-                              className="block w-full rounded-md border px-3 py-2 mb-2"
+                              className="block w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 mb-2 text-white placeholder-white/50"
                             />
                             {errors.sections?.[i]?.lessons?.[j]?.title && (
-                              <span className="text-sm text-red-500">
+                              <span className="text-sm text-red-300">
                                 {errors.sections[i].lessons[j].title.message}
                               </span>
                             )}
@@ -305,12 +313,13 @@ const CourseCreate = () => {
                                 <RichTextEditor
                                   value={field.value}
                                   onChange={field.onChange}
+                                  glassMode={true}
                                 />
                               )}
                             />
                             {errors.sections?.[i]?.lessons?.[j]
                               ?.description && (
-                              <span className="text-sm text-red-500">
+                              <span className="text-sm text-red-300">
                                 {
                                   errors.sections[i].lessons[j].description
                                     .message
@@ -327,15 +336,33 @@ const CourseCreate = () => {
             </div>
 
             {/* Form Action */}
-            <div className="flex justify-end pt-4 border-t border-gray-200">
+            <div className="flex justify-end pt-4 border-t border-white/20">
               <button
                 type="submit"
-                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-indigo-500/80 hover:bg-indigo-500 backdrop-blur-sm"
               >
                 Save Course
               </button>
             </div>
           </form>
+        </div>
+
+        {/* Right: Fixed Live Preview */}
+        <div className="w-full lg:w-1/3 lg:sticky lg:top-8 lg:self-start flex justify-center items-start pt-10">
+          <div className="rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg p-4">
+            <CourseCard
+              course={{
+                title: titleValue || "Untitled Course",
+                description: descriptionValue || "No description yet...",
+                thumbnail:
+                  thumbnailValue ||
+                  "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png",
+                category: categoryValue,
+                difficulty: difficultyValue,
+                sections: sections,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -25,13 +25,15 @@ const CourseList = () => {
   // --- STEP 2: Filters ---
   if (filterCategory !== "all") {
     filteredCourses = filteredCourses.filter(
-      (course) => course.category?.toLowerCase() === filterCategory.toLowerCase()
+      (course) =>
+        course.category?.toLowerCase() === filterCategory.toLowerCase()
     );
   }
 
   if (filterDifficulty !== "all") {
     filteredCourses = filteredCourses.filter(
-      (course) => course.difficulty?.toLowerCase() === filterDifficulty.toLowerCase()
+      (course) =>
+        course.difficulty?.toLowerCase() === filterDifficulty.toLowerCase()
     );
   }
 
@@ -45,7 +47,10 @@ const CourseList = () => {
   // --- STEP 4: Pagination ---
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const currentCourses = sortedCourses.slice(
+    indexOfFirstCourse,
+    indexOfLastCourse
+  );
   const totalPages = Math.ceil(sortedCourses.length / coursesPerPage);
 
   const goToPage = (pageNumber) => {
@@ -75,79 +80,78 @@ const CourseList = () => {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         {/* Header Section */}
-<div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-8 p-4 rounded-lg shadow-lg bg-gray-500/10">
-  <h1 className="text-2xl sm:text-3xl text-white font-extrabold">
-    Course List
-  </h1>
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-8 p-4 rounded-lg shadow-lg bg-gray-500/10">
+          <h1 className="text-2xl sm:text-3xl text-white font-extrabold">
+            Course List
+          </h1>
 
-  {/* Controls wrapper */}
-  <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full sm:w-auto">
-    {/* Search */}
-    <input
-      type="text"
-      placeholder="Search by title or category..."
-      value={searchQuery}
-      onChange={handleSearchChange}
-      className="px-4 py-2 rounded bg-gray-700 text-white 
+          {/* Controls wrapper */}
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full sm:w-auto">
+            {/* Search */}
+            <input
+              type="text"
+              placeholder="Search by title or category..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="px-4 py-2 rounded bg-gray-700 text-white 
                  focus:outline-none focus:ring-2 focus:ring-cyan-500
                  w-full sm:w-60"
-    />
+            />
 
-    {/* Category Filter */}
-    <select
-      value={filterCategory}
-      onChange={handleCategoryChange}
-      className="px-4 py-2 rounded bg-gray-700 text-white 
+            {/* Category Filter */}
+            <select
+              value={filterCategory}
+              onChange={handleCategoryChange}
+              className="px-4 py-2 rounded bg-gray-700 text-white 
                  focus:outline-none focus:ring-2 focus:ring-cyan-500
                  w-full sm:w-auto"
-    >
-      <option value="all">All Categories</option>
-      <option value="programming">Programming</option>
-      <option value="design">Design</option>
-      <option value="business">Business</option>
-      <option value="marketing">Marketing</option>
-    </select>
+            >
+              <option value="all">All Categories</option>
+              <option value="programming">Programming</option>
+              <option value="design">Design</option>
+              <option value="business">Business</option>
+              <option value="marketing">Marketing</option>
+            </select>
 
-    {/* Difficulty Filter */}
-    <select
-      value={filterDifficulty}
-      onChange={handleDifficultyChange}
-      className="px-4 py-2 rounded bg-gray-700 text-white 
+            {/* Difficulty Filter */}
+            <select
+              value={filterDifficulty}
+              onChange={handleDifficultyChange}
+              className="px-4 py-2 rounded bg-gray-700 text-white 
                  focus:outline-none focus:ring-2 focus:ring-cyan-500
                  w-full sm:w-auto"
-    >
-      <option value="all">All Levels</option>
-      <option value="beginner">Beginner</option>
-      <option value="intermediate">Intermediate</option>
-      <option value="advanced">Advanced</option>
-    </select>
+            >
+              <option value="all">All Levels</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
 
-    {/* Sort */}
-    <select
-      value={sortOption}
-      onChange={handleSortChange}
-      className="px-4 py-2 rounded bg-gray-700 text-white 
+            {/* Sort */}
+            <select
+              value={sortOption}
+              onChange={handleSortChange}
+              className="px-4 py-2 rounded bg-gray-700 text-white 
                  focus:outline-none focus:ring-2 focus:ring-cyan-500
                  w-full sm:w-auto"
-    >
-      <option value="title-asc">Title (A-Z)</option>
-      <option value="title-desc">Title (Z-A)</option>
-    </select>
+            >
+              <option value="title-asc">Title (A-Z)</option>
+              <option value="title-desc">Title (Z-A)</option>
+            </select>
 
-    {/* Add Course */}
-    <button
-      onClick={handleReturn}
-      className="px-6 py-3 rounded transition-transform duration-200 
+            {/* Add Course */}
+            <button
+              onClick={handleReturn}
+              className="px-6 py-3 rounded transition-transform duration-200 
                  hover:scale-110 text-white shadow-white hover:text-cyan-500
                  border border-transparent shadow-md border-t hover:border-t-cyan-500
                  border-t-white/30 hover:shadow-cyan-500 cursor-pointer font-semibold
                  w-full sm:w-auto"
-    >
-      Add Course
-    </button>
-  </div>
-</div>
-
+            >
+              Add Course
+            </button>
+          </div>
+        </div>
 
         {/* Course Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-12 place-items-center">
@@ -156,7 +160,9 @@ const CourseList = () => {
               <CourseCard key={index} course={course} />
             ))
           ) : (
-            <p className="text-white text-center col-span-full">No courses found.</p>
+            <p className="text-white text-center col-span-full">
+              No courses found.
+            </p>
           )}
         </div>
 
