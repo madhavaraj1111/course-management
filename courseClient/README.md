@@ -139,3 +139,67 @@ Intial code for the courseCreation form https://gist.github.com/madhavaraj1111/9
 --> Course Form shared component for the Creation and Updation 
 --> Added Button component
 --> Added FormSelect Component
+--> Added CheckBox component
+
+Folder Structure Update 
+
+course-management-system/
+├── src/
+│ ├── components/
+│ │ ├── Button.jsx
+│ │ ├── Modal.jsx
+│ │ ├── CourseCard.jsx
+│ │ ├── RichTextEditor.jsx
+│ │ ├── CourseForm.jsx           # New component for course form
+│ │ ├── FormSelect.jsx           # New component for form select input
+│ │ └── CheckBox.jsx             # New component for checkbox input
+│ │
+│ ├── pages/
+│ │ ├── Dashboard.jsx
+│ │ ├── CourseList.jsx
+│ │ ├── CourseDetail.jsx
+│ │ ├── CourseCreate.jsx
+│ │ ├── CourseUpdate.jsx         # New page for course update
+│ │ └── NotFound.jsx
+│ │
+│ ├── layouts/
+│ │ └── MainLayout.jsx
+│ │
+│ ├── store/
+│ │ ├── index.js
+│ │ ├── slices/
+│ │ │ ├── coursesSlice.js
+│ │ │ ├── progressSlice.js
+│ │ │ └── uiSlice.js
+│ │ └── middleware/
+│ │ └── storageMiddleware.js
+│ │
+│ ├── hooks/
+│ │ ├── useLocalStorage.js
+│ │ └── useDebounce.js
+│ │
+│ ├── utils/
+│ │ ├── storage.js
+│ │ ├── validation.js
+│ │ └── sanitize.js
+│ │
+│ ├── styles/
+│ │ ├── globals.css
+│ │ └── components.css
+│ │
+│ ├── routes/
+│ │ └── AppRoutes.jsx
+│ │
+│ ├── assets/
+│ │ └── logo.png
+│ │
+│ ├── App.jsx
+│ ├── main.jsx
+│ └── index.css
+│
+├── .eslintrc.js
+├── tailwind.config.js
+├── vite.config.js
+├── package.json
+└── README.md
+
