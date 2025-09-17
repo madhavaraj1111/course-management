@@ -134,6 +134,8 @@ Intial code for the courseCreation form https://gist.github.com/madhavaraj1111/9
 --> Show title,thumbnail course inner content sections and lessons
 --> Pagination to show up 10 cards per page
 --> Delete feature for the course
---> Update feature for the course
+--> Update feature for the course with route
 --> Validation for the Updation form
-
+--> Course Form shared component for the Creation and Updation 
+--> Added Button component
+--> Added FormSelect Component

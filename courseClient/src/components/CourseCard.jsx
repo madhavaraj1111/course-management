@@ -12,7 +12,13 @@ const cardColors = {
   Default: "from-purple-500 to-purple-900/5",
 };
 
-const CourseCard = ({ course, index, preview = false }) => {
+const CourseCard = ({
+  course,
+  index,
+  preview = false,
+  selected,
+  onToggleSelect,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
@@ -37,6 +43,17 @@ const CourseCard = ({ course, index, preview = false }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Checkbox */}
+      {!preview && (
+        <div className="absolute top-2 left-2 z-20">
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={onToggleSelect}
+            className="w-4 h-4 cursor-pointer"
+          />
+        </div>
+      )}
       {/* Book Container */}
       <div className="relative w-full h-full transform-style-preserve-3d">
         {/* Spine / Back */}
@@ -70,7 +87,7 @@ const CourseCard = ({ course, index, preview = false }) => {
               </div>
             </div>
 
-            {/* Thumbnail  */}
+            {/* Thumbnail */}
             <div className="relative z-10 flex-1 flex items-center justify-center">
               <div className="w-48 h-36 rounded-xl overflow-hidden shadow-md border border-white/20 backdrop-blur-sm relative">
                 <img
@@ -82,13 +99,13 @@ const CourseCard = ({ course, index, preview = false }) => {
                 {/* faded corners / vignette overlay */}
                 <div
                   className="absolute inset-0 rounded-xl 
-        bg-gradient-to-tr from-black/40 via-transparent to-black/40 
-        pointer-events-none"
+                  bg-gradient-to-tr from-black/40 via-transparent to-black/40 
+                  pointer-events-none"
                 ></div>
                 <div
                   className="absolute inset-0 rounded-xl 
-        bg-gradient-to-bl from-black/30 via-transparent to-black/30 
-        pointer-events-none"
+                  bg-gradient-to-bl from-black/30 via-transparent to-black/30 
+                  pointer-events-none"
                 ></div>
               </div>
             </div>

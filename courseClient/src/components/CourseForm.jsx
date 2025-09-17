@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import RichTextEditor from "../components/RichTextEditor";
 import CourseCard from "../components/CourseCard";
+import Button from "./Button";
+import FormSelect from "./FormSelect";
 
-const CourseForm = ({ 
-  initialData = {}, 
-  onSubmit, 
-  onCancel, 
+const CourseForm = ({
+  initialData = {},
+  onSubmit,
+  onCancel,
   mode = "create",
-  loading = false 
+  loading = false,
 }) => {
   const {
     register,
@@ -27,7 +29,7 @@ const CourseForm = ({
       category: "Programming",
       difficulty: "Beginner",
       sections: [],
-      ...initialData
+      ...initialData,
     },
   });
 
@@ -88,10 +90,9 @@ const CourseForm = ({
             {isCreate ? "Create New Course" : "Edit Course"}
           </h1>
           <p className="text-white/60">
-            {isCreate 
+            {isCreate
               ? "Build an engaging course with structured content and lessons"
-              : "Make changes to your course content and structure"
-            }
+              : "Make changes to your course content and structure"}
           </p>
         </div>
 
@@ -117,7 +118,7 @@ const CourseForm = ({
                         {...register("thumbnail", {
                           required: "Thumbnail URL is required",
                         })}
-                        className="w-full p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
+                        className="w-full p-4 rounded-lg bg-white/10 text-white border border-white/20  outline-none transition-all"
                         placeholder="Enter thumbnail URL"
                       />
                       {errors.thumbnail && (
@@ -179,25 +180,25 @@ const CourseForm = ({
                       <label className="block text-white/80 text-sm font-medium mb-3">
                         Category
                       </label>
-                      <select
-                        {...register("category", {
-                          required: "Category is required",
-                        })}
-                        className="w-full px-4 py-3 rounded-lg bg-white/10 text-white border border-white/20 outline-none transition-all"
-                      >
-                        <option value="Programming" className="bg-gray-800/90 text-white">
-                          Programming
-                        </option>
-                        <option value="Design" className="bg-gray-800/90 text-white">
-                          Design
-                        </option>
-                        <option value="Business" className="bg-gray-800/90 text-white">
-                          Business
-                        </option>
-                        <option value="Marketing" className="bg-gray-800/90 text-white">
-                          Marketing
-                        </option>
-                      </select>
+                      <Controller
+                        name="category"
+                        control={control}
+                        rules={{ required: "Category is required" }}
+                        render={({ field }) => (
+                          <FormSelect
+                            className="w-full"
+                            {...field}
+                            options={[
+                              { label: "Programming", value: "Programming" },
+                              { label: "Design", value: "Design" },
+                              { label: "Business", value: "Business" },
+                              { label: "Marketing", value: "Marketing" },
+                            ]}
+                            placeholder="Select Category"
+                          />
+                        )}
+                      />
+
                       {errors.category && (
                         <span className="block pt-2 text-sm text-red-300">
                           {errors.category.message}
@@ -209,22 +210,24 @@ const CourseForm = ({
                       <label className="block text-white/80 text-sm font-medium mb-3">
                         Difficulty
                       </label>
-                      <select
-                        {...register("difficulty", {
-                          required: "Difficulty is required",
-                        })}
-                        className="w-full px-4 py-3 rounded-lg bg-white/10 text-white border border-white/20 outline-none transition-all"
-                      >
-                        <option value="Beginner" className="bg-gray-800/90 text-white">
-                          Beginner
-                        </option>
-                        <option value="Intermediate" className="bg-gray-800/90 text-white">
-                          Intermediate
-                        </option>
-                        <option value="Advanced" className="bg-gray-800/90 text-white">
-                          Advanced
-                        </option>
-                      </select>
+                      <Controller
+                        name="difficulty"
+                        control={control}
+                        rules={{ required: "Difficulty is required" }}
+                        render={({ field }) => (
+                          <FormSelect
+                            className="w-full"
+                            {...field}
+                            options={[
+                              { label: "Beginner", value: "Beginner" },
+                              { label: "Intermediate", value: "Intermediate" },
+                              { label: "Advanced", value: "Advanced" },
+                            ]}
+                            placeholder="Select Difficulty"
+                          />
+                        )}
+                      />
+
                       {errors.difficulty && (
                         <span className="block pt-2 text-sm text-red-300">
                           {errors.difficulty.message}
@@ -275,21 +278,13 @@ const CourseForm = ({
                         type="number"
                         min="1"
                         placeholder="Count"
-                        className="w-20 px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 text-sm outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                        className="w-20 px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 text-sm outline-none  transition-all"
                         value={sectionCount || ""}
                         onChange={(e) => setSectionCount(e.target.value)}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const count = parseInt(sectionCount || 1, 10);
-                          for (let k = 0; k < count; k++) addSection();
-                          setSectionCount("");
-                        }}
-                        className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-                      >
+                      <Button onClick={addSection} variant="primary" size="sm">
                         + Add Section
-                      </button>
+                      </Button>
                     </div>
                   </div>
 
@@ -305,13 +300,13 @@ const CourseForm = ({
                           <h3 className="text-lg font-medium text-white">
                             Section {i + 1}
                           </h3>
-                          <button
-                            type="button"
+                          <Button
                             onClick={() => removeSection(i)}
-                            className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 cursor-pointer text-red-300 rounded-lg text-sm border border-red-400/30 transition-colors duration-200"
+                            variant="danger"
+                            size="sm"
                           >
                             Remove Section
-                          </button>
+                          </Button>
                         </div>
 
                         {/* Section Title */}
@@ -325,7 +320,7 @@ const CourseForm = ({
                               required: "Section title is required",
                             })}
                             placeholder={`Enter section ${i + 1} title`}
-                            className="w-full p-3 bg-white/10 text-white border border-white/20 rounded-lg outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full p-3 bg-white/10 text-white border border-white/20 rounded-lg outline-none transition-all"
                           />
                           {errors.sections?.[i]?.title && (
                             <span className="text-sm text-red-300">
@@ -369,7 +364,7 @@ const CourseForm = ({
                                 type="number"
                                 min="1"
                                 placeholder="Count"
-                                className="w-16 px-2 py-1 rounded bg-white/10 text-white border border-white/20 text-xs outline-none focus:border-cyan-500 transition-all"
+                                className="w-16 px-2 py-1 rounded bg-white/10 text-white border border-white/20 text-xs outline-none transition-all"
                                 value={lessonCount[i] || ""}
                                 onChange={(e) =>
                                   setLessonCount({
@@ -378,20 +373,13 @@ const CourseForm = ({
                                   })
                                 }
                               />
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const count = parseInt(lessonCount[i] || 1, 10);
-                                  for (let k = 0; k < count; k++) addLesson(i);
-                                  setLessonCount((prev) => ({
-                                    ...prev,
-                                    [i]: "",
-                                  }));
-                                }}
-                                className="px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-sm font-medium transition-colors duration-200"
+                              <Button
+                                onClick={() => addLesson(i)}
+                                variant="primary"
+                                size="sm"
                               >
                                 + Add Lesson
-                              </button>
+                              </Button>
                             </div>
                           </div>
 
@@ -406,13 +394,13 @@ const CourseForm = ({
                                     <span className="text-white/70 text-sm font-medium">
                                       Lesson {j + 1}
                                     </span>
-                                    <button
-                                      type="button"
+                                    <Button
                                       onClick={() => removeLesson(i, j)}
-                                      className="px-2 py-1 bg-red-500/20 cursor-pointer hover:bg-red-500/30 text-red-300 rounded text-xs border border-red-400/30 transition-colors duration-200"
+                                      variant="danger"
+                                      size="sm"
                                     >
                                       Remove
-                                    </button>
+                                    </Button>
                                   </div>
 
                                   <div className="mb-3">
@@ -425,11 +413,15 @@ const CourseForm = ({
                                         }
                                       )}
                                       placeholder={`Enter lesson ${j + 1} title`}
-                                      className="w-full p-2 bg-white/10 text-white border border-white/20 rounded outline-none text-sm focus:border-cyan-500 transition-all"
+                                      className="w-full p-2 bg-white/10 text-white border border-white/20 rounded outline-none text-sm  transition-all"
                                     />
-                                    {errors.sections?.[i]?.lessons?.[j]?.title && (
+                                    {errors.sections?.[i]?.lessons?.[j]
+                                      ?.title && (
                                       <span className="text-sm text-red-300">
-                                        {errors.sections[i].lessons[j].title.message}
+                                        {
+                                          errors.sections[i].lessons[j].title
+                                            .message
+                                        }
                                       </span>
                                     )}
                                   </div>
@@ -439,7 +431,8 @@ const CourseForm = ({
                                       name={`sections.${i}.lessons.${j}.description`}
                                       control={control}
                                       rules={{
-                                        required: "Lesson description is required",
+                                        required:
+                                          "Lesson description is required",
                                       }}
                                       render={({ field }) => (
                                         <RichTextEditor
@@ -449,9 +442,13 @@ const CourseForm = ({
                                         />
                                       )}
                                     />
-                                    {errors.sections?.[i]?.lessons?.[j]?.description && (
+                                    {errors.sections?.[i]?.lessons?.[j]
+                                      ?.description && (
                                       <span className="text-sm text-red-300">
-                                        {errors.sections[i].lessons[j].description.message}
+                                        {
+                                          errors.sections[i].lessons[j]
+                                            .description.message
+                                        }
                                       </span>
                                     )}
                                   </div>
@@ -474,7 +471,8 @@ const CourseForm = ({
                       <div className="text-center py-12 text-white/50 bg-white/5 rounded-xl border-2 border-dashed border-white/20">
                         <p className="text-lg mb-2">No sections yet.</p>
                         <p className="text-sm">
-                          Use the "+ Add Section" button to start building your course.
+                          Use the "+ Add Section" button to start building your
+                          course.
                         </p>
                       </div>
                     )}
@@ -482,21 +480,21 @@ const CourseForm = ({
 
                   {/* Save/Cancel Buttons */}
                   <div className="flex justify-end gap-4 pt-4 border-t border-white/20">
-                    <button
+                    <Button
                       type="button"
                       onClick={onCancel}
+                      variant="glass"
                       disabled={loading}
-                      className="px-6 py-2 rounded-md text-white bg-gray-600 hover:bg-gray-700 font-medium transition-colors disabled:opacity-50"
                     >
                       Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="px-6 font-semibold py-2 rounded-md shadow-sm text-white bg-cyan-700 hover:bg-cyan-600 cursor-pointer transition-colors disabled:opacity-50"
-                    >
-                      {loading ? "Saving..." : isCreate ? "Create Course" : "Update Course"}
-                    </button>
+                    </Button>
+                    <Button type="submit" variant="primary" disabled={loading}>
+                      {loading
+                        ? "Saving..."
+                        : isCreate
+                          ? "Create Course"
+                          : "Update Course"}
+                    </Button>
                   </div>
                 </div>
               </form>
@@ -518,7 +516,8 @@ const CourseForm = ({
                 preview={true}
                 course={{
                   title: watchedValues.title || "Untitled Course",
-                  description: watchedValues.description || "No description yet...",
+                  description:
+                    watchedValues.description || "No description yet...",
                   thumbnail:
                     watchedValues.thumbnail ||
                     "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png",
