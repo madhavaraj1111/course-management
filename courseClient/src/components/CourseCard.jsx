@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteCourse } from "../store/slices/coursesSlice";
+import { useNavigate } from "react-router-dom";
+import { deleteCourse, selectCourse } from "../store/slices/coursesSlice";
 
 // Color themes for the cover glow
 const cardColors = {
@@ -8,11 +9,12 @@ const cardColors = {
   Design: "from-teal-500 to-teal-900/20",
   Marketing: "from-rose-500/30 to-rose-900",
   Business: "from-amber-500 to-amber-900/20",
-  Default: "from-purple-500/20 to-purple-900",
+  Default: "from-purple-500 to-purple-900/5",
 };
 
-const CourseCard = ({ course,index }) => {
+const CourseCard = ({ course, index, preview = false }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const cardColorGradient = cardColors[course.category] || cardColors.Default;
 
@@ -21,6 +23,12 @@ const CourseCard = ({ course,index }) => {
     if (window.confirm(`Are you sure you want to delete "${course.title}"?`)) {
       dispatch(deleteCourse(index));
     }
+  };
+
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    dispatch(selectCourse({ course, index }));
+    navigate("/courses/update");
   };
 
   return (
@@ -62,7 +70,7 @@ const CourseCard = ({ course,index }) => {
               </div>
             </div>
 
-            {/* Thumbnail in center */}
+            {/* Thumbnail  */}
             <div className="relative z-10 flex-1 flex items-center justify-center">
               <div className="w-48 h-36 rounded-xl overflow-hidden shadow-md border border-white/20 backdrop-blur-sm relative">
                 <img
@@ -165,7 +173,11 @@ const CourseCard = ({ course,index }) => {
             <div className="border-t border-gray-300 pt-4 flex justify-end relative z-10">
               <div className="flex gap-5">
                 {/* Edit */}
-                <button className="p-2 transition-all text-gray-400 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-200 rounded">
+                <button
+                  onClick={handleEdit}
+                  disabled={preview}
+                  className="p-2 transition-all text-gray-400 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-200 rounded"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -178,10 +190,12 @@ const CourseCard = ({ course,index }) => {
                     />
                   </svg>
                 </button>
+
                 {/* Delete */}
                 <button
                   className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-all"
                   onClick={handleDelete}
+                  disabled={preview}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

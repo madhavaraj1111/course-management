@@ -1,26 +1,27 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import { addCourse } from "../store/slices/coursesSlice";
+import { updateCourse } from "../store/slices/coursesSlice";
 import RichTextEditor from "../components/RichTextEditor";
-import store from "../store";
 import CourseCard from "../components/CourseCard";
 
-const CourseCreate = () => {
+const CourseUpdate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { selectedCourse } = useSelector((state) => state.courses);
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset,
     control,
-    watch,
+    reset,
     setValue,
     getValues,
+    watch,
+    formState: { errors },
   } = useForm({
-    defaultValues: { sections: [] },
+    defaultValues: selectedCourse?.course || { sections: [] },
   });
 
   const titleValue = watch("title") || "";
@@ -46,14 +47,22 @@ const CourseCreate = () => {
     setValue("sections", currentSections);
   };
 
-  // This handles the submitted data
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    dispatch(addCourse(data));
-    navigate("/courses");
-    reset();
-  };
+  // Load existing course into form
+  useEffect(() => {
+    if (selectedCourse?.course) {
+      reset(selectedCourse.course);
+    }
+  }, [selectedCourse, reset]);
 
+  const onSubmit = (data) => {
+    dispatch(
+      updateCourse({
+        index: selectedCourse.index,
+        updatedCourse: data,
+      })
+    );
+    navigate("/courses");
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-10">
@@ -61,7 +70,7 @@ const CourseCreate = () => {
         <div className="flex-1 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl overflow-hidden">
           <div className="px-6 py-5 border-b border-white/20">
             <h1 className="text-3xl font-bold text-white drop-shadow">
-              Create New Course
+              Update Course
             </h1>
             <p className="mt-1 text-sm text-white/80">
               Fill out the form below to create a new course
@@ -171,7 +180,6 @@ const CourseCreate = () => {
                     <option
                       value=""
                       disabled
-                      selected
                       className="bg-gray-900/80 text-white"
                     >
                       Select Category
@@ -388,9 +396,9 @@ const CourseCreate = () => {
             <div className="flex justify-end pt-4 border-t border-white/20">
               <button
                 type="submit"
-                className="inline-flex items-center px-6 py-3 rounded-md shadow-sm text-white bg-cyan-800/80 hover:bg-cyan-700 cursor-pointer backdrop-blur-sm"
+                className="px-6 py-3 rounded-md shadow-sm text-white bg-cyan-700 hover:bg-cyan-600 cursor-pointer"
               >
-                Save Course
+                Update Course
               </button>
             </div>
           </form>
@@ -402,14 +410,30 @@ const CourseCreate = () => {
             <CourseCard
               preview={true}
               course={{
-                title: titleValue || "Untitled Course",
-                description: descriptionValue || "No description yet...",
+                title:
+                  titleValue ||
+                  selectedCourse?.course?.title ||
+                  "Untitled Course",
+                description:
+                  descriptionValue ||
+                  selectedCourse?.course?.description ||
+                  "No description yet...",
                 thumbnail:
                   thumbnailValue ||
+                  selectedCourse?.course?.thumbnail ||
                   "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png",
-                category: categoryValue,
-                difficulty: difficultyValue,
-                sections: sections,
+                category:
+                  categoryValue ||
+                  selectedCourse?.course?.category ||
+                  "Default",
+                difficulty:
+                  difficultyValue ||
+                  selectedCourse?.course?.difficulty ||
+                  "Beginner",
+                sections:
+                  sections.length > 0
+                    ? sections
+                    : selectedCourse?.course?.sections || [],
               }}
             />
           </div>
@@ -419,4 +443,4 @@ const CourseCreate = () => {
   );
 };
 
-export default CourseCreate;
+export default CourseUpdate;
