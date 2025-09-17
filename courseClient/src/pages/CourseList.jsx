@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteCourse } from "../store/slices/coursesSlice";
 import Button from "../components/Button";
 import FormSelect from "../components/FormSelect";
+import Checkbox from "../components/CheckBox";
 
 const CourseList = () => {
   const courses = useSelector((state) => state.courses.list);
@@ -162,17 +163,14 @@ const CourseList = () => {
 
         {/* Bulk Actions */}
         <div className="flex justify-between items-center mb-4">
-          <label className="flex items-center gap-2 text-white cursor-pointer">
-            <input
-              type="checkbox"
-              checked={
-                selectedCourses.length === currentCourses.length &&
-                currentCourses.length > 0
-              }
-              onChange={toggleSelectAll}
-            />
-            Select All
-          </label>
+          <Checkbox
+            label="Select All"
+            checked={
+              selectedCourses.length === currentCourses.length &&
+              currentCourses.length > 0
+            }
+            onChange={toggleSelectAll}
+          />
 
           <div className="h-10 flex items-center">
             {selectedCourses.length > 0 && (

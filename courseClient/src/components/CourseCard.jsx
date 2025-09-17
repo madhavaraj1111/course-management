@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteCourse, selectCourse } from "../store/slices/coursesSlice";
+import Checkbox from "./CheckBox";
 
 // Color themes for the cover glow
 const cardColors = {
@@ -46,12 +47,7 @@ const CourseCard = ({
       {/* Checkbox */}
       {!preview && (
         <div className="absolute top-2 left-2 z-20">
-          <input
-            type="checkbox"
-            checked={selected}
-            onChange={onToggleSelect}
-            className="w-4 h-4 cursor-pointer"
-          />
+          <Checkbox checked={selected} onChange={onToggleSelect} />
         </div>
       )}
       {/* Book Container */}
