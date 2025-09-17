@@ -7,7 +7,7 @@ import { deleteCourse, selectCourse } from "../store/slices/coursesSlice";
 const cardColors = {
   Programming: "from-sky-500/20 to-sky-900",
   Design: "from-teal-500 to-teal-900/20",
-  Marketing: "from-rose-500/30 to-rose-900",
+  Marketing: "from-rose-500 to-rose-900/20",
   Business: "from-amber-500 to-amber-900/20",
   Default: "from-purple-500 to-purple-900/5",
 };
@@ -176,7 +176,7 @@ const CourseCard = ({ course, index, preview = false }) => {
                 <button
                   onClick={handleEdit}
                   disabled={preview}
-                  className="p-2 transition-all text-gray-400 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-200 rounded"
+                  className="p-2 transition-all text-gray-500 hover:text-purple-600 hover:bg-purple-200 cursor-pointer bg-gray-300 rounded"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@ const CourseCard = ({ course, index, preview = false }) => {
 
                 {/* Delete */}
                 <button
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-200 rounded transition-all"
+                  className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-200 cursor-pointer bg-gray-300 rounded transition-all"
                   onClick={handleDelete}
                   disabled={preview}
                 >
