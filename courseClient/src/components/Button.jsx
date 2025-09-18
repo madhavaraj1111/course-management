@@ -15,7 +15,7 @@ const Button = ({
 
   const variants = {
     primary:
-      "hover:text-cyan-200 hover:border-t-cyan-500 hover:shadow-cyan-500",
+      "hover:text-amber-200 hover:border-t-amber-500 hover:shadow-amber-800",
     danger: "hover:text-red-300 hover:border-t-red-400 hover:shadow-red-500",
     glass: "hover:text-gray-300 hover:border-t-gray-400 hover:shadow-gray-400",
   };

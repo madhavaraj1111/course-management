@@ -47,17 +47,33 @@ const CourseForm = ({
   }, [initialData, reset, mode]);
 
   const addSection = () => {
-    const currentSections = getValues("sections") || [];
-    setValue("sections", [
-      ...currentSections,
-      { title: "", description: "", lessons: [] },
-    ]);
-  };
+  const count = parseInt(sectionCount, 10) || 1; // fallback to 1 if empty
+  const currentSections = getValues("sections") || [];
+
+  const newSections = Array.from({ length: count }, () => ({
+    title: "",
+    description: "",
+    lessons: [],
+  }));
+
+  setValue("sections", [...currentSections, ...newSections]);
+  setSectionCount(""); // reset input
+};
+
 
   const addLesson = (sectionIndex) => {
-    const currentSections = getValues("sections");
-    currentSections[sectionIndex].lessons.push({ title: "", description: "" });
+    const count = parseInt(lessonCount[sectionIndex], 10) || 1;
+    const currentSections = [...getValues("sections")]; // copy array
+
+    const newLessons = Array.from({ length: count }, () => ({
+      title: "",
+      description: "",
+    }));
+
+    currentSections[sectionIndex].lessons.push(...newLessons);
     setValue("sections", currentSections);
+
+    setLessonCount({ ...lessonCount, [sectionIndex]: "" }); // reset input
   };
 
   const removeSection = (sectionIndex) => {

@@ -38,16 +38,30 @@ const CourseCard = ({
     navigate("/courses/update");
   };
 
+  const handleCardClick = (e) => {
+    // Don't navigate if clicking on buttons or checkbox
+    if (e.target.closest('button') || e.target.closest('.checkbox-container')) {
+      return;
+    }
+    navigate(`/courses/${index}`);
+  };
+
+  const handleCheckboxChange = (e) => {
+    e.stopPropagation();
+    onToggleSelect();
+  };
+
   return (
     <div
       className="relative w-80 h-96 perspective-1000 cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       {/* Checkbox */}
       {!preview && (
-        <div className="absolute top-2 left-2 z-20">
-          <Checkbox checked={selected} onChange={onToggleSelect} />
+        <div className="absolute top-2 left-2 z-20 checkbox-container">
+          <Checkbox checked={selected} onChange={handleCheckboxChange} />
         </div>
       )}
       {/* Book Container */}
