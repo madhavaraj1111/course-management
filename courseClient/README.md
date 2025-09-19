@@ -150,16 +150,16 @@ course-management-system/
 │ │ ├── Modal.jsx
 │ │ ├── CourseCard.jsx
 │ │ ├── RichTextEditor.jsx
-│ │ ├── CourseForm.jsx           # New component for course form
-│ │ ├── FormSelect.jsx           # New component for form select input
-│ │ └── CheckBox.jsx             # New component for checkbox input
+│ │ ├── CourseForm.jsx           
+│ │ ├── FormSelect.jsx          
+│ │ └── CheckBox.jsx             
 │ │
 │ ├── pages/
 │ │ ├── Dashboard.jsx
 │ │ ├── CourseList.jsx
 │ │ ├── CourseDetail.jsx
 │ │ ├── CourseCreate.jsx
-│ │ ├── CourseUpdate.jsx         # New page for course update
+│ │ ├── CourseUpdate.jsx        
 │ │ └── NotFound.jsx
 │ │
 │ ├── layouts/
@@ -202,4 +202,10 @@ course-management-system/
 ├── vite.config.js
 ├── package.json
 └── README.md
+
+
+8.Sprint 2 continue
+
+--> Course Detail Page
+--> Layout Bg changed 
 

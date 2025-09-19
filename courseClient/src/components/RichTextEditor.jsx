@@ -33,7 +33,7 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
           ],
         }}
       />
-      <style global>{`
+      <style>{`
         /* Force absolute positioning and fixed heights */
         .ql-container {
           position: absolute !important;

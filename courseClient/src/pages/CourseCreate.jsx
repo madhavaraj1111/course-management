@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addCourse } from "../store/slices/coursesSlice";
-import CourseForm from "../components/CourseForm";
+import CourseForm from "../components/course-form/CourseForm";
 
 const CourseCreate = () => {
   const dispatch = useDispatch();
@@ -18,11 +18,7 @@ const CourseCreate = () => {
   };
 
   return (
-    <CourseForm
-      mode="create"
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-    />
+    <CourseForm mode="create" onSubmit={handleSubmit} onCancel={handleCancel} />
   );
 };
 

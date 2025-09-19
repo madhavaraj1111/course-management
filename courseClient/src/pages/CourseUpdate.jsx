@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateCourse } from "../store/slices/coursesSlice";
-import CourseForm from "../components/CourseForm";
+import CourseForm from "../components/course-form/CourseForm";
 
 const CourseUpdate = () => {
   const dispatch = useDispatch();
