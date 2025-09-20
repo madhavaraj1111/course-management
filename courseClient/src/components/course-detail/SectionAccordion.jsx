@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateCourse } from "../../store/slices/coursesSlice";
+import { readLesson, updateCourse } from "../../store/slices/coursesSlice";
 
 const SectionAccordion = ({
   course,
@@ -14,16 +14,20 @@ const SectionAccordion = ({
   toggleSection,
   handleLessonSelect,
 }) => {
-  const [readSection, setReadSection] = useState(false);
+  const courses = useSelector((state) => state.courses.list);
+  const courseIndex = courses.findIndex((c, index) => {
+    return c.courseId == course.courseId;
+  });
+
+  const dispatch = useDispatch();
   const handleRead = (course, sectionIndex, lessonIndex) => {
-    const updatedCourse = { ...course };
+    const updatedCourse = JSON.parse(JSON.stringify(course));
     const section = updatedCourse.sections[sectionIndex];
-
     section.lessons[lessonIndex].readLesson = true;
-
-    const allRead = section.lessons.every((lesson) => lesson.readLesson);
-    setReadSection(allRead);
+    dispatch(updateCourse({ index: courseIndex, updatedCourse }));
   };
+
+  const isSectionRead = section.lessons.every((lesson) => lesson.readLesson);
 
   return (
     <div
@@ -39,7 +43,7 @@ const SectionAccordion = ({
         }}
       >
         <div className="flex items-center justify-between">
-          {readSection ? (
+          {isSectionRead ? (
             <svg
               className="w-4 h-4 text-green-600"
               fill="none"

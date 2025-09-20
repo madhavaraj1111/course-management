@@ -9,12 +9,14 @@ const QuickNavigation = ({
   handleQuickLessonNav,
   totalLessons,
 }) => {
+  console.log(course);
+
   return (
     <div className={`${isMobile ? "lg:hidden" : "hidden lg:block"}`}>
       <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 sticky top-24">
         <h3 className="text-lg text-gray-900 mb-6 flex items-center gap-2">
           <svg
-          className="w-5 h-5"
+            className="w-5 h-5"
             xmlns="http://www.w3.org/2000/svg"
             width="32"
             height="32"
@@ -64,7 +66,9 @@ const QuickNavigation = ({
                       className={`w-full text-left p-3 text-sm rounded hover:bg-white hover:shadow-sm cursor-pointer ${
                         selectedLesson === lessonIndex
                           ? "bg-white shadow-sm border-l-2 border-purple-500"
-                          : "hover:border-l-2 hover:border-purple-300"
+                          : section.lessons[lessonIndex]?.readLesson
+                            ? "hover:border-l-2 hover:border-green-600"
+                            : "hover:border-l-2 hover:border-purple-300"
                       }`}
                       onClick={() =>
                         handleQuickLessonNav(sectionIndex, lessonIndex)
@@ -72,7 +76,7 @@ const QuickNavigation = ({
                     >
                       <div className="flex items-center space-x-3">
                         <div
-                          className={`w-2 h-2 rounded-full ${selectedLesson === lessonIndex ? "bg-purple-500" : "bg-gray-300"}`}
+                          className={`w-2 h-2 rounded-full ${selectedLesson === lessonIndex ? "bg-purple-500" : section.lessons[lessonIndex]?.readLesson ? "bg-green-600" : "bg-gray-300"}`}
                         />
                         <span className="text-gray-700">{lesson.title}</span>
                       </div>
