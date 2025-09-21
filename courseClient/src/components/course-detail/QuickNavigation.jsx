@@ -9,8 +9,6 @@ const QuickNavigation = ({
   handleQuickLessonNav,
   totalLessons,
 }) => {
-  console.log(course);
-
   return (
     <div className={`${isMobile ? "lg:hidden" : "hidden lg:block"}`}>
       <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 sticky top-24">

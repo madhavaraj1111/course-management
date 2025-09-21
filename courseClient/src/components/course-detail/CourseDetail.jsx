@@ -57,8 +57,21 @@ const CourseDetail = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8 space-y-6 lg:space-y-0">
+          {/* Sidebar Navigation */}
+          <div className="lg:col-span-1 lg:order-2">
+            <QuickNavigation
+              course={course}
+              isMobile={isMobile}
+              selectedSection={selectedSection}
+              selectedLesson={selectedLesson}
+              handleQuickSectionNav={handleQuickSectionNav}
+              handleQuickLessonNav={handleQuickLessonNav}
+              totalLessons={totalLessons}
+            />
+          </div>
+
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6 w-full max-w-4xl">
+          <div className="lg:col-span-2 space-y-6 w-full max-w-4xl lg:order-1">
             <CourseMeta course={course} totalLessons={totalLessons} />
             <CourseDescription course={course} />
             <CourseStructure
@@ -70,19 +83,6 @@ const CourseDetail = () => {
               lessonRefs={lessonRefs}
               toggleSection={toggleSection}
               handleLessonSelect={handleLessonSelect}
-            />
-          </div>
-
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <QuickNavigation
-              course={course}
-              isMobile={isMobile}
-              selectedSection={selectedSection}
-              selectedLesson={selectedLesson}
-              handleQuickSectionNav={handleQuickSectionNav}
-              handleQuickLessonNav={handleQuickLessonNav}
-              totalLessons={totalLessons}
             />
           </div>
         </div>

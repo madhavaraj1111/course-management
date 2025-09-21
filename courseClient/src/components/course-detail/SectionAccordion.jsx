@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { readLesson, updateCourse } from "../../store/slices/coursesSlice";
+import { updateCourse } from "../../store/slices/coursesSlice";
 
 const SectionAccordion = ({
   course,
