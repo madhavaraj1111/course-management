@@ -39,8 +39,12 @@ const CourseCard = ({
   };
 
   const handleCardClick = (e) => {
-    // Don't navigate if clicking on buttons or checkbox
-    if (e.target.closest('button') || e.target.closest('.checkbox-container')) {
+    // Don't navigate if clicking on buttons or checkbox or the cover of the course
+    if (
+      e.target.closest("book-container") ||
+      e.target.closest("button") ||
+      e.target.closest(".checkbox-container")
+    ) {
       return;
     }
     navigate(`/courses/${index}`);
@@ -60,18 +64,18 @@ const CourseCard = ({
     >
       {/* Checkbox */}
       {!preview && (
-        <div className="absolute top-2 left-2 z-20 checkbox-container">
+        <div className="absolute top-2 left-2 z-20">
           <Checkbox checked={selected} onChange={handleCheckboxChange} />
         </div>
       )}
       {/* Book Container */}
-      <div className="relative w-full h-full transform-style-preserve-3d">
+      <div className="relative w-full h-full transform-style-preserve-3d book-container">
         {/* Spine / Back */}
         <div className="absolute inset-0 bg-black/50 rounded-lg shadow-2xl transform rotateY-2 translate-z-[-8px]"></div>
 
         {/* Cover */}
         <div
-          className={`absolute inset-0 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg shadow-xl shadow-black/40 transform transition-all duration-700 origin-left ${
+          className={`checkbox-container absolute inset-0 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg shadow-xl shadow-black/40 transform transition-all duration-700 origin-left ${
             isHovered ? "rotateY-[-160deg]" : "rotateY-0"
           }`}
         >
