@@ -58,7 +58,7 @@ const CourseDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8 space-y-6 lg:space-y-0">
           {/* Sidebar Navigation */}
-          <div className="lg:col-span-1 lg:order-2">
+          <div className="lg:col-span-1 lg:order-2 hidden lg:block">
             <QuickNavigation
               course={course}
               isMobile={isMobile}
@@ -74,6 +74,17 @@ const CourseDetail = () => {
           <div className="lg:col-span-2 space-y-6 w-full max-w-4xl lg:order-1">
             <CourseMeta course={course} totalLessons={totalLessons} />
             <CourseDescription course={course} />
+            <div className="block lg:hidden">
+            <QuickNavigation
+              course={course}
+              isMobile={isMobile}
+              selectedSection={selectedSection}
+              selectedLesson={selectedLesson}
+              handleQuickSectionNav={handleQuickSectionNav}
+              handleQuickLessonNav={handleQuickLessonNav}
+              totalLessons={totalLessons}
+            />
+          </div>
             <CourseStructure
               course={course}
               selectedSection={selectedSection}

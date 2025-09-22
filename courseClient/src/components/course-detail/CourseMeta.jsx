@@ -44,8 +44,8 @@ const CourseMeta = ({ course, totalLessons }) => {
             />
           </div>
 
-          <div className="space-y-4 ">
-            <div className="flex flex-wrap gap-2">
+          <div className="space-y-4 w-full">
+            <div className="flex flex-wrap gap-2 justify-between">
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full border ${getCategoryColor(course.category)}`}
               >
@@ -58,11 +58,11 @@ const CourseMeta = ({ course, totalLessons }) => {
               </span>
             </div>
 
-            <h1 className="text-2xl font-bold text-gray-900 max-w-sm">
+            <h1 className="text-2xl font-bold text-gray-900  text-center">
               {course.title}
             </h1>
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+            <div className="flex flex-wrap gap-4 text-sm text-gray-600 justify-center">
               <div className="flex items-center space-x-2">
                 <svg
                   className="w-4 h-4"
@@ -96,14 +96,14 @@ const CourseMeta = ({ course, totalLessons }) => {
                 <span>{totalLessons} Lessons</span>
               </div>
             </div>
-            <div className="space-y-2 p-2">
-              <h1 className="text-sm font-medium">
+            <div className="space-y-3 p-2 px-3 pb-3 text-center bg-green-100 rouned">
+              <h1 className="text-xs font-medium text-gray-700">
                 Lesson Completion -{" "}
                 <span className="">
                   {completedLessons.length + "/" + totalLessons}
                 </span>
               </h1>
-              <ProgressBar percentage={readProgress} />
+              <ProgressBar percentage={totalLessons != 0 ? readProgress : 0} />
             </div>
           </div>
         </div>
