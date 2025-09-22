@@ -1,6 +1,17 @@
 import React from "react";
+import ProgressBar from "../ProgressBar";
+import { useSelector } from "react-redux";
 
 const CourseMeta = ({ course, totalLessons }) => {
+  const lessons = course.sections.flatMap((section) => section.lessons);
+  const completedLessons = lessons.filter((lesson) => {
+    return lesson.readLesson;
+  });
+
+  const readProgress = Math.round(
+    (completedLessons.length / totalLessons) * 100
+  );
+
   const getCategoryColor = (category) => {
     const colors = {
       Programming: "bg-blue-100 text-blue-800 border-blue-200",
@@ -24,7 +35,7 @@ const CourseMeta = ({ course, totalLessons }) => {
     <div>
       {/* Course meta section */}
       <div className="bg-white rounded-xl shadow-sm p-4 sm:p-8 ">
-        <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
+        <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-center">
           <div className="w-full md:w-80 h-48 rounded-lg overflow-hidden shadow-md">
             <img
               src={course.thumbnail}
@@ -33,7 +44,7 @@ const CourseMeta = ({ course, totalLessons }) => {
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             <div className="flex flex-wrap gap-2">
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full border ${getCategoryColor(course.category)}`}
@@ -47,7 +58,7 @@ const CourseMeta = ({ course, totalLessons }) => {
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 max-w-sm">
               {course.title}
             </h1>
 
@@ -84,6 +95,15 @@ const CourseMeta = ({ course, totalLessons }) => {
                 </svg>
                 <span>{totalLessons} Lessons</span>
               </div>
+            </div>
+            <div className="space-y-2 p-2">
+              <h1 className="text-sm font-medium">
+                Lesson Completion -{" "}
+                <span className="">
+                  {completedLessons.length + "/" + totalLessons}
+                </span>
+              </h1>
+              <ProgressBar percentage={readProgress} />
             </div>
           </div>
         </div>

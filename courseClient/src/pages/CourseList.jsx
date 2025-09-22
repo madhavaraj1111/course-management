@@ -220,7 +220,7 @@ const CourseList = () => {
               className={`px-4 py-2 rounded ${
                 currentPage === i + 1
                   ? "bg-cyan-500/40 text-white"
-                  : "bg-gray-700 text-white hover:bg-gray-600"
+                  : "bg-gray-700 text-white hover:bg-gray-600 cursor-pointer"
               }`}
             >
               {i + 1}
