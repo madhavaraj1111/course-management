@@ -4,17 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { deleteCourse } from "../store/slices/coursesSlice";
 
 // Components
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../components/course-list/PageHeader.jsx";
 import CourseFilters from "../components/course-list/CourseFilters";
 import BulkActions from "../components/course-list/BulkActions";
 import CourseGrid from "../components/course-list/CourseGrid";
-import Pagination from "../components/Pagination";
+import Pagination from "../components/course-list/Pagination.jsx";
 import DeleteConfirmModal from "../components/course-list/DeleteConfirmModal";
 
 // Hooks
 import { useCourseFilters } from "../components/course-list/hooks/useCourseFilters.js";
 import { usePagination } from "../components/course-list/hooks/usePagination.js";
 import { useCourseSelection } from "../components/course-list/hooks/useCourseSelection.js";
+import Header from "../components/Header.jsx";
 
 const CourseList = () => {
   const courses = useSelector((state) => state.courses.list);
@@ -74,8 +75,10 @@ const CourseList = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Header Section */}
+        <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        {/* Header Section */}
+        
         <PageHeader title="Course List">
           <CourseFilters
             searchQuery={searchQuery}
@@ -113,7 +116,7 @@ const CourseList = () => {
           totalPages={totalPages}
           onPageChange={goToPage}
         />
-       
+
         {/* Delete Confirmation Modal */}
         <DeleteConfirmModal
           isOpen={showConfirm}

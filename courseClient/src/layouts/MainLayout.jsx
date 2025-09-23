@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const MainLayout = () => {
   return (
     <div
-      className="min-h-screen w-screen flex items-center justify-center 
+      className="min-h-screen w-screen  items-center justify-center 
         bg-gradient-to-br from-black via-neutral-900 to-black relative overflow-hidden"
     >
       {/* Gold accents (soft glow shapes) */}

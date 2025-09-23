@@ -35,7 +35,7 @@ const CourseFilters = ({
   ];
 
   return (
-    <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full sm:w-auto">
+    <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full sm:w-auto mx-auto">
       {/* Search */}
       <SearchInput
         value={searchQuery}
@@ -67,10 +67,7 @@ const CourseFilters = ({
         options={sortOptions}
       />
 
-      {/* Add Course Button */}
-      <Button onClick={onAddCourse} variant="primary">
-        Add Course
-      </Button>
+      
     </div>
   );
 };
