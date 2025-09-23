@@ -1,6 +1,6 @@
 // components/course-form/CoursePreview.jsx
 import React from "react";
-import CourseCard from "../CourseCard";
+import CourseCard from "../course-card/CourseCard";
 
 const CoursePreview = ({ previewData }) => {
   return (

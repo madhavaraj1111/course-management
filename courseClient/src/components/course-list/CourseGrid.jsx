@@ -1,11 +1,11 @@
-import React from 'react';
-import CourseCard from '../CourseCard';
+import React from "react";
+import CourseCard from "../course-card/CourseCard";
 
 const CourseGrid = ({
   courses,
   allCourses,
   selectedCourses,
-  onToggleSelect
+  onToggleSelect,
 }) => {
   if (!courses || courses.length === 0) {
     return (
