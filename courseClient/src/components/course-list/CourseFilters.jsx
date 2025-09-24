@@ -1,7 +1,7 @@
-import React from 'react';
-import FormSelect from '../FormSelect';
-import SearchInput from '../SearchInput';
-import Button from '../Button';
+import React from "react";
+import FormSelect from "../FormSelect";
+import SearchInput from "../SearchInput";
+import Button from "../Button";
 
 const CourseFilters = ({
   searchQuery,
@@ -12,7 +12,7 @@ const CourseFilters = ({
   onDifficultyChange,
   sortOption,
   onSortChange,
-  onAddCourse
+  onAddCourse,
 }) => {
   const categoryOptions = [
     { value: "all", label: "All Categories" },
@@ -35,12 +35,13 @@ const CourseFilters = ({
   ];
 
   return (
-    <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full sm:w-auto mx-auto">
+    <div className="flex flex-col justify-center gap-3 w-full sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
       {/* Search */}
       <SearchInput
         value={searchQuery}
         onChange={onSearchChange}
         placeholder="Search by title or category..."
+        className="w-full sm:w-auto"
       />
 
       {/* Category Filter */}
@@ -49,6 +50,7 @@ const CourseFilters = ({
         value={filterCategory}
         onChange={onCategoryChange}
         options={categoryOptions}
+        className="w-full sm:w-auto"
       />
 
       {/* Difficulty Filter */}
@@ -57,6 +59,7 @@ const CourseFilters = ({
         value={filterDifficulty}
         onChange={onDifficultyChange}
         options={difficultyOptions}
+        className="w-full sm:w-auto"
       />
 
       {/* Sort */}
@@ -65,9 +68,8 @@ const CourseFilters = ({
         value={sortOption}
         onChange={onSortChange}
         options={sortOptions}
+        className="w-full sm:w-auto"
       />
-
-      
     </div>
   );
 };

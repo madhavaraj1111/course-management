@@ -75,16 +75,16 @@ const CourseDetail = () => {
             <CourseMeta course={course} totalLessons={totalLessons} />
             <CourseDescription course={course} />
             <div className="block lg:hidden">
-            <QuickNavigation
-              course={course}
-              isMobile={isMobile}
-              selectedSection={selectedSection}
-              selectedLesson={selectedLesson}
-              handleQuickSectionNav={handleQuickSectionNav}
-              handleQuickLessonNav={handleQuickLessonNav}
-              totalLessons={totalLessons}
-            />
-          </div>
+              <QuickNavigation
+                course={course}
+                isMobile={isMobile}
+                selectedSection={selectedSection}
+                selectedLesson={selectedLesson}
+                handleQuickSectionNav={handleQuickSectionNav}
+                handleQuickLessonNav={handleQuickLessonNav}
+                totalLessons={totalLessons}
+              />
+            </div>
             <CourseStructure
               course={course}
               selectedSection={selectedSection}

@@ -76,22 +76,24 @@ const CourseList = () => {
   return (
     <div className="min-h-screen">
       {/* Header Section */}
-        <Header />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        
-        <PageHeader title="Course List">
-          <CourseFilters
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            filterCategory={filterCategory}
-            onCategoryChange={setFilterCategory}
-            filterDifficulty={filterDifficulty}
-            onDifficultyChange={setFilterDifficulty}
-            sortOption={sortOption}
-            onSortChange={setSortOption}
-            onAddCourse={handleAddCourse}
-          />
-        </PageHeader>
+      <div>
+        <div className="">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <PageHeader title="Course List">
+              <CourseFilters
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                filterCategory={filterCategory}
+                onCategoryChange={setFilterCategory}
+                filterDifficulty={filterDifficulty}
+                onDifficultyChange={setFilterDifficulty}
+                sortOption={sortOption}
+                onSortChange={setSortOption}
+                onAddCourse={handleAddCourse}
+              />
+            </PageHeader>
+          </div>
+        </div>
 
         {/* Bulk Actions */}
         <BulkActions

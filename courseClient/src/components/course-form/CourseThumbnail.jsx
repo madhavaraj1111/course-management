@@ -1,4 +1,3 @@
-
 // components/course-form/CourseThumbnail.jsx
 import React from "react";
 
@@ -8,13 +7,15 @@ const CourseThumbnail = ({ register, errors, watchedValues }) => {
       <label className="block text-white/80 text-sm font-medium mb-3">
         Course Thumbnail
       </label>
+
+      {/* Input */}
       <div className="mb-4">
         <input
           type="text"
           {...register("thumbnail", {
             required: "Thumbnail URL is required",
           })}
-          className="w-full p-4 rounded-lg bg-white/10 text-white border border-white/20 outline-none transition-all"
+          className="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20 outline-none transition-all"
           placeholder="Enter thumbnail URL"
         />
         {errors.thumbnail && (
@@ -23,19 +24,23 @@ const CourseThumbnail = ({ register, errors, watchedValues }) => {
           </span>
         )}
       </div>
-      <div className="relative">
-        <img
-          src={
-            watchedValues.thumbnail ||
-            "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png"
-          }
-          alt="Course thumbnail preview"
-          className="w-full h-64 object-cover rounded-lg"
-          onError={(e) => {
-            e.target.src =
-              "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png";
-          }}
-        />
+
+      {/* Thumbnail Preview */}
+      <div className="relative w-full max-w-md mx-auto overflow-hidden rounded-lg">
+        <div className="aspect-[16/9]">
+          <img
+            src={
+              watchedValues.thumbnail ||
+              "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png"
+            }
+            alt="Course thumbnail preview"
+            className="w-full h-full object-cover rounded-lg shadow-md"
+            onError={(e) => {
+              e.target.src =
+                "https://usmc.redvector.com/lpe/assets/core/img/large-placeholder-course.png";
+            }}
+          />
+        </div>
       </div>
     </div>
   );

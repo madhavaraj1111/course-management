@@ -10,7 +10,7 @@ const BulkActions = ({
   onDeleteSelected
 }) => {
   return (
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex justify-between items-center mb-4 px-7">
       <Checkbox
         label="Select All"
         checked={isAllSelected && totalCount > 0}

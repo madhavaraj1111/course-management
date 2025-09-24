@@ -34,23 +34,23 @@ const CourseForm = ({
   const isCreate = mode === "create";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+        <div className="mb-8 text-center lg:text-left">
+          <h1 className="text-2xl font-bold text-white mb-2">
             {isCreate ? "Create New Course" : "Edit Course"}
           </h1>
-          <p className="text-white/60">
+          <p className="text-white/60 text-sm sm:text-base">
             {isCreate
               ? "Build an engaging course with structured content and lessons"
               : "Make changes to your course content and structure"}
           </p>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-8">
+        <div className="flex flex-col-reverse lg:flex-row gap-8">
           {/* Left: Main Form */}
-          <div className="flex-1 xl:max-w-4xl">
+          <div className="w-full lg:flex-1 lg:max-w-3xl">
             <div className="rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl">
               <form
                 onSubmit={handleSubmit((data) =>
@@ -73,16 +73,22 @@ const CourseForm = ({
                 />
 
                 {/* Save/Cancel Buttons */}
-                <div className="flex justify-end gap-4 pt-4 px-8 pb-8 border-t border-white/20">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-4 px-6 sm:px-8 pb-6 sm:pb-8 border-t border-white/20">
                   <Button
                     type="button"
                     onClick={onCancel}
                     variant="glass"
                     disabled={loading}
+                    className="w-full sm:w-auto"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" variant="primary" disabled={loading}>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={loading}
+                    className="w-full sm:w-auto"
+                  >
                     {loading
                       ? "Saving..."
                       : isCreate
@@ -95,7 +101,9 @@ const CourseForm = ({
           </div>
 
           {/* Right: Live Preview */}
-          <CoursePreview previewData={previewData} />
+          <div className="w-full lg:max-w-sm mx-auto lg:mx-0 lg:sticky lg:top-24 self-start">
+            <CoursePreview previewData={previewData} />
+          </div>
         </div>
       </div>
     </div>

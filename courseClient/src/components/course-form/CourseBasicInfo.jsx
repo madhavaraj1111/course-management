@@ -12,10 +12,10 @@ const CourseBasicInfo = ({ register, errors, control, watchedValues }) => {
         Course Information
       </h2>
 
-      <CourseThumbnail 
-        register={register} 
-        errors={errors} 
-        watchedValues={watchedValues} 
+      <CourseThumbnail
+        register={register}
+        errors={errors}
+        watchedValues={watchedValues}
       />
 
       {/* Title Section */}
@@ -36,7 +36,7 @@ const CourseBasicInfo = ({ register, errors, control, watchedValues }) => {
               message: "Title should not exceed 60 characters",
             },
           })}
-          className="w-full text-2xl font-bold bg-white/10 text-white border border-white/20 rounded-lg p-4 outline-none transition-all"
+          className="w-full text-xl font-bold bg-white/10 text-white border border-white/20 rounded-lg p-2 outline-none transition-all"
           placeholder="Enter course title"
         />
         {errors.title && (

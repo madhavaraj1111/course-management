@@ -3,7 +3,7 @@ import Button from "../Button";
 
 const CourseHeader = ({ onBack, onEdit, onDelete }) => {
   return (
-    <div className="bg-gradient-to-r from-primary to-cyan-950 shadow-sm border-b sticky top-0 z-10">
+    <div className="bg-gradient-to-r from-10% from-primary   to-cyan-950 shadow-sm sticky top-0 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Back button */}

@@ -58,7 +58,7 @@ const CourseCard = ({
     >
       {/* Checkbox */}
       {!preview && (
-        <div className="absolute top-2 left-2 z-20">
+        <div className="absolute top-2 left-2 z-20 checkbox-container">
           <Checkbox checked={selected} onChange={handleCheckboxChange} />
         </div>
       )}
@@ -69,14 +69,14 @@ const CourseCard = ({
         <div className="absolute inset-0 bg-black/50 rounded-lg shadow-2xl transform rotateY-2 translate-z-[-8px]"></div>
 
         {/* Cover */}
-        <BookCover 
+        <BookCover
           course={course}
           cardColorGradient={cardColorGradient}
           isHovered={isHovered}
         />
 
         {/* Inner Pages */}
-        <BookPages 
+        <BookPages
           course={course}
           isHovered={isHovered}
           onEdit={handleEdit}

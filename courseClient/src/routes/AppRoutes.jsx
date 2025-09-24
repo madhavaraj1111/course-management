@@ -13,7 +13,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="/courses" element={<CourseList />} />
+          <Route path="/courses/" element={<CourseList />} />
           <Route path="/courses/:courseId" element={<CourseDetail />} />
           <Route path="/courses/create" element={<CourseCreate />} />
           <Route path="/courses/update" element={<CourseUpdate />} />
