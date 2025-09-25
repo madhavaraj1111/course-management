@@ -208,4 +208,7 @@ course-management-system/
 
 --> Course Detail Page
 --> Layout Bg changed 
+--> Global Header Added
+--> Make responsivity changes where needed
+
 
