@@ -1,4 +1,3 @@
-import React from "react";
 import FormSelect from "../FormSelect";
 import SearchInput from "../SearchInput";
 import Button from "../Button";
@@ -13,38 +12,44 @@ const CourseFilters = ({
   sortOption,
   onSortChange,
   onAddCourse,
+  viewMode = 'manage',
 }) => {
   const categoryOptions = [
-    { value: "all", label: "All Categories" },
-    { value: "programming", label: "Programming" },
-    { value: "design", label: "Design" },
-    { value: "business", label: "Business" },
-    { value: "marketing", label: "Marketing" },
+    { value: "", label: "All Categories" },
+    { value: "Programming", label: "Programming" },
+    { value: "Design", label: "Design" },
+    { value: "Business", label: "Business" },
+    { value: "Marketing", label: "Marketing" },
+    { value: "Data Science", label: "Data Science" },
   ];
 
   const difficultyOptions = [
-    { value: "all", label: "All Levels" },
-    { value: "beginner", label: "Beginner" },
-    { value: "intermediate", label: "Intermediate" },
-    { value: "advanced", label: "Advanced" },
+    { value: "", label: "All Levels" },
+    { value: "Beginner", label: "Beginner" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Advanced", label: "Advanced" },
   ];
 
   const sortOptions = [
     { value: "title-asc", label: "Title (A-Z)" },
     { value: "title-desc", label: "Title (Z-A)" },
+    { value: "newest", label: "Newest First" },
+    { value: "oldest", label: "Oldest First" },
   ];
 
   return (
     <div className="flex flex-col justify-center gap-3 w-full sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-      {/* Search */}
       <SearchInput
         value={searchQuery}
         onChange={onSearchChange}
-        placeholder="Search by title or category..."
+        placeholder={
+          viewMode === 'browse' 
+            ? "Search courses to enroll..." 
+            : "Search courses..."
+        }
         className="w-full sm:w-auto"
       />
 
-      {/* Category Filter */}
       <FormSelect
         label="Category"
         value={filterCategory}
@@ -53,7 +58,6 @@ const CourseFilters = ({
         className="w-full sm:w-auto"
       />
 
-      {/* Difficulty Filter */}
       <FormSelect
         label="Difficulty"
         value={filterDifficulty}
@@ -62,7 +66,6 @@ const CourseFilters = ({
         className="w-full sm:w-auto"
       />
 
-      {/* Sort */}
       <FormSelect
         label="Sort By"
         value={sortOption}
@@ -70,8 +73,17 @@ const CourseFilters = ({
         options={sortOptions}
         className="w-full sm:w-auto"
       />
+
+      {onAddCourse && (
+        <Button
+          onClick={onAddCourse}
+          variant="primary"
+          className="w-full sm:w-auto"
+        >
+          Add Course
+        </Button>
+      )}
     </div>
   );
 };
-
 export default CourseFilters;

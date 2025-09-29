@@ -1,17 +1,16 @@
-// components/course-form/LessonItem.jsx
 import React from "react";
 import { Controller } from "react-hook-form";
 import Button from "../Button";
 import RichTextEditor from "../RichTextEditor";
 
-const LessonItem = ({ 
-  lesson, 
-  lessonIndex, 
-  sectionIndex, 
-  register, 
-  control, 
-  errors, 
-  onRemove 
+const LessonItem = ({
+  lesson,
+  lessonIndex,
+  sectionIndex,
+  register,
+  control,
+  errors,
+  onRemove,
 }) => {
   return (
     <div className="bg-white/5 rounded-lg border border-white/10 p-4">
@@ -28,12 +27,17 @@ const LessonItem = ({
         </Button>
       </div>
 
+      {/* Lesson Title */}
       <div className="mb-3">
+        <label className="block text-white/60 text-xs mb-1">Title</label>
         <input
           type="text"
-          {...register(`sections.${sectionIndex}.lessons.${lessonIndex}.title`, {
-            required: "Lesson title is required",
-          })}
+          {...register(
+            `sections.${sectionIndex}.lessons.${lessonIndex}.title`,
+            {
+              required: "Lesson title is required",
+            }
+          )}
           placeholder={`Enter lesson ${lessonIndex + 1} title`}
           className="w-full p-2 bg-white/10 text-white border border-white/20 rounded outline-none text-sm transition-all"
         />
@@ -44,7 +48,9 @@ const LessonItem = ({
         )}
       </div>
 
-      <div>
+      {/* Lesson Description */}
+      <div className="mb-3">
+        <label className="block text-white/60 text-xs mb-1">Description</label>
         <Controller
           name={`sections.${sectionIndex}.lessons.${lessonIndex}.description`}
           control={control}
@@ -57,9 +63,36 @@ const LessonItem = ({
             />
           )}
         />
-        {errors.sections?.[sectionIndex]?.lessons?.[lessonIndex]?.description && (
+        {errors.sections?.[sectionIndex]?.lessons?.[lessonIndex]
+          ?.description && (
           <span className="text-sm text-red-300">
-            {errors.sections[sectionIndex].lessons[lessonIndex].description.message}
+            {
+              errors.sections[sectionIndex].lessons[lessonIndex].description
+                .message
+            }
+          </span>
+        )}
+      </div>
+
+      {/* Lesson Content */}
+      <div>
+        <label className="block text-white/60 text-xs mb-1">Content</label>
+        <Controller
+          name={`sections.${sectionIndex}.lessons.${lessonIndex}.content`}
+          control={control}
+          rules={{ required: "Lesson content is required" }}
+          render={({ field }) => (
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
+              glassMode={true}
+              placeholder="Add your lesson content here..."
+            />
+          )}
+        />
+        {errors.sections?.[sectionIndex]?.lessons?.[lessonIndex]?.content && (
+          <span className="text-sm text-red-300">
+            {errors.sections[sectionIndex].lessons[lessonIndex].content.message}
           </span>
         )}
       </div>

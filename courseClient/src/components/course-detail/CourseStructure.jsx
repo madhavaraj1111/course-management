@@ -10,6 +10,10 @@ const CourseStructure = ({
   lessonRefs,
   toggleSection,
   handleLessonSelect,
+  userRole,           // Add these
+  isEnrolled,         // Add these
+  onLessonComplete,   // Add these
+  isLessonCompleted,  // Add these
 }) => {
   const totalLessons =
     course?.sections?.reduce(
@@ -40,6 +44,10 @@ const CourseStructure = ({
             lessonRefs={lessonRefs}
             toggleSection={toggleSection}
             handleLessonSelect={handleLessonSelect}
+            userRole={userRole}              // Add
+            isEnrolled={isEnrolled}          // Add
+            onLessonComplete={onLessonComplete}  // Add
+            isLessonCompleted={isLessonCompleted}  // Add
           />
         ))}
       </div>

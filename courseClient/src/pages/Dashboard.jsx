@@ -1,215 +1,132 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { setDashboardView } from '../store/slices/uiSlice';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from 'recharts';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth, apiRequest } from "../contexts/AuthContext";
 
-const Dashboard = () => {
-  const dispatch = useDispatch();
-  const courses = useSelector(state => state.courses.list);
-  const progress = useSelector(state => state.progress);
-  const { dashboardView } = useSelector(state => state.ui);
+const Dashboard = ({ userRole }) => {
+  const { user } = useAuth();
+  const [dashboardData, setDashboardData] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Calculate stats
-  const totalCourses = courses.length;
-  const totalLessons = courses.reduce((acc, course) => {
-    return acc + course.sections.reduce((sectionAcc, section) => {
-      return sectionAcc + section.lessons.length;
-    }, 0);
-  }, 0);
+  useEffect(() => {
+    fetchDashboardData();
+    if (user?.role === "admin") {
+      fetchAdminCourses();
+    }
+  }, [user]);
 
-  // Category distribution
-  const categoryStats = courses.reduce((acc, course) => {
-    acc[course.category] = (acc[course.category] || 0) + 1;
-    return acc;
-  }, {});
+  const fetchDashboardData = async () => {
+    try {
+      let data;
+      if (user?.role === "admin") {
+        data = await apiRequest("/admin/dashboard");
+      } else {
+        data = await apiRequest("/student/dashboard");
+      }
+      setDashboardData(data);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const categoryData = Object.entries(categoryStats).map(([name, value]) => ({
-    name,
-    value
-  }));
+  const fetchAdminCourses = async () => {
+    try {
+      const coursesData = await apiRequest("/admin/courses");
+      setCourses(coursesData);
+    } catch (error) {
+      console.error("Error fetching admin courses:", error);
+    }
+  };
 
-  // Difficulty distribution
-  const difficultyStats = courses.reduce((acc, course) => {
-    acc[course.difficulty] = (acc[course.difficulty] || 0) + 1;
-    return acc;
-  }, {});
-
-  const difficultyData = Object.entries(difficultyStats).map(([name, value]) => ({
-    name,
-    value
-  }));
-
-// Calculate Learning Progress
-  const { completedLessonsCount, totalLessonsCount } = courses.reduce(
-  (acc, course) => {
-    const lessons = course.sections.flatMap(section => section.lessons);
-    const completed = lessons.filter(lesson => lesson.readLesson).length;
-    acc.completedLessonsCount += completed;
-    acc.totalLessonsCount += lessons.length;
-    return acc;
-  },
-  { completedLessonsCount: 0, totalLessonsCount: 0 }
-);
-
-const overallProgress =
-  totalLessonsCount > 0
-    ? Math.round((completedLessonsCount / totalLessonsCount) * 100)
-    : 0;
-
-  // Colors for charts
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-
-  const StatsCard = ({ title, value, subtitle, color = 'blue' }) => (
-    <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:bg-white/30">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-700">{title}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
-          {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
-        </div>
-      </div>
-    </div>
-  );
-
-  const QuickActions = () => (
-    <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-      <div className="space-y-3">
-        <Link 
-          to="/courses/create"
-          className="block w-full bg-gradient-to-r from-blue-500/80 to-blue-600/80 backdrop-blur-sm text-white text-center py-3 px-4 rounded-xl hover:from-blue-600/90 hover:to-blue-700/90 transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-400/30"
-        >
-          Create New Course
-        </Link>
-        <Link 
-          to="/courses"
-          className="block w-full backdrop-blur-sm bg-white/40 border border-white/50 text-gray-700 text-center py-3 px-4 rounded-xl hover:bg-white/60 transition-all duration-300 shadow-lg hover:shadow-xl"
-        >
-          Manage Courses
-        </Link>
-      </div>
-    </div>
-  );
-
-  const RecentCourses = () => (
-    <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Courses</h3>
-      <div className="space-y-3">
-        {courses.slice(0, 3).map((course, index) => (
-          <div key={course.courseId} className="flex items-center p-3 backdrop-blur-sm bg-white/30 border border-white/40 rounded-xl hover:bg-white/50 transition-all duration-300">
-            <img 
-              src={course.thumbnail} 
-              alt={course.title}
-              className="w-12 h-12 rounded-xl object-cover mr-3 shadow-md"
-            />
-            <div className="flex-1">
-              <h4 className="font-medium text-gray-900 truncate">{course.title}</h4>
-              <p className="text-sm text-gray-600">{course.category} • {course.difficulty}</p>
-            </div>
-          </div>
-        ))}
-        {courses.length === 0 && (
-          <p className="text-gray-600 text-center py-4">No courses created yet</p>
-        )}
-      </div>
-    </div>
-  );
-
-  if (dashboardView === 'student') {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  const StatsCard = ({ title, value, subtitle }) => (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+    </div>
+  );
+
+  // Student Dashboard
+  if (user?.role === "student") {
+    return (
+      <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Student Dashboard</h1>
-              <p className="text-gray-700">Continue your learning journey</p>
-            </div>
-            <button 
-              onClick={() => dispatch(setDashboardView('admin'))}
-              className="bg-gradient-to-r from-blue-500/80 to-blue-600/80 backdrop-blur-sm text-white px-6 py-3 rounded-xl hover:from-blue-600/90 hover:to-blue-700/90 transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-400/30"
-            >
-              Switch to Admin
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold mb-6">Welcome, {user.username}!</h1>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <StatsCard 
-              title="Available Courses" 
-              value={totalCourses}
-              subtitle="Ready to learn"
-              color="green"
+            <StatsCard
+              title="Enrolled Courses"
+              value={dashboardData?.totalEnrolled || 0}
             />
-            <StatsCard 
-              title="Total Lessons" 
-              value={totalLessons}
-              subtitle="Across all courses"
-              color="blue"
+            <StatsCard
+              title="Completed Courses"
+              value={dashboardData?.completedCourses || 0}
             />
-            <StatsCard 
-              title="Learning Progress" 
-              value={`${overallProgress}%`}
-              subtitle="Keep going!"
-              color="purple"
+            <StatsCard
+              title="Average Progress"
+              value={`${dashboardData?.avgProgress || 0}%`}
             />
           </div>
 
-          {/* Available Courses */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Available Courses</h3>
-              <div className="space-y-4">
-                {courses.map((course) => (
-                  <div key={course.courseId} className="backdrop-blur-sm bg-white/30 border border-white/40 rounded-xl p-4 hover:bg-white/50 hover:shadow-lg transition-all duration-300">
-                    <div className="flex items-start">
-                      <img 
-                        src={course.thumbnail} 
-                        alt={course.title}
-                        className="w-16 h-16 rounded-xl object-cover mr-4 shadow-md"
-                      />
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{course.title}</h4>
-                        <p className="text-sm text-gray-700 mb-2" dangerouslySetInnerHTML={{__html: course.description}}></p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm bg-white/50 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/40">{course.category}</span>
-                          <button className="text-blue-600 hover:text-blue-800 text-sm font-medium bg-white/40 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/40 hover:bg-white/60 transition-all duration-300">
-                            Start Learning
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {courses.length === 0 && (
-                  <p className="text-center text-gray-600 py-8">No courses available yet</p>
-                )}
-              </div>
+          {/* Enrolled Courses */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">My Courses</h2>
+              <Link
+                to="/courses"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Browse Courses
+              </Link>
             </div>
 
-            <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Categories</h3>
-              {categoryData.length > 0 ? (
-                <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie
-                        data={categoryData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        label={({name, value}) => `${name}: ${value}`}
-                      >
-                        {categoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
+            <div className="space-y-4">
+              {dashboardData?.enrolledCourses?.map((course) => (
+                <div key={course._id} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-medium">{course.title}</h3>
+                      <p className="text-sm text-gray-600">
+                        by {course.instructorName}
+                      </p>
+                    </div>
+                    <Link
+                      to={`/courses/${course._id}`}
+                      className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                    >
+                      Continue
+                    </Link>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
+                      style={{ width: `${course.progress}%` }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {course.progress}% complete
+                  </p>
                 </div>
-              ) : (
-                <p className="text-center text-gray-600 py-8">No data to display</p>
+              ))}
+
+              {!dashboardData?.enrolledCourses?.length && (
+                <div className="text-center py-8 text-gray-500">
+                  No enrolled courses yet.{" "}
+                  <Link to="/courses" className="text-blue-600 hover:underline">
+                    Browse courses to get started!
+                  </Link>
+                </div>
               )}
             </div>
           </div>
@@ -218,106 +135,109 @@ const overallProgress =
     );
   }
 
+  // Admin Dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6">
+    <div className="p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-700">Manage your courses and track progress</p>
-          </div>
-          <button 
-            onClick={() => dispatch(setDashboardView('student'))}
-            className="bg-gradient-to-r from-green-500/80 to-green-600/80 backdrop-blur-sm text-white px-6 py-3 rounded-xl hover:from-green-600/90 hover:to-green-700/90 transition-all duration-300 shadow-lg hover:shadow-xl border border-green-400/30"
-          >
-            Switch to Student View
-          </button>
-        </div>
+        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-        {/* Stats Cards */}
+        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <StatsCard 
-            title="Total Courses" 
-            value={totalCourses}
-            subtitle="Published courses"
+          <StatsCard
+            title="Total Courses"
+            value={dashboardData?.totalCourses || 0}
           />
-          <StatsCard 
-            title="Total Lessons" 
-            value={totalLessons}
-            subtitle="Across all courses"
-            color="green"
+          <StatsCard
+            title="Total Students"
+            value={dashboardData?.totalStudents || 0}
           />
-          <StatsCard 
-            title="Categories" 
-            value={Object.keys(categoryStats).length}
-            subtitle="Different topics"
-            color="yellow"
+          <StatsCard
+            title="Active Enrollments"
+            value={dashboardData?.activeEnrollments || 0}
           />
-          <StatsCard 
-            title="Average Sections" 
-            value={totalCourses > 0 ? Math.round(courses.reduce((acc, course) => acc + course.sections.length, 0) / totalCourses) : 0}
-            subtitle="Per course"
-            color="purple"
+          <StatsCard
+            title="Avg Completion"
+            value={`${dashboardData?.avgCompletion || 0}%`}
           />
         </div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <div className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl p-6 shadow-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Analytics</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Category Chart */}
-                <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4">
-                  <h4 className="text-md font-medium text-gray-800 mb-3">By Category</h4>
-                  {categoryData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={200}>
-                      <PieChart>
-                        <Pie
-                          data={categoryData}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={60}
-                          dataKey="value"
-                        >
-                          {categoryData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="h-48 flex items-center justify-center text-gray-600">
-                      No data available
-                    </div>
-                  )}
-                </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">My Courses</h2>
+                <Link
+                  to="admin/courses/create"
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Create Course
+                </Link>
+              </div>
 
-                {/* Difficulty Chart */}
-                <div className="backdrop-blur-sm bg-white/10 rounded-xl p-4">
-                  <h4 className="text-md font-medium text-gray-800 mb-3">By Difficulty</h4>
-                  {difficultyData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={200}>
-                      <BarChart data={difficultyData}>
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Bar dataKey="value" fill="#3B82F6" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="h-48 flex items-center justify-center text-gray-600">
-                      No data available
+              <div className="space-y-4">
+                {courses.map((course) => (
+                  <div key={course._id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="font-medium">{course.title}</h3>
+                        <p className="text-sm text-gray-600">
+                          {course.category} • {course.difficulty}
+                        </p>
+                        <p className="text-sm text-blue-600">
+                          {course.enrolledStudents?.length || 0} students
+                          enrolled
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Link
+                          to={`admin/courses/${course._id}/edit`}
+                          className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                        >
+                          Edit
+                        </Link>
+                        <Link
+                          to={`/courses/${course._id}`}
+                          className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700"
+                        >
+                          View
+                        </Link>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                ))}
+
+                {!courses.length && (
+                  <div className="text-center py-8 text-gray-500">
+                    No courses created yet.{" "}
+                    <Link
+                      to="/courses/create"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Create your first course!
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <QuickActions />
-            <RecentCourses />
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div className="space-y-3">
+              <Link
+                to="admin/courses/create"
+                className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded hover:bg-blue-700"
+              >
+                Create New Course
+              </Link>
+              <Link
+                to="/courses"
+                className="block w-full bg-gray-600 text-white text-center py-2 px-4 rounded hover:bg-gray-700"
+              >
+                Manage All Courses
+              </Link>
+            </div>
           </div>
         </div>
       </div>

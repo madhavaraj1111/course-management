@@ -26,6 +26,7 @@ export const useSectionManager = (setValue, getValues) => {
     const newLessons = Array.from({ length: count }, () => ({
       title: "",
       description: "",
+      content: "", 
     }));
 
     currentSections[sectionIndex].lessons.push(...newLessons);

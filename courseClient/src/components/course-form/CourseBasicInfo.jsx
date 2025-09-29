@@ -68,6 +68,7 @@ const CourseBasicInfo = ({ register, errors, control, watchedValues }) => {
                   { label: "Design", value: "Design" },
                   { label: "Business", value: "Business" },
                   { label: "Marketing", value: "Marketing" },
+                  { label: "Data Science", value: "Data Science" },
                 ]}
                 placeholder="Select Category"
               />

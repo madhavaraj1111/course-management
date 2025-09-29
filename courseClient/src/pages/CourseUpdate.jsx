@@ -1,104 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateCourse } from "../store/slices/coursesSlice";
+import { apiRequest } from "../contexts/AuthContext";
 import CourseForm from "../components/course-form/CourseForm";
 
 const CourseUpdate = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId } = useParams();
-
-  const { courses, selectedCourse } = useSelector((state) => state.courses);
-
+  
   const [courseData, setCourseData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let currentCourse = null;
-    let courseIndex = null;
-
-    if (selectedCourse?.course) {
-      currentCourse = selectedCourse.course;
-      courseIndex = selectedCourse.index;
-    } else if (courseId && courses && courses.length > 0) {
-      courseIndex = courses.findIndex(
-        (course) =>
-          course.id === courseId ||
-          course._id === courseId ||
-          courses.indexOf(course).toString() === courseId
-      );
-
-      if (courseIndex !== -1) {
-        currentCourse = courses[courseIndex];
-      }
+    if (courseId) {
+      fetchCourse();
     } else {
-      const savedCourse = localStorage.getItem("editingCourse");
-      if (savedCourse) {
-        try {
-          const parsed = JSON.parse(savedCourse);
-          currentCourse = parsed.course;
-          courseIndex = parsed.index;
-        } catch (e) {
-          console.error("Error parsing saved course data:", e);
-        }
-      }
+      setError("No course ID provided");
+      setLoading(false);
     }
+  }, [courseId]);
 
-    if (currentCourse) {
-      setCourseData(currentCourse);
+  const fetchCourse = async () => {
+    try {
+      const data = await apiRequest(`/courses/${courseId}`);
+      setCourseData(data);
       setError(null);
-      localStorage.setItem(
-        "editingCourse",
-        JSON.stringify({
-          course: currentCourse,
-          index: courseIndex,
-        })
-      );
-    } else {
-      setError("Course not found. Please select a course to edit.");
+    } catch (error) {
+      console.error('Error fetching course:', error);
+      setError("Course not found or you don't have permission to edit it.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    setLoading(false);
-  }, [selectedCourse, courseId, courses]);
-
-  const handleSubmit = (data) => {
-    const savedData = localStorage.getItem("editingCourse");
-    let courseIndex = null;
-
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        courseIndex = parsed.index;
-      } catch (e) {
-        console.error("Error parsing saved course data:", e);
-      }
-    }
-
-    if (courseIndex !== null) {
-      dispatch(
-        updateCourse({
-          index: courseIndex,
-          updatedCourse: data,
-        })
-      );
-      localStorage.removeItem("editingCourse");
+  const handleSubmit = async (data) => {
+    setSubmitting(true);
+    setError(null);
+    
+    try {
+      await apiRequest(`/admin/courses/${courseId}`, {
+        method: 'PUT',
+        body: data
+      });
+      
       navigate("/courses");
-    } else {
-      setError("Unable to save course. Course index not found.");
+    } catch (error) {
+      console.error('Error updating course:', error);
+      setError(error.message || 'Error updating course');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleCancel = () => {
-    localStorage.removeItem("editingCourse");
     navigate("/courses");
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading course data...</div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-400"></div>
       </div>
     );
   }
@@ -120,12 +82,23 @@ const CourseUpdate = () => {
   }
 
   return (
-    <CourseForm
-      mode="update"
-      initialData={courseData}
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-    />
+    <div>
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {error}
+          </div>
+        </div>
+      )}
+      
+      <CourseForm
+        mode="update"
+        initialData={courseData}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        loading={submitting}
+      />
+    </div>
   );
 };
 

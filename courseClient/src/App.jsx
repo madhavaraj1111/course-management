@@ -1,9 +1,13 @@
+import { AuthProvider } from "./contexts/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
+
 const App = () => {
   return (
-    <div className="App font-nunito">
-      <AppRoutes />
-    </div>
+    <AuthProvider>
+      <div className="App font-nunito">
+        <AppRoutes />
+      </div>
+    </AuthProvider>
   );
 };
 
