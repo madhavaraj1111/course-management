@@ -12,12 +12,12 @@ const CourseCard = ({
   preview = false,
   selected,
   onToggleSelect,
-  viewMode = 'manage',
+  viewMode = "manage",
   userRole,
+  instructorId,
   onEnroll,
   showSelection = false,
 }) => {
-
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,20 +27,20 @@ const CourseCard = ({
     e.stopPropagation();
     if (window.confirm(`Are you sure you want to delete "${course.title}"?`)) {
       try {
-        await apiRequest(`/admin/courses/${course._id}`, { method: 'DELETE' });
+        await apiRequest(`/admin/courses/${course._id}`, { method: "DELETE" });
         // Instead of reload, trigger parent refresh
-        if (window.location.pathname.includes('/courses')) {
+        if (window.location.pathname.includes("/courses")) {
           window.location.reload();
         }
       } catch (error) {
-        alert('Error deleting course: ' + error.message);
+        alert("Error deleting course: " + error.message);
       }
     }
   };
 
   const handleEdit = (e) => {
     e.stopPropagation();
-    navigate(`/courses/${course._id}/edit`);
+    navigate(`/admin/courses/${course._id}/edit`);
   };
 
   const handleEnroll = async (e) => {
@@ -76,8 +76,8 @@ const CourseCard = ({
     if (preview) return null;
 
     switch (viewMode) {
-      case 'browse':
-        if (userRole === 'student') {
+      case "browse":
+        if (userRole === "student") {
           return course.isEnrolled ? (
             <button
               onClick={() => navigate(`/courses/${course._id}`)}
@@ -91,13 +91,13 @@ const CourseCard = ({
               disabled={loading}
               className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
             >
-              {loading ? 'Enrolling...' : 'Enroll Now'}
+              {loading ? "Enrolling..." : "Enroll Now"}
             </button>
           );
         }
         break;
-      
-      case 'enrolled':
+
+      case "enrolled":
         return (
           <div className="flex items-center space-x-2">
             <button
@@ -113,10 +113,10 @@ const CourseCard = ({
             )}
           </div>
         );
-      
-      case 'manage':
+
+      case "manage":
       default:
-        if (userRole === 'admin') {
+        if (userRole === "admin") {
           return (
             <div className="flex space-x-2">
               <button
@@ -155,7 +155,7 @@ const CourseCard = ({
 
   // Get enrollment count for admin view
   const getEnrollmentCount = () => {
-    if (userRole === 'admin' && course.enrolledStudents) {
+    if (userRole === "admin" && course.enrolledStudents) {
       return `${course.enrolledStudents.length} enrolled`;
     }
     return null;
@@ -177,19 +177,24 @@ const CourseCard = ({
 
       {/* Status Badges */}
       <div className="absolute top-2 right-2 z-20">
-        {viewMode === 'browse' && course.isEnrolled && (
+        {viewMode === "browse" && course.isEnrolled && (
           <div className="bg-green-500 text-white px-2 py-1 rounded text-xs mb-1">
             Enrolled
           </div>
         )}
-        {viewMode === 'enrolled' && course.progress !== undefined && (
+        {viewMode === "enrolled" && course.progress !== undefined && (
           <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs">
             {course.progress}%
           </div>
         )}
-        {viewMode === 'manage' && userRole === 'admin' && (
+        {viewMode === "manage" && userRole === "admin" && (
           <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs">
             {getEnrollmentCount()}
+          </div>
+        )}
+        {course.instructor?._id === instructorId && (
+          <div className="bg-emerald-700 text-white px-2 py-1 rounded text-xs">
+            Your creation
           </div>
         )}
       </div>
@@ -210,9 +215,10 @@ const CourseCard = ({
         <BookPages
           course={course}
           isHovered={isHovered}
-          onEdit={userRole === 'admin' ? handleEdit : null}
-          onDelete={userRole === 'admin' ? handleDelete : null}
+          onEdit={userRole === "admin" ? handleEdit : null}
+          onDelete={userRole === "admin" ? handleDelete : null}
           preview={preview}
+          instructorId={instructorId}
           actionButtons={getActionButtons()}
           viewMode={viewMode}
         />

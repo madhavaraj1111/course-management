@@ -5,23 +5,25 @@ const CourseGrid = ({
   allCourses,
   selectedCourses,
   onToggleSelect,
-  viewMode = 'manage',
+  viewMode = "manage",
   userRole,
+  instructorId,
   onEnroll,
   showSelection = false,
 }) => {
-  
   if (!courses || courses.length === 0) {
     const getEmptyMessage = () => {
       switch (viewMode) {
-        case 'browse':
-          return 'No courses available to browse.';
-        case 'enrolled':
-          return 'You haven\'t enrolled in any courses yet.';
-        case 'manage':
-          return userRole === 'admin' ? 'No courses created yet.' : 'No courses found.';
+        case "browse":
+          return "No courses available to browse.";
+        case "enrolled":
+          return "You haven't enrolled in any courses yet.";
+        case "manage":
+          return userRole === "admin"
+            ? "No courses created yet."
+            : "No courses found.";
         default:
-          return 'No courses found.';
+          return "No courses found.";
       }
     };
 
@@ -38,17 +40,21 @@ const CourseGrid = ({
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-12 place-items-center">
       {courses.map((course, index) => {
         const actualIndex = allCourses.findIndex((c) => c._id === course._id);
-        const isSelected = showSelection && selectedCourses.includes(actualIndex);
-        
+        const isSelected =
+          showSelection && selectedCourses.includes(actualIndex);
+
         return (
           <CourseCard
             key={course._id || index}
             course={course}
             index={actualIndex}
             selected={isSelected}
-            onToggleSelect={showSelection ? () => onToggleSelect(actualIndex) : null}
+            onToggleSelect={
+              showSelection ? () => onToggleSelect(actualIndex) : null
+            }
             viewMode={viewMode}
             userRole={userRole}
+            instructorId={instructorId}
             onEnroll={onEnroll}
             showSelection={showSelection}
           />

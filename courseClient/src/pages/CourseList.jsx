@@ -78,7 +78,6 @@ const CourseList = ({ viewMode = "manage" }) => {
           // Get enrolled courses from student dashboard
           const dashboardData = await apiRequest("/student/dashboard");
 
-
           data = dashboardData.enrolledCourses.map((course) => ({
             ...course, // keep all fields: title, description, thumbnail, sections, lessons, etc.
             isEnrolled: true,
@@ -211,6 +210,7 @@ const CourseList = ({ viewMode = "manage" }) => {
           onToggleSelect={toggleSelect}
           viewMode={viewMode}
           userRole={user?.role}
+          instructorId={user.id}
           onEnroll={handleEnroll}
           showSelection={showBulkActions}
         />

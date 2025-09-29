@@ -1,14 +1,15 @@
 import SectionsList from "./SectionsList";
 import ActionButtons from "./ActionButtons";
 
-const BookPages = ({ 
-  course, 
-  isHovered, 
-  onEdit, 
-  onDelete, 
-  preview, 
-  actionButtons, 
-  viewMode 
+const BookPages = ({
+  course,
+  isHovered,
+  onEdit,
+  onDelete,
+  preview,
+  actionButtons,
+  viewMode,
+  instructorId,
 }) => {
   return (
     <div
@@ -26,12 +27,12 @@ const BookPages = ({
         {/* Header */}
         <div className="border-b border-gray-300 pb-4 mb-6 relative z-10">
           <h4 className="text-lg font-bold text-gray-800 text-center">
-            {viewMode === 'browse' ? 'Course Overview' : 'Course Index'}
+            {viewMode === "browse" ? "Course Overview" : "Course Index"}
           </h4>
         </div>
 
         {/* Course Info for browse mode */}
-        {viewMode === 'browse' && (
+        {viewMode === "browse" && (
           <div className="mb-4 relative z-10">
             <div className="text-sm text-gray-600 space-y-2">
               <div className="flex justify-between">
@@ -45,7 +46,9 @@ const BookPages = ({
               {course.enrolledStudents && (
                 <div className="flex justify-between">
                   <span>Students:</span>
-                  <span className="font-medium">{course.enrolledStudents.length || 0}</span>
+                  <span className="font-medium">
+                    {course.enrolledStudents.length || 0}
+                  </span>
                 </div>
               )}
             </div>
@@ -58,17 +61,16 @@ const BookPages = ({
         {/* Dynamic Action Buttons */}
         {actionButtons ? (
           <div className="mt-auto pt-4 border-t border-gray-200 relative z-10">
-            <div className="flex justify-center">
-              {actionButtons}
-            </div>
+            <div className="flex justify-center">{actionButtons}</div>
           </div>
         ) : (
-          // Fallback to old ActionButtons component
-          <ActionButtons 
-            onEdit={onEdit}
-            onDelete={onDelete}
-            preview={preview}
-          />
+          course.instructor._id == instructorId && (
+            <ActionButtons
+              onEdit={onEdit}
+              onDelete={onDelete}
+              preview={preview}
+            />
+          )
         )}
 
         {/* Page lines */}
