@@ -12,7 +12,7 @@ const CourseFilters = ({
   sortOption,
   onSortChange,
   onAddCourse,
-  viewMode = 'manage',
+  viewMode = "manage",
 }) => {
   const categoryOptions = [
     { value: "all", label: "All Categories" },
@@ -33,8 +33,6 @@ const CourseFilters = ({
   const sortOptions = [
     { value: "title-asc", label: "Title (A-Z)" },
     { value: "title-desc", label: "Title (Z-A)" },
-    { value: "newest", label: "Newest First" },
-    { value: "oldest", label: "Oldest First" },
   ];
 
   return (
@@ -43,8 +41,8 @@ const CourseFilters = ({
         value={searchQuery}
         onChange={onSearchChange}
         placeholder={
-          viewMode === 'browse' 
-            ? "Search courses to enroll..." 
+          viewMode === "browse"
+            ? "Search courses to enroll..."
             : "Search courses..."
         }
         className="w-full sm:w-auto"
