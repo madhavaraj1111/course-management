@@ -49,8 +49,8 @@ const BookCover = ({
               </span>
             )}
             {viewMode === "enrolled" && course.progress !== undefined && (
-              <span className="px-3 py-1 text-xs font-semibold rounded bg-blue-500 text-white">
-                {course.progress}% Complete
+              <span className="px-3 py-1 text-xs font-semibold rounded bg-green-600 text-white">
+                {course.progress}%
               </span>
             )}
           </div>
