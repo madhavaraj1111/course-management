@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth, apiRequest } from "../contexts/AuthContext";
 
-const Dashboard = ({ userRole }) => {
+const Dashboard = () => {
   const { user } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -91,40 +91,45 @@ const Dashboard = ({ userRole }) => {
               </Link>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dashboardData?.enrolledCourses?.map((course) => (
-                <div key={course._id} className="border rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-medium">{course.title}</h3>
-                      <p className="text-sm text-gray-600">
-                        by {course.instructorName}
-                      </p>
-                    </div>
+                <div
+                  key={course._id}
+                  className="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold text-lg mb-1 line-clamp-2">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    by {course.instructorName}
+                  </p>
+
+                  <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                    <div
+                      className="bg-blue-600 h-2.5 rounded-full transition-all"
+                      style={{ width: `${course.progress}%` }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-gray-700">
+                      {course.progress}% complete
+                    </p>
                     <Link
                       to={`/courses/${course._id}`}
-                      className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                      className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700"
                     >
                       Continue
                     </Link>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {course.progress}% complete
-                  </p>
                 </div>
               ))}
 
               {!dashboardData?.enrolledCourses?.length && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="col-span-full text-center py-12 text-gray-500">
                   No enrolled courses yet.{" "}
                   <Link to="/courses" className="text-blue-600 hover:underline">
-                    Browse courses to get started!
+                    Browse courses
                   </Link>
                 </div>
               )}
@@ -168,7 +173,7 @@ const Dashboard = ({ userRole }) => {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">My Courses</h2>
                 <Link
-                  to="admin/courses/create"
+                  to="/admin/courses/create"
                   className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
                   Create Course
@@ -226,7 +231,7 @@ const Dashboard = ({ userRole }) => {
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <div className="space-y-3">
               <Link
-                to="admin/courses/create"
+                to="/admin/courses/create"
                 className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded hover:bg-blue-700"
               >
                 Create New Course

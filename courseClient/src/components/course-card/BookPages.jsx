@@ -10,7 +10,11 @@ const BookPages = ({
   actionButtons,
   viewMode,
   instructorId,
+  userRole,
 }) => {
+  // Show Course Index for students, Course Overview for admin/manage views
+  const isStudentView = viewMode === "browse" || viewMode === "enrolled";
+
   return (
     <div
       className={`absolute inset-0 bg-white rounded-r-lg shadow-lg transform transition-all duration-700 ${
@@ -27,12 +31,12 @@ const BookPages = ({
         {/* Header */}
         <div className="border-b border-gray-300 pb-4 mb-6 relative z-10">
           <h4 className="text-lg font-bold text-gray-800 text-center">
-            {viewMode === "browse" ? "Course Overview" : "Course Index"}
+            {isStudentView ? "Course Index" : "Course Overview"}
           </h4>
         </div>
 
-        {/* Course Info for browse mode */}
-        {viewMode === "browse" && (
+        {/* Course Info for non-student views only */}
+        {!isStudentView && (
           <div className="mb-4 relative z-10">
             <div className="text-sm text-gray-600 space-y-2">
               <div className="flex justify-between">
@@ -64,7 +68,7 @@ const BookPages = ({
             <div className="flex justify-center">{actionButtons}</div>
           </div>
         ) : (
-          course.instructor._id == instructorId && (
+          course.instructor?._id == instructorId && (
             <ActionButtons
               onEdit={onEdit}
               onDelete={onDelete}

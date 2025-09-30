@@ -175,30 +175,6 @@ const CourseCard = ({
         </div>
       )}
 
-      {/* Status Badges */}
-      <div className="absolute top-2 right-2 z-20">
-        {viewMode === "browse" && course.isEnrolled && (
-          <div className="bg-green-500 text-white px-2 py-1 rounded text-xs mb-1">
-            Enrolled
-          </div>
-        )}
-        {viewMode === "enrolled" && course.progress !== undefined && (
-          <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs">
-            {course.progress}%
-          </div>
-        )}
-        {viewMode === "manage" && userRole === "admin" && (
-          <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs">
-            {getEnrollmentCount()}
-          </div>
-        )}
-        {course.instructor?._id === instructorId && (
-          <div className="bg-emerald-700 text-white px-2 py-1 rounded text-xs">
-            Your creation
-          </div>
-        )}
-      </div>
-
       {/* Book Container */}
       <div className="relative w-full h-full transform-style-preserve-3d book-container">
         {/* Spine / Back */}
@@ -209,6 +185,8 @@ const CourseCard = ({
           course={course}
           cardColorGradient={cardColorGradient}
           isHovered={isHovered}
+          viewMode={viewMode}
+          instructorId={instructorId}
         />
 
         {/* Inner Pages */}
@@ -221,6 +199,7 @@ const CourseCard = ({
           instructorId={instructorId}
           actionButtons={getActionButtons()}
           viewMode={viewMode}
+          userRole={userRole}
         />
 
         {/* Hover pulse */}

@@ -15,7 +15,7 @@ const CoursePreview = ({ previewData }) => {
           </p>
         </div>
         <div className="flex justify-center lg:justify-start">
-          <CourseCard preview={true} course={previewData} />
+          <CourseCard preview={true} course={previewData} instructorId={null} />
         </div>
       </div>
     </div>

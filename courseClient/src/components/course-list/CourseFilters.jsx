@@ -15,7 +15,7 @@ const CourseFilters = ({
   viewMode = 'manage',
 }) => {
   const categoryOptions = [
-    { value: "", label: "All Categories" },
+    { value: "all", label: "All Categories" },
     { value: "Programming", label: "Programming" },
     { value: "Design", label: "Design" },
     { value: "Business", label: "Business" },
@@ -24,7 +24,7 @@ const CourseFilters = ({
   ];
 
   const difficultyOptions = [
-    { value: "", label: "All Levels" },
+    { value: "all", label: "All Levels" },
     { value: "Beginner", label: "Beginner" },
     { value: "Intermediate", label: "Intermediate" },
     { value: "Advanced", label: "Advanced" },

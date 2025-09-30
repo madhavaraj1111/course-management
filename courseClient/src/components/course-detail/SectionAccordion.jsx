@@ -158,14 +158,6 @@ const SectionAccordion = ({
                           }}
                         />
                       )}
-                      {isSelected && lesson.content && (
-                        <div className="mt-4 p-3 sm:p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
-                          <div
-                            className="prose prose-xs max-w-none text-gray-700"
-                            dangerouslySetInnerHTML={{ __html: lesson.content }}
-                          />
-                        </div>
-                      )}
                     </div>
                   </div>
                 </button>

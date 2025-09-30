@@ -1,3 +1,4 @@
+// components/course-form/LessonItem.jsx
 import React from "react";
 import { Controller } from "react-hook-form";
 import Button from "../Button";
@@ -49,7 +50,7 @@ const LessonItem = ({
       </div>
 
       {/* Lesson Description */}
-      <div className="mb-3">
+      <div>
         <label className="block text-white/60 text-xs mb-1">Description</label>
         <Controller
           name={`sections.${sectionIndex}.lessons.${lessonIndex}.description`}
@@ -70,29 +71,6 @@ const LessonItem = ({
               errors.sections[sectionIndex].lessons[lessonIndex].description
                 .message
             }
-          </span>
-        )}
-      </div>
-
-      {/* Lesson Content */}
-      <div>
-        <label className="block text-white/60 text-xs mb-1">Content</label>
-        <Controller
-          name={`sections.${sectionIndex}.lessons.${lessonIndex}.content`}
-          control={control}
-          rules={{ required: "Lesson content is required" }}
-          render={({ field }) => (
-            <RichTextEditor
-              value={field.value}
-              onChange={field.onChange}
-              glassMode={true}
-              placeholder="Add your lesson content here..."
-            />
-          )}
-        />
-        {errors.sections?.[sectionIndex]?.lessons?.[lessonIndex]?.content && (
-          <span className="text-sm text-red-300">
-            {errors.sections[sectionIndex].lessons[lessonIndex].content.message}
           </span>
         )}
       </div>

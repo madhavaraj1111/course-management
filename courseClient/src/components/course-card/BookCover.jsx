@@ -1,8 +1,16 @@
+// BookCover.jsx
 import React from "react";
 import CourseThumbnail from "./CourseThumbnail";
 import CourseInfo from "./CourseInfo";
 
-const BookCover = ({ course, cardColorGradient, isHovered }) => {
+// BookCover.jsx
+const BookCover = ({
+  course,
+  cardColorGradient,
+  isHovered,
+  viewMode,
+  instructorId,
+}) => {
   return (
     <div
       className={`checkbox-container absolute inset-0 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg shadow-xl shadow-black/40 transform transition-all duration-700 origin-left ${
@@ -21,21 +29,35 @@ const BookCover = ({ course, cardColorGradient, isHovered }) => {
 
         {/* Header */}
         <div className="relative z-10">
-          <div className="flex gap-2 mb-4">
+          {/* Your Creation - Top Right */}
+          {course.instructor?._id === instructorId && (
+            <div className="absolute -top-2 -right-2 px-2 py-1 text-xs font-bold rounded bg-green-600 text-white shadow-lg">
+              BY YOU
+            </div>
+          )}
+
+          <div className="flex gap-2 mb-4 flex-wrap">
             <span className="px-3 py-1 text-xs font-semibold rounded bg-white/10 text-white">
               {course.category}
             </span>
             <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/20 text-white border border-white/20">
               {course.difficulty}
             </span>
+            {viewMode === "browse" && course.isEnrolled && (
+              <span className="px-3 py-1 text-xs font-semibold rounded bg-green-600 text-white">
+                Enrolled
+              </span>
+            )}
+            {viewMode === "enrolled" && course.progress !== undefined && (
+              <span className="px-3 py-1 text-xs font-semibold rounded bg-blue-500 text-white">
+                {course.progress}% Complete
+              </span>
+            )}
           </div>
         </div>
 
         {/* Thumbnail */}
-        <CourseThumbnail 
-          thumbnail={course.thumbnail}
-          title={course.title}
-        />
+        <CourseThumbnail thumbnail={course.thumbnail} title={course.title} />
 
         {/* Course Info */}
         <CourseInfo course={course} />
