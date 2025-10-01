@@ -166,7 +166,6 @@ const CourseList = ({ viewMode = "manage" }) => {
   }
 
   const showBulkActions = user?.role === "admin";
-  console.log(showBulkActions);
 
   const showAddCourse = viewMode === "manage" && user?.role === "admin";
 

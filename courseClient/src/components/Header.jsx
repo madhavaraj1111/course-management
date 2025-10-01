@@ -80,7 +80,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-white cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -129,7 +129,7 @@ const Header = () => {
                     navigate("/my-courses");
                     setIsOpen(false);
                   }}
-                  className="text-left hover:text-gray-300 transition-colors"
+                  className="text-left hover:text-gray-300 transition-colors cursor-pointer"
                 >
                   My Courses
                 </button>
