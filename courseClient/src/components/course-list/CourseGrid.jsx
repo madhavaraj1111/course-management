@@ -39,24 +39,23 @@ const CourseGrid = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-12 place-items-center">
       {courses.map((course, index) => {
-        const actualIndex = allCourses.findIndex((c) => c._id === course._id);
-        const isSelected =
-          showSelection && selectedCourses.includes(actualIndex);
+        // Check if this course ID is in the selected Set
+        const isSelected = showSelection && selectedCourses.has(course._id);
 
         return (
           <CourseCard
-            key={course._id || index}
+            key={course._id}
             course={course}
-            index={actualIndex}
+            index={index}
             selected={isSelected}
-            onToggleSelect={
-              showSelection ? () => onToggleSelect(actualIndex) : null
-            }
+            onToggleSelect={() => onToggleSelect(index)}
             viewMode={viewMode}
             userRole={userRole}
             instructorId={instructorId}
             onEnroll={onEnroll}
-            showSelection={showSelection}
+            showSelection={
+              showSelection && course.instructorId === instructorId
+            }
           />
         );
       })}

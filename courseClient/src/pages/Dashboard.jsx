@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth, apiRequest } from "../contexts/AuthContext";
+import Button from "../components/Button"; // Adjust the import path as needed
+import ProgressBar from "../components/ProgressBar";
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,28 +46,30 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   const StatsCard = ({ title, value, subtitle }) => (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-6 hover:bg-white/15 transition-all">
+      <h3 className="text-sm font-medium text-white/70">{title}</h3>
+      <p className="text-3xl font-bold text-white mt-2">{value}</p>
+      {subtitle && <p className="text-sm text-white/60 mt-1">{subtitle}</p>}
     </div>
   );
 
   // Student Dashboard
   if (user?.role === "student") {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Welcome, {user.username}!</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
+            Welcome, {user.username}!
+          </h1>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
             <StatsCard
               title="Enrolled Courses"
               value={dashboardData?.totalEnrolled || 0}
@@ -80,57 +85,60 @@ const Dashboard = () => {
           </div>
 
           {/* Enrolled Courses */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">My Courses</h2>
-              <Link
-                to="/courses"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <h2 className="text-xl font-semibold text-white">My Courses</h2>
+              <Button
+                onClick={() => navigate("/courses")}
+                variant="info"
+                size="md"
               >
                 Browse Courses
-              </Link>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dashboardData?.enrolledCourses?.map((course) => (
                 <div
                   key={course._id}
-                  className="bg-white border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 hover:bg-white/10 transition-all"
                 >
-                  <h3 className="font-semibold text-lg mb-1 line-clamp-2">
+                  <h3 className="font-semibold text-lg mb-1 line-clamp-2 text-white">
                     {course.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-white/60 mb-4">
                     by {course.instructorName}
                   </p>
 
-                  <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                    <div
-                      className="bg-blue-600 h-2.5 rounded-full transition-all"
-                      style={{ width: `${course.progress}%` }}
-                    />
+                  {/* Updated Progress Bar */}
+                  <div className="mb-4">
+                    <ProgressBar percentage={course.progress} />
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-white/70">
                       {course.progress}% complete
                     </p>
-                    <Link
-                      to={`/courses/${course._id}`}
-                      className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700"
+                    <Button
+                      onClick={() => navigate(`/courses/${course._id}`)}
+                      variant="success"
+                      size="sm"
                     >
                       Continue
-                    </Link>
+                    </Button>
                   </div>
                 </div>
               ))}
 
               {!dashboardData?.enrolledCourses?.length && (
-                <div className="col-span-full text-center py-12 text-gray-500">
+                <div className="col-span-full text-center py-12 text-white/60">
                   No enrolled courses yet.{" "}
-                  <Link to="/courses" className="text-blue-600 hover:underline">
+                  <button
+                    onClick={() => navigate("/courses")}
+                    className="text-blue-400 hover:text-blue-300 font-medium underline"
+                  >
                     Browse courses
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
@@ -142,12 +150,14 @@ const Dashboard = () => {
 
   // Admin Dashboard
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
+          Admin Dashboard
+        </h1>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <StatsCard
             title="Total Courses"
             value={dashboardData?.totalCourses || 0}
@@ -169,79 +179,95 @@ const Dashboard = () => {
         {/* Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">My Courses</h2>
-                <Link
-                  to="/admin/courses/create"
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h2 className="text-xl font-semibold text-white">My Courses</h2>
+                <Button
+                  onClick={() => navigate("/admin/courses/create")}
+                  variant="info"
+                  size="md"
                 >
                   Create Course
-                </Link>
+                </Button>
               </div>
 
               <div className="space-y-4">
                 {courses.map((course) => (
-                  <div key={course._id} className="border rounded-lg p-4">
-                    <div className="flex justify-between items-center">
+                  <div
+                    key={course._id}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-all"
+                  >
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="font-medium">{course.title}</h3>
-                        <p className="text-sm text-gray-600">
+                        <h3 className="font-medium text-white">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm text-white/60">
                           {course.category} • {course.difficulty}
                         </p>
-                        <p className="text-sm text-blue-600">
+                        <p className="text-sm text-blue-400">
                           {course.enrolledStudents?.length || 0} students
                           enrolled
                         </p>
                       </div>
-                      <div className="flex space-x-2">
-                        <Link
-                          to={`admin/courses/${course._id}/edit`}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() =>
+                            navigate(`admin/courses/${course._id}/edit`)
+                          }
+                          variant="success"
+                          size="sm"
                         >
                           Edit
-                        </Link>
-                        <Link
-                          to={`/courses/${course._id}`}
-                          className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700"
+                        </Button>
+                        <Button
+                          onClick={() => navigate(`/courses/${course._id}`)}
+                          variant="glass"
+                          size="sm"
                         >
                           View
-                        </Link>
+                        </Button>
                       </div>
                     </div>
                   </div>
                 ))}
 
                 {!courses.length && (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-white/60">
                     No courses created yet.{" "}
-                    <Link
-                      to="/courses/create"
-                      className="text-blue-600 hover:underline"
+                    <button
+                      onClick={() => navigate("/courses/create")}
+                      className="text-blue-400 hover:text-blue-300 font-medium underline"
                     >
                       Create your first course!
-                    </Link>
+                    </button>
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              Quick Actions
+            </h2>
             <div className="space-y-3">
-              <Link
-                to="/admin/courses/create"
-                className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded hover:bg-blue-700"
+              <Button
+                onClick={() => navigate("/admin/courses/create")}
+                variant="info"
+                size="lg"
+                className="w-full"
               >
                 Create New Course
-              </Link>
-              <Link
-                to="/courses"
-                className="block w-full bg-gray-600 text-white text-center py-2 px-4 rounded hover:bg-gray-700"
+              </Button>
+              <Button
+                onClick={() => navigate("/courses")}
+                variant="glass"
+                size="lg"
+                className="w-full"
               >
                 Manage All Courses
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

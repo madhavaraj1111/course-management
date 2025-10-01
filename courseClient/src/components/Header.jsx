@@ -72,12 +72,13 @@ const Header = () => {
               <span className="hidden lg:block">
                 {user?.username} ({user?.role})
               </span>
-              <button
+              <Button
                 onClick={logout}
-                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
+                variant="danger"
+                size="sm"
               >
                 Logout
-              </button>
+              </Button>
             </div>
           </nav>
 
@@ -147,8 +148,9 @@ const Header = () => {
                   logout();
                   setIsOpen(false);
                 }}
-                variant="primary"
-                className="bg-red-600 hover:bg-red-700 w-full"
+                variant="danger"
+                size="md"
+                className="w-full"
               >
                 Logout
               </Button>
@@ -185,8 +187,8 @@ const Header = () => {
           </button>
           <Button
             onClick={handleSignup}
-            variant="primary"
-            className="bg-blue-600 hover:bg-blue-700"
+            variant="info"
+            size="md"
           >
             Sign Up
           </Button>
@@ -219,8 +221,9 @@ const Header = () => {
                 handleSignup();
                 setIsOpen(false);
               }}
-              variant="primary"
-              className="bg-blue-600 hover:bg-blue-700 w-full"
+              variant="info"
+              size="md"
+              className="w-full"
             >
               Sign Up
             </Button>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Button from "../components/Button";
 import logo from "../assets/PerfectStudy.png";
 
 const Signup = () => {
@@ -164,13 +165,15 @@ const Signup = () => {
               </select>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2.5 px-4 rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl text-sm sm:text-base cursor-pointer"
+              variant="success"
+              size="md"
+              className="w-full"
             >
               {loading ? "Creating Account..." : "Sign Up"}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-5 sm:mt-6 text-center">

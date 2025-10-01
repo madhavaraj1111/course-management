@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Button from "../components/Button";
 import logo from "../assets/PerfectStudy.png";
 
 const Login = () => {
@@ -87,13 +88,15 @@ const Login = () => {
               />
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2.5 sm:py-3 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl text-sm sm:text-base cursor-pointer"
+              variant="info"
+              size="md"
+              className="w-full"
             >
               {loading ? "Logging in..." : "Login"}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-5 sm:mt-6 text-center">

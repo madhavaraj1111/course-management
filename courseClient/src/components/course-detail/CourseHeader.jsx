@@ -9,7 +9,7 @@ const CourseHeader = ({ userRole, onBack, onEdit, onDelete }) => {
           {/* Back button */}
           <Button
             onClick={onBack}
-            variant="ghost"
+            variant="glass"
             className="flex items-center space-x-2 text-sm"
           >
             <svg

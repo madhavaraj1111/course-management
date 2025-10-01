@@ -1,42 +1,73 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-export const useCourseSelection = (currentCourses, allCourses) => {
-  const [selectedCourses, setSelectedCourses] = useState([]);
+export const useCourseSelection = (currentCourses, allCourses, instructorId) => {
+  const [selectedCourses, setSelectedCourses] = useState(new Set());
 
-  const toggleSelect = (index) => {
-    setSelectedCourses((prev) =>
-      prev.includes(index)
-        ? prev.filter((id) => id !== index)
-        : [...prev, index]
-    );
+  // Filter courses that belong to the current instructor (only from current page)
+  const selectableCurrentCourses = useMemo(() => {
+    return currentCourses.filter(course => course.instructorId === instructorId);
+  }, [currentCourses, instructorId]);
+
+  // Filter all courses that belong to the current instructor
+  const selectableAllCourses = useMemo(() => {
+    return allCourses.filter(course => course.instructorId === instructorId);
+  }, [allCourses, instructorId]);
+
+  const toggleSelect = (courseId) => {
+    // Only allow toggling if the course belongs to the instructor
+    const course = currentCourses.find(c => c._id === courseId);
+    if (!course || course.instructorId !== instructorId) return;
+
+    setSelectedCourses((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(courseId)) {
+        newSet.delete(courseId);
+      } else {
+        newSet.add(courseId);
+      }
+      return newSet;
+    });
   };
 
   const toggleSelectAll = () => {
-    if (selectedCourses.length === currentCourses.length) {
-      setSelectedCourses([]);
-    } else {
-      const pageIndexes = currentCourses.map((c) =>
-        allCourses.findIndex((x) => x === c)
-      );
-      setSelectedCourses(pageIndexes);
-    }
+    setSelectedCourses((prev) => {
+      const newSet = new Set(prev);
+      const selectableIds = selectableCurrentCourses.map(c => c._id);
+      
+      // Check if all selectable items on current page are selected
+      const allSelectableSelected = selectableIds.every(id => newSet.has(id));
+      
+      if (allSelectableSelected) {
+        // Deselect all selectable courses on current page
+        selectableIds.forEach(id => newSet.delete(id));
+      } else {
+        // Select all selectable courses on current page
+        selectableIds.forEach(id => newSet.add(id));
+      }
+      return newSet;
+    });
   };
 
   const clearSelection = () => {
-    setSelectedCourses([]);
+    setSelectedCourses(new Set());
   };
 
   const selectAll = () => {
-    const allIndexes = allCourses.map((_, index) => index);
-    setSelectedCourses(allIndexes);
+    // Select all courses created by the instructor (across all pages)
+    const allSelectableIds = selectableAllCourses.map(course => course._id);
+    setSelectedCourses(new Set(allSelectableIds));
   };
 
-  const isAllSelected = selectedCourses.length === currentCourses.length && currentCourses.length > 0;
-  const selectedCount = selectedCourses.length;
+  const selectableCurrentIds = selectableCurrentCourses.map(c => c._id);
+  const isAllSelected = 
+    selectableCurrentCourses.length > 0 && 
+    selectableCurrentIds.every(id => selectedCourses.has(id));
+  
+  const selectedCount = selectedCourses.size;
   const hasSelected = selectedCount > 0;
 
   return {
-    selectedCourses,
+    selectedCourses, // Set of IDs
     selectedCount,
     hasSelected,
     isAllSelected,
@@ -44,6 +75,8 @@ export const useCourseSelection = (currentCourses, allCourses) => {
     toggleSelectAll,
     clearSelection,
     selectAll,
-    setSelectedCourses
+    setSelectedCourses,
+    selectableCurrentCourses, // Courses on current page that can be selected
+    selectableAllCourses, // All courses that can be selected
   };
 };

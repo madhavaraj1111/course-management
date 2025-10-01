@@ -4,6 +4,7 @@ import { apiRequest } from "../../contexts/AuthContext";
 import Checkbox from "../CheckBox";
 import BookCover from "./BookCover";
 import BookPages from "./BookPages";
+import Button from "../Button"; // Import your Button component
 import { cardColors } from "./constants";
 
 const CourseCard = ({
@@ -79,20 +80,23 @@ const CourseCard = ({
       case "browse":
         if (userRole === "student") {
           return course.isEnrolled ? (
-            <button
+            <Button
               onClick={() => navigate(`/courses/${course._id}`)}
-              className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+              variant="success"
+              size="sm"
+              className="text-green-600 hover:text-green-400"
             >
               Continue Learning
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
               onClick={handleEnroll}
               disabled={loading}
-              className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
+              variant="info"
+              size="sm"
             >
               {loading ? "Enrolling..." : "Enroll Now"}
-            </button>
+            </Button>
           );
         }
         break;
@@ -100,14 +104,16 @@ const CourseCard = ({
       case "enrolled":
         return (
           <div className="flex items-center space-x-2">
-            <button
+            <Button
               onClick={() => navigate(`/courses/${course._id}`)}
-              className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+              variant="info"
+              size="sm"
+              className="text-blue-600 hover:text-blue-400"
             >
               Continue
-            </button>
+            </Button>
             {course.progress !== undefined && (
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-gray-800">
                 {course.progress}% complete
               </span>
             )}
@@ -119,34 +125,30 @@ const CourseCard = ({
         if (userRole === "admin") {
           return (
             <div className="flex space-x-2">
-              <button
-                onClick={handleEdit}
-                className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-              >
+              <Button onClick={handleEdit} variant="success" size="sm">
                 Edit
-              </button>
-              <button
-                onClick={handleDelete}
-                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
-              >
+              </Button>
+              <Button onClick={handleDelete} variant="danger" size="sm">
                 Delete
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => navigate(`/courses/${course._id}`)}
-                className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700"
+                variant="glass"
+                size="sm"
               >
                 View
-              </button>
+              </Button>
             </div>
           );
         } else {
           return (
-            <button
+            <Button
               onClick={() => navigate(`/courses/${course._id}`)}
-              className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700"
+              variant="glass"
+              size="sm"
             >
               View Details
-            </button>
+            </Button>
           );
         }
     }
