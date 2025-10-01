@@ -53,7 +53,7 @@ const CourseFilters = ({
         value={filterCategory}
         onChange={onCategoryChange}
         options={categoryOptions}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto cursor-pointer"
       />
 
       <FormSelect
@@ -61,7 +61,7 @@ const CourseFilters = ({
         value={filterDifficulty}
         onChange={onDifficultyChange}
         options={difficultyOptions}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto cursor-pointer"
       />
 
       <FormSelect
@@ -69,7 +69,7 @@ const CourseFilters = ({
         value={sortOption}
         onChange={onSortChange}
         options={sortOptions}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto cursor-pointer"
       />
 
       {onAddCourse && (

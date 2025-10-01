@@ -38,14 +38,14 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <button
               onClick={() => navigate("/")}
-              className="text-white hover:text-gray-300 transition-colors"
+              className="text-white hover:text-gray-300 transition-colors cursor-pointer"
             >
               Dashboard
             </button>
 
             <button
               onClick={() => navigate("/courses")}
-              className="text-white hover:text-gray-300 transition-colors"
+              className="text-white hover:text-gray-300 transition-colors cursor-pointer"
             >
               Courses
             </button>
@@ -53,7 +53,7 @@ const Header = () => {
             {user?.role === "admin" && (
               <button
                 onClick={handleAddCourse}
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-white hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Create Course
               </button>
@@ -62,7 +62,7 @@ const Header = () => {
             {user?.role === "student" && (
               <button
                 onClick={() => navigate("/my-courses")}
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-white hover:text-gray-300 transition-colors cursor-pointer"
               >
                 My Courses
               </button>
@@ -72,11 +72,7 @@ const Header = () => {
               <span className="hidden lg:block">
                 {user?.username} ({user?.role})
               </span>
-              <Button
-                onClick={logout}
-                variant="danger"
-                size="sm"
-              >
+              <Button onClick={logout} variant="danger" size="sm">
                 Logout
               </Button>
             </div>
@@ -100,7 +96,7 @@ const Header = () => {
                   navigate("/");
                   setIsOpen(false);
                 }}
-                className="text-left hover:text-gray-300 transition-colors"
+                className="text-left hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Dashboard
               </button>
@@ -110,7 +106,7 @@ const Header = () => {
                   navigate("/courses");
                   setIsOpen(false);
                 }}
-                className="text-left hover:text-gray-300 transition-colors"
+                className="text-left hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Courses
               </button>
@@ -121,7 +117,7 @@ const Header = () => {
                     handleAddCourse();
                     setIsOpen(false);
                   }}
-                  className="text-left hover:text-gray-300 transition-colors"
+                  className="text-left hover:text-gray-300 transition-colors cursor-pointer"
                 >
                   Create Course
                 </button>
@@ -185,11 +181,7 @@ const Header = () => {
           >
             Login
           </button>
-          <Button
-            onClick={handleSignup}
-            variant="info"
-            size="md"
-          >
+          <Button onClick={handleSignup} variant="info" size="md">
             Sign Up
           </Button>
         </nav>

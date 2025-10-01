@@ -1,11 +1,11 @@
 const ProgressBar = ({ percentage }) => {
   return (
-    <div className="relative w-full max-w-lg mx-auto">
+    <div className="relative w-full">
       {/* Progress Bar Background */}
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden relative">
+      <div className="w-full h-1.5 sm:h-2 bg-gray-200/20 rounded-full overflow-hidden relative">
         {/* Progress Fill */}
         <div
-          className="h-2 bg-gradient-to-r from-green-400 to-green-500 rounded-full relative overflow-hidden transition-all duration-500 ease-out"
+          className="h-full bg-gradient-to-r from-green-700 to-green-700 rounded-full relative overflow-hidden transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         >
           {/* Diagonal Pattern Overlay */}
@@ -26,9 +26,9 @@ const ProgressBar = ({ percentage }) => {
 
       {/* Percentage Circle */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 w-8 h-8 bg-green-500 border-2 border-white rounded-full flex items-center justify-center font-bold text-[10px] text-white shadow-lg transition-all duration-500 ease-out"
+        className="absolute top-1/2 -translate-y-1/2 w-8 h-8 text-[10px] bg-green-700 border-[3px] border-white rounded-full flex items-center justify-center font-bold text-white shadow-lg transition-all duration-500 ease-out"
         style={{
-          left: `calc(${Math.max(5, Math.min(95, percentage))}% - 1rem)`,
+          left: `calc(${percentage}% - 1.25rem)`,
         }}
       >
         {percentage}%
