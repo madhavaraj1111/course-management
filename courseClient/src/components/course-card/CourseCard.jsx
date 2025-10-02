@@ -1,17 +1,16 @@
+// CourseCard.jsx - Simplified main component
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiRequest } from "../../contexts/AuthContext";
+import { useCourseCardActions } from "./hooks/useCourseCardActions";
 import Checkbox from "../common/CheckBox";
 import BookCover from "./BookCover";
 import BookPages from "./BookPages";
-import Button from "../common/Button"; // Import your Button component
 import { cardColors } from "./constants";
 
 const CourseCard = ({
   course,
-  index,
   preview = false,
-  selected,
+  selected = false,
   onToggleSelect,
   viewMode = "manage",
   userRole,
@@ -22,36 +21,21 @@ const CourseCard = ({
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const cardColorGradient = cardColors[course.category] || cardColors.Default;
 
-  const handleDelete = async (e) => {
-    e.stopPropagation();
-    if (window.confirm(`Are you sure you want to delete "${course.title}"?`)) {
-      try {
-        await apiRequest(`/admin/courses/${course._id}`, { method: "DELETE" });
-        // Instead of reload, trigger parent refresh
-        if (window.location.pathname.includes("/courses")) {
-          window.location.reload();
-        }
-      } catch (error) {
-        alert("Error deleting course: " + error.message);
-      }
-    }
-  };
-
-  const handleEdit = (e) => {
-    e.stopPropagation();
-    navigate(`/admin/courses/${course._id}/edit`);
-  };
-
-  const handleEnroll = async (e) => {
-    e.stopPropagation();
-    if (onEnroll && !loading) {
+  const { handleDelete, handleEdit, getActionButtons } = useCourseCardActions({
+    course,
+    viewMode,
+    userRole,
+    loading,
+    navigate,
+    onEnroll: async (courseId) => {
       setLoading(true);
-      await onEnroll(course._id);
+      await onEnroll(courseId);
       setLoading(false);
-    }
-  };
+    },
+  });
 
   const handleCardClick = (e) => {
     // Don't navigate if clicking on interactive elements
@@ -70,98 +54,6 @@ const CourseCard = ({
     if (onToggleSelect) {
       onToggleSelect();
     }
-  };
-
-  // Get action buttons based on view mode and user role
-  const getActionButtons = () => {
-    if (preview) return null;
-
-    switch (viewMode) {
-      case "browse":
-        if (userRole === "student") {
-          return course.isEnrolled ? (
-            <Button
-              onClick={() => navigate(`/courses/${course._id}`)}
-              variant="success"
-              size="sm"
-              className="text-green-600 hover:text-green-400"
-            >
-              Continue Learning
-            </Button>
-          ) : (
-            <Button
-              onClick={handleEnroll}
-              disabled={loading}
-              variant="info"
-              className="text-blue-600 hover:text-blue-400"
-              size="sm"
-            >
-              {loading ? "Enrolling..." : "Enroll Now"}
-            </Button>
-          );
-        }
-        break;
-
-      case "enrolled":
-        return (
-          <div className="flex items-center space-x-2">
-            <Button
-              onClick={() => navigate(`/courses/${course._id}`)}
-              variant="info"
-              size="sm"
-              className="text-blue-600 hover:text-blue-400"
-            >
-              Continue
-            </Button>
-            {course.progress !== undefined && (
-              <span className="text-xs text-gray-800">
-                {course.progress}% complete
-              </span>
-            )}
-          </div>
-        );
-
-      case "manage":
-      default:
-        if (userRole === "admin") {
-          return (
-            <div className="flex space-x-2">
-              <Button onClick={handleEdit} variant="success" size="sm">
-                Edit
-              </Button>
-              <Button onClick={handleDelete} variant="danger" size="sm">
-                Delete
-              </Button>
-              <Button
-                onClick={() => navigate(`/courses/${course._id}`)}
-                variant="glass"
-                size="sm"
-              >
-                View
-              </Button>
-            </div>
-          );
-        } else {
-          return (
-            <Button
-              onClick={() => navigate(`/courses/${course._id}`)}
-              variant="glass"
-              size="sm"
-            >
-              View Details
-            </Button>
-          );
-        }
-    }
-    return null;
-  };
-
-  // Get enrollment count for admin view
-  const getEnrollmentCount = () => {
-    if (userRole === "admin" && course.enrolledStudents) {
-      return `${course.enrolledStudents.length} enrolled`;
-    }
-    return null;
   };
 
   return (

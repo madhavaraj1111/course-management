@@ -5,17 +5,17 @@ import Button from "../common/Button";
 import RichTextEditor from "../RichTextEditor";
 import LessonItem from "./LessonItem";
 
-const SectionItem = ({ 
-  section, 
-  sectionIndex, 
-  register, 
-  control, 
+const SectionItem = ({
+  section,
+  sectionIndex,
+  register,
+  control,
   errors,
   lessonCount,
   setLessonCount,
   onRemoveSection,
   onAddLesson,
-  onRemoveLesson
+  onRemoveLesson,
 }) => {
   return (
     <div className="bg-white/5 rounded-xl border border-white/10 p-6">
