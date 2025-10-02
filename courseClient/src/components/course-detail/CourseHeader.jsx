@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button";
+import Button from "../common/Button";
 
 const CourseHeader = ({ userRole, onBack, onEdit, onDelete }) => {
   return (

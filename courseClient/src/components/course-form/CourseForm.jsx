@@ -1,6 +1,6 @@
 // components/course-form/CourseForm.jsx
 import React from "react";
-import Button from "../Button";
+import Button from "../common/Button";
 import CourseBasicInfo from "./CourseBasicInfo";
 import CourseSections from "./CourseSections";
 import CoursePreview from "./CoursePreview";

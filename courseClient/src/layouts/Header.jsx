@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import Button from "./Button";
+import Button from "../components/common/Button";
 import logo from "../assets/PerfectStudy.png";
 
 const Header = () => {

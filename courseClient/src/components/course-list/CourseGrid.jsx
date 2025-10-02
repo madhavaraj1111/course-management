@@ -41,6 +41,10 @@ const CourseGrid = ({
       {courses.map((course, index) => {
         // Check if this course ID is in the selected Set
         const isSelected = showSelection && selectedCourses.has(course._id);
+        
+        // Get the actual instructor ID - handle both populated and unpopulated cases
+        const courseInstructorId = course.instructor?._id || course.instructor;
+        const canSelect = courseInstructorId === instructorId;
 
         return (
           <CourseCard
@@ -48,14 +52,12 @@ const CourseGrid = ({
             course={course}
             index={index}
             selected={isSelected}
-            onToggleSelect={() => onToggleSelect(index)}
+            onToggleSelect={() => onToggleSelect(course._id)}
             viewMode={viewMode}
             userRole={userRole}
             instructorId={instructorId}
             onEnroll={onEnroll}
-            showSelection={
-              showSelection && course.instructorId === instructorId
-            }
+            showSelection={showSelection && canSelect}
           />
         );
       })}

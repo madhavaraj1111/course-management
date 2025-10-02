@@ -1,7 +1,7 @@
 // components/course-form/LessonItem.jsx
 import React from "react";
 import { Controller } from "react-hook-form";
-import Button from "../Button";
+import Button from "../common/Button";
 import RichTextEditor from "../RichTextEditor";
 
 const LessonItem = ({

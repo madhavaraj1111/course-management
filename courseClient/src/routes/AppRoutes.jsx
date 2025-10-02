@@ -10,8 +10,8 @@ import CourseList from "../pages/CourseList";
 import CourseDetail from "../components/course-detail/CourseDetail.jsx";
 import CourseCreate from "../pages/CourseCreate.jsx";
 import CourseUpdate from "../pages/CourseUpdate.jsx";
-import Login from "../pages/Login.jsx";
-import Signup from "../pages/SignUp.jsx";
+import Login from "../components/auth/Login.jsx";
+import Signup from "../components/auth/SignUp.jsx";
 import NotFound from "../pages/NotFound";
 import MainLayout from "../layouts/MainLayout.jsx";
 

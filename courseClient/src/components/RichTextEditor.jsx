@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
@@ -8,7 +9,8 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         glassMode ? "border-white/40" : "border-gray-200/40"
       }`}
       style={{
-        height: "100px", // Fixed container height
+        minHeight: "140px",
+        height: "auto",
         position: "relative",
       }}
     >
@@ -17,12 +19,8 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         value={value}
         onChange={onChange}
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: "100px",
+          position: "relative",
+          minHeight: "140px",
         }}
         modules={{
           toolbar: [
@@ -34,47 +32,42 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         }}
       />
       <style>{`
-        /* Force absolute positioning and fixed heights */
+        /* Responsive container */
         .ql-container {
-          position: absolute !important;
-          top: 41px !important; /* Account for toolbar height */
-          left: 0 !important;
-          right: 0 !important;
-          bottom: 0 !important;
-          height: 59px !important; /* 100px - 41px toolbar */
-          max-height: 59px !important;
-          overflow: hidden !important;
+          position: relative !important;
+          min-height: 90px !important;
+          height: auto !important;
+          overflow: visible !important;
         }
         
         .ql-editor {
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          bottom: 0 !important;
-          height: 59px !important;
-          max-height: 59px !important;
+          position: relative !important;
+          min-height: 90px !important;
+          max-height: 200px !important;
+          height: auto !important;
           overflow-y: auto !important;
           overflow-x: hidden !important;
-          padding: 8px 12px !important;
+          padding: 10px 12px !important;
           color: white !important;
-          line-height: 1.4 !important;
+          line-height: 1.5 !important;
           box-sizing: border-box !important;
         }
 
+        /* Responsive toolbar */
         .ql-toolbar {
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          height: 41px !important;
-          max-height: 41px !important;
+          position: relative !important;
+          min-height: 42px !important;
+          height: auto !important;
           border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
           background: rgba(255, 255, 255, 0.05) !important;
           border-top: none !important;
           border-left: none !important;
           border-right: none !important;
           box-sizing: border-box !important;
+          padding: 8px 6px !important;
+          display: flex !important;
+          flex-wrap: wrap !important;
+          gap: 4px !important;
         }
 
         .ql-toolbar .ql-stroke {
@@ -95,23 +88,23 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
           border: none !important;
         }
 
-        /* Prevent any expansion or layout shifts */
+        /* Better paragraph spacing */
         .ql-editor p, .ql-editor div {
-          margin: 0 0 2px 0 !important;
+          margin: 0 0 4px 0 !important;
           word-wrap: break-word !important;
           word-break: break-word !important;
-          line-height: 1.4 !important;
+          line-height: 1.5 !important;
         }
 
         .ql-editor ul, .ql-editor ol {
-          margin: 0 0 2px 0 !important;
-          padding-left: 16px !important;
+          margin: 0 0 4px 0 !important;
+          padding-left: 20px !important;
         }
 
         .ql-editor li {
-          margin: 0 !important;
+          margin: 2px 0 !important;
           padding: 0 !important;
-          line-height: 1.4 !important;
+          line-height: 1.5 !important;
         }
 
         /* Ensure no elements can break the container */
@@ -122,7 +115,7 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
 
         /* Custom scrollbar */
         .ql-editor::-webkit-scrollbar {
-          width: 4px;
+          width: 6px;
         }
 
         .ql-editor::-webkit-scrollbar-track {
@@ -131,29 +124,51 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
 
         .ql-editor::-webkit-scrollbar-thumb {
           background: rgba(255, 255, 255, 0.2);
-          border-radius: 2px;
+          border-radius: 3px;
         }
 
         .ql-editor::-webkit-scrollbar-thumb:hover {
           background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Prevent toolbar buttons from wrapping */
+        /* Responsive toolbar formats */
         .ql-toolbar .ql-formats {
-          margin-right: 8px !important;
+          margin-right: 6px !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 2px !important;
         }
 
-        /* Toolbar button styling */
+        /* Toolbar button styling - responsive */
         .ql-toolbar button {
-          width: 28px !important;
-          height: 24px !important;
-          padding: 2px !important;
-          margin: 2px 1px !important;
+          width: 32px !important;
+          height: 28px !important;
+          padding: 4px !important;
+          margin: 0 !important;
           border: none !important;
-          border-radius: 3px !important;
+          border-radius: 4px !important;
           background: transparent !important;
           color: rgba(255, 255, 255, 0.7) !important;
           transition: all 0.2s ease !important;
+          flex-shrink: 0 !important;
+        }
+
+        /* Smaller buttons on mobile */
+        @media (max-width: 640px) {
+          .ql-toolbar button {
+            width: 28px !important;
+            height: 26px !important;
+            padding: 3px !important;
+          }
+          
+          .ql-toolbar {
+            padding: 6px 4px !important;
+            gap: 2px !important;
+          }
+          
+          .ql-toolbar .ql-formats {
+            margin-right: 4px !important;
+          }
         }
 
         /* Toolbar button hover state */
@@ -178,6 +193,7 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         /* Dropdown button styling */
         .ql-toolbar .ql-picker {
           color: rgba(255, 255, 255, 0.7) !important;
+          flex-shrink: 0 !important;
         }
 
         .ql-toolbar .ql-picker:hover {
@@ -191,9 +207,15 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         /* Picker label styling */
         .ql-toolbar .ql-picker-label {
           border: none !important;
-          padding: 2px 4px !important;
-          border-radius: 3px !important;
+          padding: 4px 6px !important;
+          border-radius: 4px !important;
           transition: all 0.2s ease !important;
+        }
+
+        @media (max-width: 640px) {
+          .ql-toolbar .ql-picker-label {
+            padding: 3px 4px !important;
+          }
         }
 
         .ql-toolbar .ql-picker-label:hover {
@@ -213,6 +235,7 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
           backdrop-filter: blur(12px) !important;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
           margin-top: 2px !important;
+          z-index: 100 !important;
         }
 
         .ql-toolbar .ql-picker-item {
@@ -240,6 +263,14 @@ const RichTextEditor = ({ value, onChange, glassMode = false }) => {
         .ql-toolbar .ql-picker-label:focus-visible {
           outline: 2px solid rgb(6, 182, 212) !important;
           outline-offset: 1px !important;
+        }
+
+        /* Placeholder styling */
+        .ql-editor.ql-blank::before {
+          color: rgba(255, 255, 255, 0.4) !important;
+          font-style: italic !important;
+          left: 12px !important;
+          right: 12px !important;
         }
       `}</style>
     </div>

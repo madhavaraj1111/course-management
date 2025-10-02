@@ -1,6 +1,6 @@
-import FormSelect from "../FormSelect";
-import SearchInput from "../SearchInput";
-import Button from "../Button";
+import FormSelect from "../common/FormSelect";
+import SearchInput from "../common/SearchInput";
+import Button from "../common/Button";
 
 const CourseFilters = ({
   searchQuery,

@@ -2,7 +2,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import RichTextEditor from "../RichTextEditor";
-import FormSelect from "../FormSelect";
+import FormSelect from "../common/FormSelect";
 import CourseThumbnail from "./CourseThumbnail";
 
 const CourseBasicInfo = ({ register, errors, control, watchedValues }) => {

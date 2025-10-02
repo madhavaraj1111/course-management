@@ -1,7 +1,7 @@
 // components/course-form/SectionItem.jsx
 import React from "react";
 import { Controller } from "react-hook-form";
-import Button from "../Button";
+import Button from "../common/Button";
 import RichTextEditor from "../RichTextEditor";
 import LessonItem from "./LessonItem";
 
@@ -79,7 +79,7 @@ const SectionItem = ({
 
       {/* Lessons */}
       <div className="border-l-2 border-cyan-500/30 pl-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 gap-2">
           <h4 className="text-white font-medium">Lessons</h4>
           <div className="flex items-center gap-2">
             <input

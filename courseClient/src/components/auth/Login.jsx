@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import Button from "../components/Button";
-import logo from "../assets/PerfectStudy.png";
+import { useAuth } from "../../contexts/AuthContext";
+import Button from "../common/Button";
+import logo from "../../assets/PerfectStudy.png";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });

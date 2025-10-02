@@ -32,7 +32,7 @@ const BookCover = ({
           {/* Your Creation - Top Right */}
           {course.instructor?._id === instructorId && (
             <div className="absolute -top-2 -right-2 px-2 py-1 text-xs font-bold rounded bg-green-600 text-white shadow-lg">
-              BY YOU
+              By You
             </div>
           )}
 

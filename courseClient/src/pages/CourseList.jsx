@@ -52,7 +52,7 @@ const CourseList = ({ viewMode = "manage" }) => {
     toggleSelect,
     toggleSelectAll,
     clearSelection,
-  } = useCourseSelection(currentCourses, courses);
+  } = useCourseSelection(currentCourses, courses, user?.id);
 
   // Fetch courses based on view mode
   useEffect(() => {
@@ -114,8 +114,8 @@ const CourseList = ({ viewMode = "manage" }) => {
 
   const confirmDelete = async () => {
     try {
-      const deletePromises = selectedCourses.map((courseIndex) => {
-        const courseId = currentCourses[courseIndex]._id;
+      // Convert Set to Array and map over the course IDs directly
+      const deletePromises = Array.from(selectedCourses).map((courseId) => {
         return apiRequest(`/admin/courses/${courseId}`, { method: "DELETE" });
       });
 

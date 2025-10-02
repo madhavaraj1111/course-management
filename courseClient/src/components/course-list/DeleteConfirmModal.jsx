@@ -1,12 +1,7 @@
-import React from 'react';
-import Button from '../Button';
+import React from "react";
+import Button from "../common/Button";
 
-const DeleteConfirmModal = ({
-  isOpen,
-  selectedCount,
-  onConfirm,
-  onCancel
-}) => {
+const DeleteConfirmModal = ({ isOpen, selectedCount, onConfirm, onCancel }) => {
   if (!isOpen) return null;
 
   return (
@@ -19,9 +14,7 @@ const DeleteConfirmModal = ({
         <h2 className="text-2xl font-bold mb-4">Confirm Delete</h2>
         <p className="mb-6 text-white/80">
           Are you sure you want to delete{" "}
-          <span className="font-semibold text-lg">
-            {selectedCount}
-          </span>{" "}
+          <span className="font-semibold text-lg">{selectedCount}</span>{" "}
           {selectedCount === 1 ? "course" : "courses"}?
         </p>
 

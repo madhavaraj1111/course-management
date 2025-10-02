@@ -1,13 +1,13 @@
-import React from 'react';
-import Checkbox from '../CheckBox';
-import Button from '../Button';
+import React from "react";
+import Checkbox from "../common/CheckBox";
+import Button from "../common/Button";
 
 const BulkActions = ({
   selectedCount,
   totalCount,
   isAllSelected,
   onToggleSelectAll,
-  onDeleteSelected
+  onDeleteSelected,
 }) => {
   return (
     <div className="flex justify-between items-center mb-4 px-7">

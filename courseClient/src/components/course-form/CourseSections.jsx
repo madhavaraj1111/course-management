@@ -1,6 +1,6 @@
 // components/course-form/CourseSections.jsx
 import React from "react";
-import Button from "../Button";
+import Button from "../common/Button";
 import SectionItem from "./SectionItem";
 
 const CourseSections = ({ 
@@ -33,12 +33,12 @@ const CourseSections = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-end">
           <input
             type="number"
             min="1"
             placeholder="Count"
-            className="w-20 px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 text-sm outline-none transition-all"
+            className="w-12 px-3 py-1 rounded-lg bg-white/10 text-white border border-white/20 text-sm outline-none transition-all"
             value={sectionCount || ""}
             onChange={(e) => setSectionCount(e.target.value)}
           />

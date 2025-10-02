@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../../contexts/AuthContext";
-import Checkbox from "../CheckBox";
+import Checkbox from "../common/CheckBox";
 import BookCover from "./BookCover";
 import BookPages from "./BookPages";
-import Button from "../Button"; // Import your Button component
+import Button from "../common/Button"; // Import your Button component
 import { cardColors } from "./constants";
 
 const CourseCard = ({
@@ -93,6 +93,7 @@ const CourseCard = ({
               onClick={handleEnroll}
               disabled={loading}
               variant="info"
+              className="text-blue-600 hover:text-blue-400"
               size="sm"
             >
               {loading ? "Enrolling..." : "Enroll Now"}

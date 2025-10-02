@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button"; // Adjust the import path as needed
+import Button from "../common/Button"; // Adjust the import path as needed
 
 const ActionButtons = ({ onEdit, onDelete, preview }) => {
   return (

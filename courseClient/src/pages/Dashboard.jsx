@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth, apiRequest } from "../contexts/AuthContext";
-import Button from "../components/Button"; // Adjust the import path as needed
-import ProgressBar from "../components/ProgressBar";
+import Button from "../components/common/Button"; // Adjust the import path as needed
+import ProgressBar from "../components/common/ProgressBar";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -17,6 +17,21 @@ const Dashboard = () => {
       fetchAdminCourses();
     }
   }, [user]);
+
+  const handleDelete = async (courseId) => {
+    if (!window.confirm("Are you sure you want to delete this course?")) return;
+
+    try {
+      await apiRequest(`/admin/courses/${courseId}`, {
+        method: "DELETE",
+      });
+      // Refresh courses after deletion
+      setCourses((prev) => prev.filter((c) => c._id !== courseId));
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      alert("Failed to delete course. Please try again.");
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -111,7 +126,7 @@ const Dashboard = () => {
                   </p>
 
                   {/* Updated Progress Bar */}
-                  <div className="mb-4">
+                  <div className="mb-4 px-3">
                     <ProgressBar percentage={course.progress} />
                   </div>
 
@@ -191,7 +206,7 @@ const Dashboard = () => {
                 </Button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-hidden">
                 {courses.map((course) => (
                   <div
                     key={course._id}
@@ -202,13 +217,15 @@ const Dashboard = () => {
                         <h3 className="font-medium text-white">
                           {course.title}
                         </h3>
-                        <p className="text-sm text-white/60">
-                          {course.category} • {course.difficulty}
-                        </p>
-                        <p className="text-sm text-blue-400">
-                          {course.enrolledStudents?.length || 0} students
-                          enrolled
-                        </p>
+                        <div className="">
+                          <p className="text-sm text-white/60">
+                            {course.category} • {course.difficulty}
+                          </p>
+                          <p className="text-sm text-blue-400">
+                            {course.enrolledStudents?.length || 0} students
+                            enrolled
+                          </p>
+                        </div>
                       </div>
                       <div className="flex gap-2">
                         <Button
@@ -227,6 +244,13 @@ const Dashboard = () => {
                         >
                           View
                         </Button>
+                        <Button
+                          onClick={() => handleDelete(course._id)}
+                          variant="danger"
+                          size="sm"
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -236,8 +260,8 @@ const Dashboard = () => {
                   <div className="text-center py-8 text-white/60">
                     No courses created yet.{" "}
                     <button
-                      onClick={() => navigate("/courses/create")}
-                      className="text-blue-400 hover:text-blue-300 font-medium underline"
+                      onClick={() => navigate("/admin/courses/create")}
+                      className="text-blue-400 hover:text-blue-300 font-medium underline cursor-pointer"
                     >
                       Create your first course!
                     </button>
@@ -247,7 +271,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6 self-start">
             <h2 className="text-xl font-semibold mb-4 text-white">
               Quick Actions
             </h2>
