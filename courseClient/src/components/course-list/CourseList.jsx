@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth, apiRequest } from "../contexts/AuthContext";
+import { useAuth, apiRequest } from "../../contexts/AuthContext.jsx";
 
 // Components
-import PageHeader from "../components/course-list/PageHeader.jsx";
-import CourseFilters from "../components/course-list/CourseFilters";
-import BulkActions from "../components/course-list/BulkActions";
-import CourseGrid from "../components/course-list/CourseGrid";
-import Pagination from "../components/course-list/Pagination.jsx";
-import DeleteConfirmModal from "../components/course-list/DeleteConfirmModal";
+import PageHeader from "./PageHeader.jsx";
+import CourseFilters from "./CourseFilters.jsx";
+import BulkActions from "./BulkActions.jsx";
+import CourseGrid from "./CourseGrid.jsx";
+import Pagination from "./Pagination.jsx";
+import DeleteConfirmModal from "./DeleteConfirmModal.jsx";
 
 // Hooks
-import { useCourseFilters } from "../components/course-list/hooks/useCourseFilters.js";
-import { usePagination } from "../components/course-list/hooks/usePagination.js";
-import { useCourseSelection } from "../components/course-list/hooks/useCourseSelection.js";
+import { useCourseFilters } from "./hooks/useCourseFilters.js";
+import { usePagination } from "./hooks/usePagination.js";
+import { useCourseSelection } from "./hooks/useCourseSelection.js";
 
 const CourseList = ({ viewMode = "manage" }) => {
   const { user } = useAuth();

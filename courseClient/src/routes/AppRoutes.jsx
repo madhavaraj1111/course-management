@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Dashboard from "../pages/Dashboard";
-import CourseList from "../pages/CourseList";
+import CourseList from "../components/course-list/CourseList.jsx";
 import CourseDetail from "../components/course-detail/CourseDetail.jsx";
 import CourseCreate from "../pages/CourseCreate.jsx";
 import CourseUpdate from "../pages/CourseUpdate.jsx";
