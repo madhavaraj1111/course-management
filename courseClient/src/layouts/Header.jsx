@@ -60,12 +60,20 @@ const Header = () => {
             )}
 
             {user?.role === "student" && (
-              <button
-                onClick={() => navigate("/my-courses")}
-                className="text-white hover:text-gray-300 transition-colors cursor-pointer"
-              >
-                My Courses
-              </button>
+              <>
+                <button
+                  onClick={() => navigate("/my-courses")}
+                  className="text-white hover:text-gray-300 transition-colors cursor-pointer"
+                >
+                  My Courses
+                </button>
+                <button
+                  onClick={() => navigate("/ask-ai")}
+                  className="text-white hover:text-gray-300 transition-colors cursor-pointer"
+                >
+                  Ask AI
+                </button>
+              </>
             )}
 
             <div className="flex items-center space-x-3 text-white text-sm">
@@ -124,15 +132,26 @@ const Header = () => {
               )}
 
               {user?.role === "student" && (
-                <button
-                  onClick={() => {
-                    navigate("/my-courses");
-                    setIsOpen(false);
-                  }}
-                  className="text-left hover:text-gray-300 transition-colors cursor-pointer"
-                >
-                  My Courses
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      navigate("/my-courses");
+                      setIsOpen(false);
+                    }}
+                    className="text-left hover:text-gray-300 transition-colors cursor-pointer"
+                  >
+                    My Courses
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/ask-ai");
+                      setIsOpen(false);
+                    }}
+                    className="text-left hover:text-gray-300 transition-colors cursor-pointer"
+                  >
+                    Ask AI
+                  </button>
+                </>
               )}
 
               <div className="text-sm text-gray-300 pt-2 border-t border-white/10">
