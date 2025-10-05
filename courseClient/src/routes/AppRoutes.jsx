@@ -14,6 +14,7 @@ import Login from "../components/auth/Login.jsx";
 import Signup from "../components/auth/SignUp.jsx";
 import NotFound from "../pages/NotFound";
 import MainLayout from "../layouts/MainLayout.jsx";
+import AskAI from "../pages/AskAI.jsx";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -91,6 +92,7 @@ const AppRoutes = () => {
                 <CourseCreate />
               </ProtectedRoute>
             }
+            
           />
           <Route
             path="/admin/courses/:courseId/edit"
@@ -109,6 +111,14 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute requiredRole="student">
                 <CourseList viewMode="enrolled" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ask-ai"
+            element={
+              <ProtectedRoute requiredRole="student">
+                <AskAI />
               </ProtectedRoute>
             }
           />
