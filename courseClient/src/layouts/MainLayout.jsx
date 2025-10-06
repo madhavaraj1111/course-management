@@ -25,6 +25,7 @@ const MainLayout = () => {
       <div>
         <Outlet />
       </div>
+      
     </div>
   );
 };
