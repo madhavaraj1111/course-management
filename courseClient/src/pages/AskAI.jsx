@@ -116,7 +116,46 @@ const AskAI = () => {
                       : "bg-white/20 text-white border border-white/30"
                   }`}
                 >
-                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  {message.role === "user" ? (
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                  ) : (
+                    <div className="text-sm leading-relaxed space-y-2">
+                      {message.content.split('\n').map((paragraph, idx) => {
+                        // Check if it's a bullet point
+                        if (paragraph.trim().startsWith('*') || paragraph.trim().startsWith('-')) {
+                          return (
+                            <div key={idx} className="flex items-start space-x-2 ml-2">
+                              <span className="mt-1.5 w-1 h-1 bg-white rounded-full flex-shrink-0"></span>
+                              <span>{paragraph.trim().substring(1).trim()}</span>
+                            </div>
+                          );
+                        }
+                        // Check if it's a numbered list
+                        else if (/^\d+\./.test(paragraph.trim())) {
+                          const match = paragraph.trim().match(/^(\d+)\.\s*(.+)$/);
+                          return (
+                            <div key={idx} className="flex items-start space-x-2 ml-2">
+                              <span className="font-semibold flex-shrink-0">{match[1]}.</span>
+                              <span>{match[2]}</span>
+                            </div>
+                          );
+                        }
+                        // Check if it's a header (starts with ##)
+                        else if (paragraph.trim().startsWith('##')) {
+                          return (
+                            <h3 key={idx} className="font-semibold text-base mt-3 mb-1">
+                              {paragraph.trim().replace(/^#+\s*/, '')}
+                            </h3>
+                          );
+                        }
+                        // Regular paragraph
+                        else if (paragraph.trim()) {
+                          return <p key={idx} className="mb-2">{paragraph}</p>;
+                        }
+                        return null;
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
