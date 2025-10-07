@@ -1,8 +1,165 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth, apiRequest } from "../contexts/AuthContext";
-import Button from "../components/common/Button"; // Adjust the import path as needed
+import Button from "../components/common/Button";
 import ProgressBar from "../components/common/ProgressBar";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
+
+// Memoized Stats Card Component
+const StatsCard = memo(({ title, value, subtitle }) => (
+  <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-6 hover:bg-white/15 transition-all">
+    <h3 className="text-sm font-medium text-white/70">{title}</h3>
+    <p className="text-3xl font-bold text-white mt-2">{value}</p>
+    {subtitle && <p className="text-sm text-white/60 mt-1">{subtitle}</p>}
+  </div>
+));
+
+StatsCard.displayName = "StatsCard";
+
+// Memoized Course Card Component
+const CourseCard = memo(({ course, navigate }) => (
+  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 hover:bg-white/10 transition-all">
+    <h3 className="font-semibold text-lg mb-1 line-clamp-2 text-white">
+      {course.title}
+    </h3>
+    <p className="text-sm text-white/60 mb-4">by {course.instructorName}</p>
+
+    <div className="mb-4 px-3">
+      <ProgressBar percentage={course.progress} />
+    </div>
+
+    <div className="flex items-center justify-between">
+      <p className="text-sm text-white/70">{course.progress}% complete</p>
+      <Button
+        onClick={() => navigate(`/courses/${course._id}`)}
+        variant="success"
+        size="sm"
+      >
+        Continue
+      </Button>
+    </div>
+  </div>
+));
+
+CourseCard.displayName = "CourseCard";
+
+// Memoized Admin Course Item Component
+const AdminCourseItem = memo(({ course, navigate, handleDelete }) => (
+  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-all">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h3 className="font-medium text-white">{course.title}</h3>
+        <div>
+          <p className="text-sm text-white/60">
+            {course.category} • {course.difficulty}
+          </p>
+          <p className="text-sm text-blue-400">
+            {course.enrolledStudents?.length || 0} students enrolled
+          </p>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button
+          onClick={() => navigate(`admin/courses/${course._id}/edit`)}
+          variant="success"
+          size="sm"
+        >
+          Edit
+        </Button>
+        <Button
+          onClick={() => navigate(`/courses/${course._id}`)}
+          variant="glass"
+          size="sm"
+        >
+          View
+        </Button>
+        <Button
+          onClick={() => handleDelete(course._id)}
+          variant="danger"
+          size="sm"
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  </div>
+));
+
+AdminCourseItem.displayName = "AdminCourseItem";
+
+// Memoized Chart Component
+const CategoryDistributionChart = memo(({ courses }) => {
+  const COLORS = [
+    "#3b82f6",
+    "#10b981",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#ec4899",
+    "#06b6d4",
+  ];
+
+  // Calculate category distribution
+  const categoryData = courses.reduce((acc, course) => {
+    const category = course.category || "Uncategorized";
+    const existing = acc.find((item) => item.name === category);
+    if (existing) {
+      existing.value += 1;
+    } else {
+      acc.push({ name: category, value: 1 });
+    }
+    return acc;
+  }, []);
+
+  if (categoryData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64 text-white/60">
+        No course data available
+      </div>
+    );
+  }
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={categoryData}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          label={({ name, percent }) =>
+            `${name}: ${(percent * 100).toFixed(0)}%`
+          }
+          outerRadius={80}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {categoryData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "8px",
+            color: "#fff",
+          }}
+        />
+        <Legend wrapperStyle={{ color: "#fff" }} iconType="circle" />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+});
+
+CategoryDistributionChart.displayName = "CategoryDistributionChart";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -25,7 +182,6 @@ const Dashboard = () => {
       await apiRequest(`/admin/courses/${courseId}`, {
         method: "DELETE",
       });
-      // Refresh courses after deletion
       setCourses((prev) => prev.filter((c) => c._id !== courseId));
     } catch (error) {
       console.error("Error deleting course:", error);
@@ -65,14 +221,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
-  const StatsCard = ({ title, value, subtitle }) => (
-    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-6 hover:bg-white/15 transition-all">
-      <h3 className="text-sm font-medium text-white/70">{title}</h3>
-      <p className="text-3xl font-bold text-white mt-2">{value}</p>
-      {subtitle && <p className="text-sm text-white/60 mt-1">{subtitle}</p>}
-    </div>
-  );
 
   // Student Dashboard
   if (user?.role === "student") {
@@ -114,35 +262,11 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dashboardData?.enrolledCourses?.map((course) => (
-                <div
+                <CourseCard
                   key={course._id}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 hover:bg-white/10 transition-all"
-                >
-                  <h3 className="font-semibold text-lg mb-1 line-clamp-2 text-white">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-white/60 mb-4">
-                    by {course.instructorName}
-                  </p>
-
-                  {/* Updated Progress Bar */}
-                  <div className="mb-4 px-3">
-                    <ProgressBar percentage={course.progress} />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-white/70">
-                      {course.progress}% complete
-                    </p>
-                    <Button
-                      onClick={() => navigate(`/courses/${course._id}`)}
-                      variant="success"
-                      size="sm"
-                    >
-                      Continue
-                    </Button>
-                  </div>
-                </div>
+                  course={course}
+                  navigate={navigate}
+                />
               ))}
 
               {!dashboardData?.enrolledCourses?.length && (
@@ -191,8 +315,9 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Course List */}
           <div className="lg:col-span-2">
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -208,52 +333,12 @@ const Dashboard = () => {
 
               <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-hidden">
                 {courses.map((course) => (
-                  <div
+                  <AdminCourseItem
                     key={course._id}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-all"
-                  >
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                      <div>
-                        <h3 className="font-medium text-white">
-                          {course.title}
-                        </h3>
-                        <div className="">
-                          <p className="text-sm text-white/60">
-                            {course.category} • {course.difficulty}
-                          </p>
-                          <p className="text-sm text-blue-400">
-                            {course.enrolledStudents?.length || 0} students
-                            enrolled
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() =>
-                            navigate(`admin/courses/${course._id}/edit`)
-                          }
-                          variant="success"
-                          size="sm"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => navigate(`/courses/${course._id}`)}
-                          variant="glass"
-                          size="sm"
-                        >
-                          View
-                        </Button>
-                        <Button
-                          onClick={() => handleDelete(course._id)}
-                          variant="danger"
-                          size="sm"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                    course={course}
+                    navigate={navigate}
+                    handleDelete={handleDelete}
+                  />
                 ))}
 
                 {!courses.length && (
@@ -271,6 +356,7 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Quick Actions */}
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6 self-start">
             <h2 className="text-xl font-semibold mb-4 text-white">
               Quick Actions
@@ -295,6 +381,16 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Analytics Chart */}
+        {courses.length > 0 && (
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              Course Distribution by Category
+            </h2>
+            <CategoryDistributionChart courses={courses} />
+          </div>
+        )}
       </div>
     </div>
   );
