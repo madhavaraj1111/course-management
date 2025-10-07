@@ -33,20 +33,53 @@ const AskAI = () => {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
 
-    // Simulate AI response (replace with actual API call)
-    setTimeout(() => {
+    try {
+      // Get token from localStorage
+      const token = localStorage.getItem("token");
+      
+      // Use environment variable or fallback to localhost:5000
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      
+      const response = await fetch(`${API_URL}/api/rag/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: userMessage,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get AI response");
+      }
+
+      const data = await response.json();
+      
+      // Add AI response
       const aiResponse = {
         role: "assistant",
-        content:
-          "I'm a demo AI assistant. In production, I would connect to your backend API to provide real assistance about your courses and learning materials. You can integrate with OpenAI, Anthropic Claude, or other AI services here.",
+        content: data.answer || "I received your question but couldn't generate a response. Please try rephrasing.",
       };
+      
       setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+      
+      // Add error message
+      const errorResponse = {
+        role: "assistant",
+        content: "Sorry, I encountered an error processing your request. Please try again.",
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br  p-4">
+    <div className="min-h-screen bg-gradient-to-br p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 mb-4 border border-white/20">
@@ -99,21 +132,24 @@ const AskAI = () => {
           </div>
 
           {/* Input Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="p-4 border-t border-white/20"
-          >
+          <div className="p-4 border-t border-white/20">
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
                 placeholder="Ask me anything about your courses..."
                 className="flex-1 bg-white/10 text-white placeholder-gray-400 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-white/20"
                 disabled={isLoading}
               />
               <Button
-                type="submit"
+                onClick={handleSubmit}
                 variant="primary"
                 size="md"
                 disabled={!input.trim() || isLoading}
@@ -125,7 +161,7 @@ const AskAI = () => {
               AI responses are for assistance only. Always verify important
               information.
             </p>
-          </form>
+          </div>
         </div>
       </div>
     </div>
