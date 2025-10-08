@@ -71,10 +71,13 @@ export const enrollCourse = createAsyncThunk(
   async (courseId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_BASE_URL}/courses/${courseId}/enroll`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/courses/${courseId}/enroll`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) throw new Error("Enrollment failed");
 
@@ -85,8 +88,82 @@ export const enrollCourse = createAsyncThunk(
   }
 );
 
+// Add after enrollCourse thunk
+
+export const createCourse = createAsyncThunk(
+  "courses/createCourse",
+  async (courseData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/admin/courses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(courseData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateCourse = createAsyncThunk(
+  "courses/updateCourse",
+  async ({ courseId, courseData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${API_BASE_URL}/admin/courses/${courseId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(courseData),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchCourseById = createAsyncThunk(
+  "courses/fetchCourseById",
+  async (courseId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Update initialState
 const initialState = {
   list: [],
+  selectedCourse: null,
   loading: false,
   error: null,
 };
@@ -119,6 +196,24 @@ const coursesSlice = createSlice({
       .addCase(enrollCourse.fulfilled, (state, action) => {
         const course = state.list.find((c) => c._id === action.payload);
         if (course) course.isEnrolled = true;
+      })
+      .addCase(createCourse.fulfilled, (state, action) => {
+        state.list.push(action.payload);
+      })
+      .addCase(updateCourse.fulfilled, (state, action) => {
+        const index = state.list.findIndex((c) => c._id === action.payload._id);
+        if (index !== -1) state.list[index] = action.payload;
+      })
+      .addCase(fetchCourseById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCourseById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedCourse = action.payload;
+      })
+      .addCase(fetchCourseById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

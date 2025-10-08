@@ -1,60 +1,37 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { apiRequest } from "../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCourseById, updateCourse } from "../store/slices/coursesSlice";
 import CourseForm from "../components/course-form/CourseForm";
 
 const CourseUpdate = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { courseId } = useParams();
-  
-  const [courseData, setCourseData] = useState({});
-  const [loading, setLoading] = useState(true);
+
+  const { selectedCourse, loading } = useSelector((state) => state.courses);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (courseId) {
-      fetchCourse();
-    } else {
-      setError("No course ID provided");
-      setLoading(false);
+      dispatch(fetchCourseById(courseId));
     }
-  }, [courseId]);
-
-  const fetchCourse = async () => {
-    try {
-      const data = await apiRequest(`/courses/${courseId}`);
-      setCourseData(data);
-      setError(null);
-    } catch (error) {
-      console.error('Error fetching course:', error);
-      setError("Course not found or you don't have permission to edit it.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [dispatch, courseId]);
 
   const handleSubmit = async (data) => {
     setSubmitting(true);
     setError(null);
-    
-    try {
-      await apiRequest(`/admin/courses/${courseId}`, {
-        method: 'PUT',
-        body: data
-      });
-      
-      navigate("/courses");
-    } catch (error) {
-      console.error('Error updating course:', error);
-      setError(error.message || 'Error updating course');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
-  const handleCancel = () => {
-    navigate("/courses");
+    const result = await dispatch(updateCourse({ courseId, courseData: data }));
+
+    if (updateCourse.fulfilled.match(result)) {
+      navigate("/courses");
+    } else {
+      setError(result.payload || "Error updating course");
+    }
+
+    setSubmitting(false);
   };
 
   if (loading) {
@@ -90,12 +67,12 @@ const CourseUpdate = () => {
           </div>
         </div>
       )}
-      
+
       <CourseForm
         mode="update"
-        initialData={courseData}
+        initialData={selectedCourse || {}}
         onSubmit={handleSubmit}
-        onCancel={handleCancel}
+        onCancel={() => navigate("/courses")}
         loading={submitting}
       />
     </div>

@@ -1,35 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiRequest } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { createCourse } from "../store/slices/coursesSlice";
 import CourseForm from "../components/course-form/CourseForm";
 
 const CourseCreate = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (data) => {
-    console.log(data);
-
     setLoading(true);
     setError("");
 
-    try {
-      await apiRequest("/admin/courses", {
-        method: "POST",
-        body: data, // Remove JSON.stringify - apiRequest handles this
-      });
+    const result = await dispatch(createCourse(data));
 
+    if (createCourse.fulfilled.match(result)) {
       navigate("/courses");
-    } catch (error) {
-      setError(error.message || "Error creating course");
-    } finally {
-      setLoading(false);
+    } else {
+      setError(result.payload || "Error creating course");
     }
-  };
 
-  const handleCancel = () => {
-    navigate("/courses");
+    setLoading(false);
   };
 
   return (
@@ -45,7 +38,7 @@ const CourseCreate = () => {
       <CourseForm
         mode="create"
         onSubmit={handleSubmit}
-        onCancel={handleCancel}
+        onCancel={() => navigate("/courses")}
         loading={loading}
       />
     </div>
