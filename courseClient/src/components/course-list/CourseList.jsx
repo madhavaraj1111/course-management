@@ -1,8 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth, apiRequest } from "../../contexts/AuthContext.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { useAuth } from "../../contexts/AuthContext.jsx";
+import {
+  fetchCourses,
+  deleteCourses,
+  enrollCourse,
+} from "../../store/slices/coursesSlice.js";
 
-// Components
+// Components (keep imports)
 import PageHeader from "./PageHeader.jsx";
 import CourseFilters from "./CourseFilters.jsx";
 import BulkActions from "./BulkActions.jsx";
@@ -18,13 +24,12 @@ import { useCourseSelection } from "./hooks/useCourseSelection.js";
 const CourseList = ({ viewMode = "manage" }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // State
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { list: courses, loading } = useSelector((state) => state.courses);
+  console.log("Redux State:", { courses, loading });
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Custom hooks
   const {
     searchQuery,
     setSearchQuery,
@@ -54,96 +59,37 @@ const CourseList = ({ viewMode = "manage" }) => {
     clearSelection,
   } = useCourseSelection(currentCourses, courses, user?.id);
 
-  // Fetch courses based on view mode
   useEffect(() => {
-    fetchCourses();
-  }, [viewMode, user]);
+    if (user) {
+      dispatch(
+        fetchCourses({ viewMode, userRole: user.role, userId: user.id })
+      );
+    }
+  }, [dispatch, viewMode, user]);
 
-  // Reset pagination when filters change
   useEffect(() => {
     resetToFirstPage();
   }, [filteredAndSortedCourses, resetToFirstPage]);
 
-  const fetchCourses = async () => {
-    try {
-      let data;
-
-      switch (viewMode) {
-        case "browse":
-          // All available courses for browsing
-          data = await apiRequest("/courses");
-          break;
-
-        case "enrolled":
-          // Get enrolled courses from student dashboard
-          const dashboardData = await apiRequest("/student/dashboard");
-
-          data = dashboardData.enrolledCourses.map((course) => ({
-            ...course, // keep all fields: title, description, thumbnail, sections, lessons, etc.
-            isEnrolled: true,
-          }));
-
-          break;
-
-        case "manage":
-          // Admin's courses or all courses for students
-          if (user?.role === "admin") {
-            data = await apiRequest("/admin/courses");
-          } else {
-            data = await apiRequest("/courses");
-          }
-          break;
-
-        default:
-          data = await apiRequest("/courses");
-      }
-
-      setCourses(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-      setCourses([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handlers
-  const handleAddCourse = () => navigate("/courses/create");
-
   const handleDeleteSelected = () => setShowConfirm(true);
 
   const confirmDelete = async () => {
-    try {
-      // Convert Set to Array and map over the course IDs directly
-      const deletePromises = Array.from(selectedCourses).map((courseId) => {
-        return apiRequest(`/admin/courses/${courseId}`, { method: "DELETE" });
-      });
-
-      await Promise.all(deletePromises);
-
-      // Refresh courses list
-      await fetchCourses();
-      clearSelection();
-      setShowConfirm(false);
-    } catch (error) {
-      console.error("Error deleting courses:", error);
-      alert("Error deleting courses: " + error.message);
-    }
+    await dispatch(deleteCourses(Array.from(selectedCourses)));
+    clearSelection();
+    setShowConfirm(false);
   };
 
   const handleCancelDelete = () => setShowConfirm(false);
 
   const handleEnroll = async (courseId) => {
-    try {
-      await apiRequest(`/courses/${courseId}/enroll`, { method: "POST" });
-      await fetchCourses(); // Refresh to update enrollment status
+    const result = await dispatch(enrollCourse(courseId));
+    if (result.meta.requestStatus === "fulfilled") {
       alert("Enrolled successfully!");
-    } catch (error) {
-      alert("Error enrolling: " + error.message);
+    } else {
+      alert("Error enrolling");
     }
   };
 
-  // Get page title based on view mode
   const getPageTitle = () => {
     switch (viewMode) {
       case "browse":
@@ -166,12 +112,10 @@ const CourseList = ({ viewMode = "manage" }) => {
   }
 
   const showBulkActions = user?.role === "admin";
-
   const showAddCourse = viewMode === "manage" && user?.role === "admin";
 
   return (
     <div className="min-h-screen">
-      {/* Header Section */}
       <div>
         <div className="">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -185,14 +129,15 @@ const CourseList = ({ viewMode = "manage" }) => {
                 onDifficultyChange={setFilterDifficulty}
                 sortOption={sortOption}
                 onSortChange={setSortOption}
-                onAddCourse={showAddCourse ? handleAddCourse : null}
+                onAddCourse={
+                  showAddCourse ? () => navigate("/courses/create") : null
+                }
                 viewMode={viewMode}
               />
             </PageHeader>
           </div>
         </div>
 
-        {/* Bulk Actions - Only for Admin in manage mode */}
         {showBulkActions && (
           <BulkActions
             selectedCount={selectedCount}
@@ -203,7 +148,6 @@ const CourseList = ({ viewMode = "manage" }) => {
           />
         )}
 
-        {/* Course Grid */}
         <CourseGrid
           courses={currentCourses}
           allCourses={courses}
@@ -216,14 +160,12 @@ const CourseList = ({ viewMode = "manage" }) => {
           showSelection={showBulkActions}
         />
 
-        {/* Pagination */}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={goToPage}
         />
 
-        {/* Delete Confirmation Modal - Only for Admin */}
         {showBulkActions && (
           <DeleteConfirmModal
             isOpen={showConfirm}
