@@ -119,17 +119,15 @@ const CategoryDistributionChart = memo(({ courses }) => {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <PieChart>
         <Pie
           data={categoryData}
           cx="50%"
-          cy="50%"
+          cy="45%"
           labelLine={false}
-          label={({ name, percent }) =>
-            `${name}: ${(percent * 100).toFixed(0)}%`
-          }
-          outerRadius={80}
+          label={false}
+          outerRadius={90}
           fill="#8884d8"
           dataKey="value"
         >
@@ -139,13 +137,17 @@ const CategoryDistributionChart = memo(({ courses }) => {
         </Pie>
         <Tooltip
           contentStyle={{
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backgroundColor: "white",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             borderRadius: "8px",
             color: "#fff",
           }}
         />
-        <Legend wrapperStyle={{ color: "#fff" }} iconType="circle" />
+        <Legend
+          wrapperStyle={{ color: "#fff", fontSize: "14px" }}
+          iconType="circle"
+          formatter={(value, entry) => `${value}: ${entry.payload.value}`}
+        />
       </PieChart>
     </ResponsiveContainer>
   );
@@ -318,7 +320,7 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold mb-4 text-white">
               Quick Actions
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-3 mb-6">
               <Button
                 onClick={() => navigate("/admin/courses/create")}
                 variant="info"
@@ -336,17 +338,17 @@ const Dashboard = () => {
                 Manage All Courses
               </Button>
             </div>
+
+            {courses.length > 0 && (
+              <>
+                <h2 className="mt-10 text-xl font-semibold text-white">
+                  Course Distribution
+                </h2>
+                <CategoryDistributionChart courses={courses} />
+              </>
+            )}
           </div>
         </div>
-
-        {courses.length > 0 && (
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 sm:p-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Course Distribution by Category
-            </h2>
-            <CategoryDistributionChart courses={courses} />
-          </div>
-        )}
       </div>
     </div>
   );
