@@ -1,7 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { createCourse, updateCourse } from "../../../store/slices/coursesSlice";
 
 export const useCourseForm = (initialData = {}, mode = "create") => {
+  const dispatch = useDispatch();
+  
   const form = useForm({
     defaultValues: {
       title: "",
@@ -16,21 +20,17 @@ export const useCourseForm = (initialData = {}, mode = "create") => {
 
   const { reset } = form;
 
-  // Reset form when initialData changes (for update mode)
   useEffect(() => {
     if (mode === "update" && Object.keys(initialData).length > 0) {
-      // Transform API data if needed
       const formData = {
         ...initialData,
-        // Ensure sections exist
         sections: initialData.sections || [],
       };
       reset(formData);
     }
   }, [initialData, reset, mode]);
 
-  const handleFormSubmit = (data, onSubmit) => {
-    // Clean and format data for API
+  const handleFormSubmit = async (data, onSubmit) => {
     const cleanedData = {
       title: data.title.trim(),
       description: data.description.trim(),
@@ -44,24 +44,30 @@ export const useCourseForm = (initialData = {}, mode = "create") => {
           title: lesson.title.trim(),
           description: lesson.description?.trim() || "",
           content: lesson.content?.trim() || "",
-          // Remove any UI-only fields
         })) || []
       }))
     };
 
-    // Remove empty sections
     cleanedData.sections = cleanedData.sections.filter(section => 
       section.title && section.title.length > 0
     );
 
-    // Remove empty lessons from sections
     cleanedData.sections.forEach(section => {
       section.lessons = section.lessons.filter(lesson => 
         lesson.title && lesson.title.length > 0
       );
     });
 
-    onSubmit(cleanedData);
+    try {
+      if (mode === "create") {
+        await dispatch(createCourse(cleanedData)).unwrap();
+      } else {
+        await dispatch(updateCourse({ id: initialData._id, data: cleanedData })).unwrap();
+      }
+      onSubmit?.();
+    } catch (error) {
+      alert("Error: " + error);
+    }
   };
 
   return {

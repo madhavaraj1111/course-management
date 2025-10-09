@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { apiRequest } from "../../../utils/api";
+import { useDispatch } from "react-redux";
+import { deleteCourses } from "../../../store/slices/coursesSlice";
 import Button from "../../common/Button";
 
 export const useCourseCardActions = ({
@@ -10,6 +11,8 @@ export const useCourseCardActions = ({
   navigate,
   onEnroll,
 }) => {
+  const dispatch = useDispatch();
+
   const handleDelete = useCallback(
     async (e) => {
       e.stopPropagation();
@@ -21,17 +24,12 @@ export const useCourseCardActions = ({
       if (!confirmed) return;
 
       try {
-        await apiRequest(`/admin/courses/${course._id}`, { method: "DELETE" });
-
-        // Trigger parent refresh if on courses page
-        if (window.location.pathname.includes("/courses")) {
-          window.location.reload();
-        }
+        await dispatch(deleteCourses([course._id])).unwrap();
       } catch (error) {
         alert("Error deleting course: " + error.message);
       }
     },
-    [course._id, course.title]
+    [dispatch, course._id, course.title]
   );
 
   const handleEdit = useCallback(
@@ -60,7 +58,6 @@ export const useCourseCardActions = ({
     [navigate, course._id]
   );
 
-  // Get action buttons based on view mode and user role
   const getActionButtons = useCallback(() => {
     switch (viewMode) {
       case "browse":
