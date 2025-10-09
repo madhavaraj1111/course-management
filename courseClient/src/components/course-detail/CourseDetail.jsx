@@ -1,6 +1,6 @@
 // CourseDetail.jsx - Main component (simplified)
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSelector } from "react-redux";
 import { useCourseDetail } from "./hooks/useCourseDetail";
 import { useNavigation } from "./hooks/useNavigation";
 import { useResponsiveLayout } from "./hooks/useResponsiveLayout";
@@ -14,7 +14,7 @@ import CourseMeta from "./CourseMeta";
 const CourseDetail = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useSelector((state) => state.auth);
 
   // Fetch course data and handle actions
   const {

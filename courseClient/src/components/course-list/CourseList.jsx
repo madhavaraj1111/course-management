@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useAuth } from "../../contexts/AuthContext.jsx";
 import {
   fetchCourses,
   deleteCourses,
@@ -22,12 +21,13 @@ import { usePagination } from "./hooks/usePagination.js";
 import { useCourseSelection } from "./hooks/useCourseSelection.js";
 
 const CourseList = ({ viewMode = "manage" }) => {
-  const { user } = useAuth();
+  const { user, token } = useSelector((state) => state.auth);
+  const isAuthenticated = Boolean(token);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { list: courses, loading } = useSelector((state) => state.courses);
-  console.log("Redux State:", { courses, loading });
   const [showConfirm, setShowConfirm] = useState(false);
 
   const {
@@ -155,7 +155,7 @@ const CourseList = ({ viewMode = "manage" }) => {
           onToggleSelect={toggleSelect}
           viewMode={viewMode}
           userRole={user?.role}
-          instructorId={user.id}
+          instructorId={user?.id}
           onEnroll={handleEnroll}
           showSelection={showBulkActions}
         />

@@ -1,18 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/slices/authSlice";
 import Button from "../components/common/Button";
 import logo from "../assets/PerfectStudy.png";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
+
+  const { user, token } = useSelector((state) => state.auth);
+  const isAuthenticated = Boolean(token);
 
   const handleAddCourse = () => navigate("/admin/courses/create");
   const handleLogin = () => navigate("/login");
   const handleSignup = () => navigate("/signup");
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   // Authenticated Header
   if (isAuthenticated) {
@@ -80,7 +88,7 @@ const Header = () => {
               <span className="hidden lg:block">
                 {user?.username} ({user?.role})
               </span>
-              <Button onClick={logout} variant="danger" size="sm">
+              <Button onClick={handleLogout} variant="danger" size="sm">
                 Logout
               </Button>
             </div>
@@ -160,7 +168,7 @@ const Header = () => {
 
               <Button
                 onClick={() => {
-                  logout();
+                  handleLogout();
                   setIsOpen(false);
                 }}
                 variant="danger"

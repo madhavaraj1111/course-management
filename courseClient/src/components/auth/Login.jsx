@@ -1,30 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, clearError } from "../../store/slices/authSlice";
 import Button from "../common/Button";
 import logo from "../../assets/PerfectStudy.png";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { login } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error, user, token } = useSelector((state) => state.auth);
+
+  // Navigate when user is authenticated
+  useEffect(() => {
+    if (user && token) {
+      console.log("User authenticated, navigating...");
+      navigate("/", { replace: true });
+    }
+  }, [user, token, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    dispatch(clearError());
 
-    const result = await login(form.email, form.password);
-
-    if (result.success) {
-      navigate("/");
-    } else {
-      setError(result.message);
+    try {
+      await dispatch(
+        loginUser({ email: form.email, password: form.password })
+      ).unwrap();
+      // Navigation will happen in useEffect
+    } catch (err) {
+      console.error("Login failed:", err);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -69,7 +75,7 @@ const Login = () => {
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base "
+                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
                 placeholder="Enter your email"
               />
             </div>

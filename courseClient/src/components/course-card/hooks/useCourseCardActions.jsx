@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { apiRequest } from "../../../contexts/AuthContext";
+import { apiRequest } from "../../../utils/api";
 import Button from "../../common/Button";
 
 export const useCourseCardActions = ({
