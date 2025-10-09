@@ -1,11 +1,8 @@
+// useCourseForm.js - SIMPLIFIED
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { createCourse, updateCourse } from "../../../store/slices/coursesSlice";
 
 export const useCourseForm = (initialData = {}, mode = "create") => {
-  const dispatch = useDispatch();
-  
   const form = useForm({
     defaultValues: {
       title: "",
@@ -22,15 +19,11 @@ export const useCourseForm = (initialData = {}, mode = "create") => {
 
   useEffect(() => {
     if (mode === "update" && Object.keys(initialData).length > 0) {
-      const formData = {
-        ...initialData,
-        sections: initialData.sections || [],
-      };
-      reset(formData);
+      reset({ ...initialData, sections: initialData.sections || [] });
     }
   }, [initialData, reset, mode]);
 
-  const handleFormSubmit = async (data, onSubmit) => {
+  const handleFormSubmit = (data, onSubmit) => {
     const cleanedData = {
       title: data.title.trim(),
       description: data.description.trim(),
@@ -45,33 +38,16 @@ export const useCourseForm = (initialData = {}, mode = "create") => {
           description: lesson.description?.trim() || "",
           content: lesson.content?.trim() || "",
         })) || []
-      }))
+      })).filter(s => s.title)
     };
 
-    cleanedData.sections = cleanedData.sections.filter(section => 
-      section.title && section.title.length > 0
-    );
-
     cleanedData.sections.forEach(section => {
-      section.lessons = section.lessons.filter(lesson => 
-        lesson.title && lesson.title.length > 0
-      );
+      section.lessons = section.lessons.filter(l => l.title);
     });
 
-    try {
-      if (mode === "create") {
-        await dispatch(createCourse(cleanedData)).unwrap();
-      } else {
-        await dispatch(updateCourse({ id: initialData._id, data: cleanedData })).unwrap();
-      }
-      onSubmit?.();
-    } catch (error) {
-      alert("Error: " + error);
-    }
+    // Just call onSubmit with cleaned data - let parent handle Redux
+    onSubmit(cleanedData);
   };
 
-  return {
-    form,
-    handleFormSubmit,
-  };
+  return { form, handleFormSubmit };
 };
