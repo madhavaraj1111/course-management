@@ -86,15 +86,16 @@ export const useCourseDetail = (courseId) => {
   }, [dispatch, courseId]);
 
   const handleLessonComplete = useCallback(
-    async (sectionId, lessonId) => {
-      try {
-        await dispatch(markLessonComplete({ courseId, sectionId, lessonId })).unwrap();
-      } catch (err) {
-        console.error("Error marking lesson complete:", err);
-      }
-    },
-    [dispatch, courseId]
-  );
+  async (sectionId, lessonId) => {
+    try {
+      await dispatch(markLessonComplete({ courseId, sectionId, lessonId })).unwrap();
+      // Don't refetch - state should update automatically via markLessonComplete
+    } catch (err) {
+      console.error("Error marking lesson complete:", err);
+    }
+  },
+  [dispatch, courseId]
+);
 
   return {
     course,

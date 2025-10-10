@@ -14,7 +14,6 @@ const Login = () => {
   // Navigate when user is authenticated
   useEffect(() => {
     if (user && token) {
-      console.log("User authenticated, navigating...");
       navigate("/", { replace: true });
     }
   }, [user, token, navigate]);

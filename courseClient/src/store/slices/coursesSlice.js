@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { markLessonComplete } from "./progressSlice";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -88,8 +89,6 @@ export const enrollCourse = createAsyncThunk(
   }
 );
 
-// Add after enrollCourse thunk
-
 export const createCourse = createAsyncThunk(
   "courses/createCourse",
   async (courseData, { rejectWithValue }) => {
@@ -160,7 +159,6 @@ export const fetchCourseById = createAsyncThunk(
   }
 );
 
-// Update initialState
 const initialState = {
   list: [],
   selectedCourse: null,
@@ -214,6 +212,23 @@ const coursesSlice = createSlice({
       .addCase(fetchCourseById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(markLessonComplete.fulfilled, (state, action) => {
+        const { courseId, sectionId, lessonId } = action.payload;
+        
+        if (state.selectedCourse && state.selectedCourse._id === courseId) {
+          if (!state.selectedCourse.progress) {
+            state.selectedCourse.progress = [];
+          }
+          
+          const exists = state.selectedCourse.progress.some(
+            (p) => p.sectionId === sectionId && p.lessonId === lessonId
+          );
+          
+          if (!exists) {
+            state.selectedCourse.progress.push({ sectionId, lessonId });
+          }
+        }
       });
   },
 });
