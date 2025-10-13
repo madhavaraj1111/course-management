@@ -1,15 +1,24 @@
-import { useState, useEffect } from "react";
+// components/auth/Login.jsx
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, clearError } from "../../store/slices/authSlice";
+import { useLoginForm } from "./hooks/useLoginForm";
 import Button from "../common/Button";
 import logo from "../../assets/PerfectStudy.png";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, user, token } = useSelector((state) => state.auth);
+
+  // Custom hook for form management
+  const { form, validationRules } = useLoginForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   // Navigate when user is authenticated
   useEffect(() => {
@@ -18,13 +27,15 @@ const Login = () => {
     }
   }, [user, token, navigate]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     dispatch(clearError());
 
     try {
       await dispatch(
-        loginUser({ email: form.email, password: form.password })
+        loginUser({ 
+          email: data.email.trim().toLowerCase(), 
+          password: data.password 
+        })
       ).unwrap();
       // Navigation will happen in useEffect
     } catch (err) {
@@ -58,39 +69,56 @@ const Login = () => {
             </p>
           </div>
 
+          {/* Server Error */}
           {error && (
             <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg mb-6 backdrop-blur-sm text-sm">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
+            {/* Email Field */}
             <div>
               <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
                 Email
               </label>
               <input
                 type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
+                {...register("email", validationRules.email)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.email ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.email ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
+            {/* Password Field */}
             <div>
               <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
                 Password
               </label>
               <input
                 type="password"
-                required
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
+                {...register("password", validationRules.password)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.password ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.password ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
                 placeholder="Enter your password"
               />
+              {errors.password && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <Button

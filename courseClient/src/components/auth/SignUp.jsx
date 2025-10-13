@@ -1,7 +1,9 @@
+// components/auth/SignUp.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser, clearError } from "../../store/slices/authSlice";
+import { useSignupForm } from "./hooks/useSignupForm";
 import Button from "../common/Button";
 import logo from "../../assets/PerfectStudy.png";
 
@@ -10,24 +12,35 @@ const Signup = () => {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-    role: "student",
-  });
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Custom hook for form management
+  const { form, validationRules } = useSignupForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
+  const onSubmit = async (data) => {
     dispatch(clearError());
 
     try {
-      await dispatch(signupUser(form)).unwrap();
+      // Prepare clean data (exclude confirmPassword from API call)
+      const { confirmPassword, ...formData } = data;
+      const cleanData = {
+        username: formData.username.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        role: formData.role,
+      };
+
+      await dispatch(signupUser(cleanData)).unwrap();
       setSuccess(true);
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       // Error handled by Redux
+      console.error("Signup failed:", err);
     }
   };
 
@@ -65,60 +78,123 @@ const Signup = () => {
             <p className="text-white/60 text-xs sm:text-sm">Start your learning journey today</p>
           </div>
 
+          {/* Server Error */}
           {error && (
             <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg mb-6 backdrop-blur-sm text-sm">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Username Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">Username</label>
+              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                Username
+              </label>
               <input
                 type="text"
-                required
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
+                {...register("username", validationRules.username)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.username ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.username ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
                 placeholder="Choose a username"
               />
+              {errors.username && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.username.message}
+                </p>
+              )}
             </div>
 
+            {/* Email Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">Email</label>
+              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                Email
+              </label>
               <input
                 type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
+                {...register("email", validationRules.email)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.email ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.email ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
+            {/* Password Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">Password</label>
+              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                Password
+              </label>
               <input
                 type="password"
-                required
-                minLength={6}
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
-                placeholder="Minimum 6 characters"
+                {...register("password", validationRules.password)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.password ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.password ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
+                placeholder="Min 6 chars with upper, lower & number"
               />
+              {errors.password && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
+            {/* Confirm Password Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">Role</label>
+              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                {...register("confirmPassword", validationRules.confirmPassword)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.confirmPassword ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 ${
+                  errors.confirmPassword ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
+                placeholder="Re-enter your password"
+              />
+              {errors.confirmPassword && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
+            {/* Role Field */}
+            <div>
+              <label className="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                Role
+              </label>
               <select
-                value={form.role}
-                onChange={(e) => setForm({ ...form, role: e.target.value })}
-                className="w-full px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all text-sm sm:text-base"
+                {...register("role", validationRules.role)}
+                className={`w-full px-3 sm:px-4 py-2 bg-white/10 border ${
+                  errors.role ? "border-red-500/70" : "border-white/20"
+                } rounded-lg text-white focus:outline-none focus:ring-2 ${
+                  errors.role ? "focus:ring-red-500/50" : "focus:ring-blue-500/50"
+                } focus:border-transparent transition-all text-sm sm:text-base`}
               >
                 <option value="student" className="bg-gray-800 text-white">Student</option>
                 <option value="admin" className="bg-gray-800 text-white">Admin/Instructor</option>
               </select>
+              {errors.role && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {errors.role.message}
+                </p>
+              )}
             </div>
 
             <Button type="submit" disabled={loading} variant="success" size="md" className="w-full">
