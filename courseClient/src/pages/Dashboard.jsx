@@ -33,7 +33,7 @@ const CourseCard = memo(({ course, navigate }) => (
       {course.title}
     </h3>
     <p className="text-sm text-white/60 mb-4">by {course.instructorName}</p>
-    <div className="mb-4 px-3">
+    <div className="mb-4 pr-3">
       <ProgressBar percentage={course.progress} />
     </div>
     <div className="flex items-center justify-between">
