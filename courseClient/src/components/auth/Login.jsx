@@ -31,16 +31,20 @@ const Login = () => {
     dispatch(clearError());
 
     try {
-      await dispatch(
-        loginUser({ 
-          email: data.email.trim().toLowerCase(), 
-          password: data.password 
-        })
-      ).unwrap();
-      // Navigation will happen in useEffect
-    } catch (err) {
-      console.error("Login failed:", err);
-    }
+  const res = await dispatch(
+    loginUser({
+      email: data.email.trim().toLowerCase(),
+      password: data.password,
+    })
+  ).unwrap();
+
+  if (res?.token) {
+    navigate("/", { replace: true });
+  }
+} catch (err) {
+  console.error("Login failed:", err);
+}
+
   };
 
   return (
