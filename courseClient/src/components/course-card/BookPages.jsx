@@ -1,3 +1,4 @@
+// components/course-card/BookPages.jsx
 import SectionsList from "./SectionsList";
 import ActionButtons from "./ActionButtons";
 
@@ -35,8 +36,8 @@ const BookPages = ({
           </h4>
         </div>
 
-        {/* Course Info for non-student views only */}
-        {!isStudentView && (
+        {/* Course Info for non-student views only and NOT in preview mode */}
+        {!isStudentView && !preview && (
           <div className="mb-4 relative z-10">
             <div className="text-sm text-gray-600 space-y-2">
               <div className="flex justify-between">
@@ -62,19 +63,19 @@ const BookPages = ({
         {/* Sections */}
         <SectionsList sections={course.sections} viewMode={viewMode} />
 
-        {/* Dynamic Action Buttons */}
-        {actionButtons ? (
-          <div className="mt-auto pt-4 border-t border-gray-200 relative z-10">
-            <div className="flex justify-center">{actionButtons}</div>
-          </div>
-        ) : (
-          course.instructor?._id == instructorId && (
-            <ActionButtons
-              onEdit={onEdit}
-              onDelete={onDelete}
-              preview={preview}
-            />
-          )
+        {/* Dynamic Action Buttons - Only show if NOT in preview mode */}
+        {!preview && (
+          <>
+            {actionButtons ? (
+              <div className="mt-auto pt-4 border-t border-gray-200 relative z-10">
+                <div className="flex justify-center">{actionButtons}</div>
+              </div>
+            ) : (
+              course.instructor?._id == instructorId && (
+                <ActionButtons onEdit={onEdit} onDelete={onDelete} />
+              )
+            )}
+          </>
         )}
 
         {/* Page lines */}
