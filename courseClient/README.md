@@ -10,83 +10,140 @@ and remove unwanted boiler plate codes and boiler folder and files.Keeping the n
 
 This is the main folders
 
-course-management-system/
-├── src/
-│ ├── components/
-│ ├── pages/
-│ ├── layouts/
-│ ├── store/
-│ │ ├── slices/
-│ │ └── middleware/
-│ ├── hooks/
-│ ├── utils/
-│ ├── styles/
-│ ├── routes/
-│ └── assets/
-│
-├── .eslintrc.js
-├── tailwind.config.js
-├── vite.config.js
-├── package.json
-└── README.md
+CourseManagement/
+├── courseClient/
+│   ├── .gitignore
+│   ├── README.md
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── assets/
+│   │   │   ├── PerfectStudy.png
+│   │   │   ├── logo.png
+│   │   ├── components/
+│   │   │   ├── ErrorBoundary.jsx
+│   │   │   ├── RichTextEditor.jsx
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── SignUp.jsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useLoginForm.js
+│   │   │   │   │   ├── useSignupForm.js
+│   │   │   ├── common/
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── CheckBox.jsx
+│   │   │   │   ├── FormSelect.jsx
+│   │   │   │   ├── ProgressBar.jsx
+│   │   │   │   ├── SearchInput.jsx
+│   │   │   ├── course-card/
+│   │   │   │   ├── ActionButtons.jsx
+│   │   │   │   ├── BookCover.jsx
+│   │   │   │   ├── BookPages.jsx
+│   │   │   │   ├── CourseCard.jsx
+│   │   │   │   ├── CourseInfo.jsx
+│   │   │   │   ├── CourseThumbnail.jsx
+│   │   │   │   ├── SectionsList.jsx
+│   │   │   │   ├── constants.js
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useCourseCardActions.jsx
+│   │   │   │   ├── index.js
+│   │   │   ├── course-detail/
+│   │   │   │   ├── CourseDescription.jsx
+│   │   │   │   ├── CourseDetail.jsx
+│   │   │   │   ├── CourseHeader.jsx
+│   │   │   │   ├── CourseMeta.jsx
+│   │   │   │   ├── CourseStructure.jsx
+│   │   │   │   ├── QuickNavigation.jsx
+│   │   │   │   ├── SectionAccordion.jsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useCourseDetail.js
+│   │   │   │   │   ├── useNavigation.js
+│   │   │   │   │   ├── useResponsiveLayout.js
+│   │   │   ├── course-form/
+│   │   │   │   ├── CourseBasicInfo.jsx
+│   │   │   │   ├── CourseForm.jsx
+│   │   │   │   ├── CoursePreview.jsx
+│   │   │   │   ├── CourseSections.jsx
+│   │   │   │   ├── CourseThumbnail.jsx
+│   │   │   │   ├── LessonItem.jsx
+│   │   │   │   ├── SectionItem.jsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useCourseForm.js
+│   │   │   │   │   ├── useFormPreview.js
+│   │   │   │   │   ├── useSectionManager.js
+│   │   │   ├── course-list/
+│   │   │   │   ├── BulkActions.jsx
+│   │   │   │   ├── CourseFilters.jsx
+│   │   │   │   ├── CourseGrid.jsx
+│   │   │   │   ├── CourseList.jsx
+│   │   │   │   ├── DeleteConfirmModal.jsx
+│   │   │   │   ├── PageHeader.jsx
+│   │   │   │   ├── Pagination.jsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useCourseFilters.js
+│   │   │   │   │   ├── useCourseSelection.js
+│   │   │   │   │   ├── usePagination.js
+│   │   ├── index.css
+│   │   ├── layouts/
+│   │   │   ├── Header.jsx
+│   │   │   ├── MainLayout.jsx
+│   │   ├── main.jsx
+│   │   ├── pages/
+│   │   │   ├── AskAI.jsx
+│   │   │   ├── CourseCreate.jsx
+│   │   │   ├── CourseUpdate.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── NotFound.jsx
+│   │   │   ├── ask-ai/
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── LoadingIndicator.jsx
+│   │   │   │   │   ├── MessageBubble.jsx
+│   │   │   │   │   ├── MessageContent.jsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useChatManager.js
+│   │   │   │   ├── sections/
+│   │   │   │   │   ├── ChatHeader.jsx
+│   │   │   │   │   ├── ChatInput.jsx
+│   │   │   │   │   ├── ChatMessages.jsx
+│   │   │   │   ├── utils/
+│   │   │   │   │   ├── aiService.js
+│   │   │   │   │   ├── messageFormatter.js
+│   │   │   ├── dashboard/
+│   │   │   │   ├── AdminDashboard.jsx
+│   │   │   │   ├── StudentDashboard.jsx
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── AdminCourseItem.jsx
+│   │   │   │   │   ├── CategoryDistributionChart.jsx
+│   │   │   │   │   ├── CourseCard.jsx
+│   │   │   │   │   ├── LoadingSpinner.jsx
+│   │   │   │   │   ├── StatsCard.jsx
+│   │   │   │   ├── sections/
+│   │   │   │   │   ├── AdminCoursesListSection.jsx
+│   │   │   │   │   ├── AdminSidebarSection.jsx
+│   │   │   │   │   ├── AdminStatsSection.jsx
+│   │   │   │   │   ├── StudentCoursesSection.jsx
+│   │   │   │   │   ├── StudentStatsSection.jsx
+│   │   ├── routes/
+│   │   │   ├── AppRoutes.jsx
+│   │   │   ├── ProtectedRoutes.jsx
+│   │   ├── store/
+│   │   │   ├── index.js
+│   │   │   ├── middleware/
+│   │   │   │   ├── storageMiddleware.js
+│   │   │   ├── selectors/
+│   │   │   │   ├── index.js
+│   │   │   ├── slices/
+│   │   │   │   ├── authSlice.js
+│   │   │   │   ├── coursesSlice.js
+│   │   │   │   ├── progressSlice.js
+│   │   │   │   ├── uiSlice.js
+│   │   ├── utils/
+│   │   │   ├── api.js
+│   ├── vite.config.js
 
----Files creation---
-
-course-management-system/
-├── src/
-│ ├── components/
-│ │ ├── Button.jsx
-│ │ ├── Modal.jsx
-│ │ ├── CourseCard.jsx
-│ │ └── RichTextEditor.jsx
-│ │
-│ ├── pages/
-│ │ ├── Dashboard.jsx
-│ │ ├── CourseList.jsx
-│ │ ├── CourseDetail.jsx
-│ │ ├── CourseCreate.jsx
-│ │ └── NotFound.jsx
-│ │
-│ ├── layouts/
-│ │ └── MainLayout.jsx
-│ │
-│ ├── store/
-│ │ ├── index.js # Configure Redux store
-│ │ ├── slices/
-│ │ │ ├── coursesSlice.js
-│ │ │ ├── progressSlice.js
-│ │ │ └── uiSlice.js
-│ │ └── middleware/
-│ │ └── storageMiddleware.js
-│ │
-│ ├── hooks/
-│ │ ├── useLocalStorage.js
-│ │ └── useDebounce.js
-│ │
-│ ├── utils/
-│ │ ├── storage.js # LocalStorage helpers
-│ │ ├── validation.js # Form validation helpers
-│ │ └── sanitize.js # HTML sanitization
-│ │
-│ ├── styles/
-│ │ ├── globals.css
-│ │ └── components.css
-│ │
-│ ├── routes/
-│ │ └── AppRoutes.jsx
-│ │
-│ ├── assets/ # (images, icons, thumbnails)
-│ │ └── logo.png
-│ │
-│ ├── App.jsx
-│ ├── main.jsx
-│ └── index.css
-│
-├── .eslintrc.js
-├── tailwind.config.js
-├── vite.config.js
-├── package.json
-└── README.md
 
 3.Setting React router navigation
 
@@ -211,4 +268,27 @@ course-management-system/
 --> Global Header Added
 --> Make responsivity changes where needed
 
+Sprint 3 Course Detail Page
+--> Course Header Thumbnail , title , section count and lesson count , who created the course , Progress bar.
+-->About this course
+--> QUick Navigation
+-->Course struture, sections and lessons
+-->Completion of lesson while clicked on the lesson
+
+Sprint 4 Dashboard and auth for student and admin
+--> Students Completed course, enrolled course , Average progress and my courses that the student enrolled
+
+-> Admin Total Courses created , total Students , Active enrollements and my courses that the admin created , and there also having quick actions to create new course and manage all course to the courses created and also have the course distribution chart of the own admin course that he created . 
+
+-->IMplemented React memo to optimize recalculations
+--> Lazy loading for routes
+--> Error boundaries for component crashes,Responsive design for mobile and desktop
+
+
+
+Additional Important Added
+JWT for authentication 
+Added AskAi using weaviate and gemini
+Student and admin roles 
+Course Preview while createing and updating course
 
