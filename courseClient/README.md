@@ -1,15 +1,20 @@
-1.Project Setup
+# Course Management Project Documentation
 
-creation of CourseManagement folder.
+## 1. Project Setup
 
-inside that courseClient folder then in this npm install , npm install tailwindcss @tailwindcss/vite and in vite.config.js need to import the tailwindcss and add tailwindcss() plugin.
+Creation of CourseManagement folder.
 
-and remove unwanted boiler plate codes and boiler folder and files.Keeping the needed.
+Inside that, create courseClient folder, then run npm install, npm install tailwindcss @tailwindcss/vite and in vite.config.js need to import tailwindcss and add tailwindcss() plugin.
 
-2.project structure
+Remove unwanted boilerplate code and boilerplate folders and files, keeping only the needed ones.
 
-This is the main folders
+---
 
+## 2. Project Structure
+
+These are the main folders:
+
+```
 CourseManagement/
 ├── courseClient/
 │   ├── .gitignore
@@ -39,58 +44,16 @@ CourseManagement/
 │   │   │   │   ├── ProgressBar.jsx
 │   │   │   │   ├── SearchInput.jsx
 │   │   │   ├── course-card/
-│   │   │   │   ├── ActionButtons.jsx
-│   │   │   │   ├── BookCover.jsx
-│   │   │   │   ├── BookPages.jsx
-│   │   │   │   ├── CourseCard.jsx
-│   │   │   │   ├── CourseInfo.jsx
-│   │   │   │   ├── CourseThumbnail.jsx
-│   │   │   │   ├── SectionsList.jsx
-│   │   │   │   ├── constants.js
-│   │   │   │   ├── hooks/
-│   │   │   │   │   ├── useCourseCardActions.jsx
-│   │   │   │   ├── index.js
+│   │   │   │  
 │   │   │   ├── course-detail/
-│   │   │   │   ├── CourseDescription.jsx
-│   │   │   │   ├── CourseDetail.jsx
-│   │   │   │   ├── CourseHeader.jsx
-│   │   │   │   ├── CourseMeta.jsx
-│   │   │   │   ├── CourseStructure.jsx
-│   │   │   │   ├── QuickNavigation.jsx
-│   │   │   │   ├── SectionAccordion.jsx
-│   │   │   │   ├── hooks/
-│   │   │   │   │   ├── useCourseDetail.js
-│   │   │   │   │   ├── useNavigation.js
-│   │   │   │   │   ├── useResponsiveLayout.js
+│   │   │   │   
 │   │   │   ├── course-form/
-│   │   │   │   ├── CourseBasicInfo.jsx
-│   │   │   │   ├── CourseForm.jsx
-│   │   │   │   ├── CoursePreview.jsx
-│   │   │   │   ├── CourseSections.jsx
-│   │   │   │   ├── CourseThumbnail.jsx
-│   │   │   │   ├── LessonItem.jsx
-│   │   │   │   ├── SectionItem.jsx
-│   │   │   │   ├── hooks/
-│   │   │   │   │   ├── useCourseForm.js
-│   │   │   │   │   ├── useFormPreview.js
-│   │   │   │   │   ├── useSectionManager.js
+│   │   │   │ 
 │   │   │   ├── course-list/
-│   │   │   │   ├── BulkActions.jsx
-│   │   │   │   ├── CourseFilters.jsx
-│   │   │   │   ├── CourseGrid.jsx
-│   │   │   │   ├── CourseList.jsx
-│   │   │   │   ├── DeleteConfirmModal.jsx
-│   │   │   │   ├── PageHeader.jsx
-│   │   │   │   ├── Pagination.jsx
-│   │   │   │   ├── hooks/
-│   │   │   │   │   ├── useCourseFilters.js
-│   │   │   │   │   ├── useCourseSelection.js
-│   │   │   │   │   ├── usePagination.js
+│   │   │   │  
 │   │   ├── index.css
 │   │   ├── layouts/
-│   │   │   ├── Header.jsx
-│   │   │   ├── MainLayout.jsx
-│   │   ├── main.jsx
+│   │   │   
 │   │   ├── pages/
 │   │   │   ├── AskAI.jsx
 │   │   │   ├── CourseCreate.jsx
@@ -99,196 +62,150 @@ CourseManagement/
 │   │   │   ├── NotFound.jsx
 │   │   │   ├── ask-ai/
 │   │   │   │   ├── components/
-│   │   │   │   │   ├── LoadingIndicator.jsx
-│   │   │   │   │   ├── MessageBubble.jsx
-│   │   │   │   │   ├── MessageContent.jsx
+│   │   │   │   │  
 │   │   │   │   ├── hooks/
 │   │   │   │   │   ├── useChatManager.js
 │   │   │   │   ├── sections/
-│   │   │   │   │   ├── ChatHeader.jsx
-│   │   │   │   │   ├── ChatInput.jsx
-│   │   │   │   │   ├── ChatMessages.jsx
+│   │   │   │   │  
 │   │   │   │   ├── utils/
-│   │   │   │   │   ├── aiService.js
-│   │   │   │   │   ├── messageFormatter.js
+│   │   │   │   │  
 │   │   │   ├── dashboard/
 │   │   │   │   ├── AdminDashboard.jsx
 │   │   │   │   ├── StudentDashboard.jsx
 │   │   │   │   ├── components/
-│   │   │   │   │   ├── AdminCourseItem.jsx
-│   │   │   │   │   ├── CategoryDistributionChart.jsx
-│   │   │   │   │   ├── CourseCard.jsx
-│   │   │   │   │   ├── LoadingSpinner.jsx
-│   │   │   │   │   ├── StatsCard.jsx
+│   │   │   │   │  
 │   │   │   │   ├── sections/
-│   │   │   │   │   ├── AdminCoursesListSection.jsx
-│   │   │   │   │   ├── AdminSidebarSection.jsx
-│   │   │   │   │   ├── AdminStatsSection.jsx
-│   │   │   │   │   ├── StudentCoursesSection.jsx
-│   │   │   │   │   ├── StudentStatsSection.jsx
+│   │   │   │   │   
 │   │   ├── routes/
 │   │   │   ├── AppRoutes.jsx
 │   │   │   ├── ProtectedRoutes.jsx
 │   │   ├── store/
 │   │   │   ├── index.js
 │   │   │   ├── middleware/
-│   │   │   │   ├── storageMiddleware.js
+│   │   │   │  
 │   │   │   ├── selectors/
-│   │   │   │   ├── index.js
+│   │   │   │   
 │   │   │   ├── slices/
-│   │   │   │   ├── authSlice.js
-│   │   │   │   ├── coursesSlice.js
-│   │   │   │   ├── progressSlice.js
-│   │   │   │   ├── uiSlice.js
+│   │   │   │ 
 │   │   ├── utils/
 │   │   │   ├── api.js
 │   ├── vite.config.js
+```
 
+---
 
-3.Setting React router navigation
+## 3. Setting React Router Navigation
 
+```bash
 npm install react-router-dom
+```
 
-Setting up of the AppRoutes for the pages
+Setting up the AppRoutes for the pages.
 
-4.Setting the intial slices and store
+---
 
-Initializing the storage Middleware and connecting react and redux in main.jsx using Provider
+## 4. Setting the Initial Slices and Store
 
-5.CourseCreation
-RichTextEditor.jsx added code using react-quill-new
-Included validation for the input fields
+Initializing the storage middleware and connecting React and Redux in main.jsx using Provider.
 
-Intial code for the courseCreation form https://gist.github.com/madhavaraj1111/911b4a5cd924cf89dc605710663f2d0f
+---
 
-6.Sprint 1: Project Setup & Course Creation (Week 1)
+## 5. Course Creation
 
-1. Project Setup
-   Done--
-   Initialize project with Vite + React
-   Configure ESLint and Prettier
-   Set up project structure
-   Set up basic navigation with React Router
-   Configure Redux Toolkit store with initial slices
+RichTextEditor.jsx added code using react-quill-new.
+Included validation for the input fields.
 
-2. Course Creation Form
-   Done--
-   Title with validation (10–60 chars)
-   Description with Quill.js RichTextEditor
-   Thumbnail (URL)
-   Category dropdown
-   Difficulty dropdown
-   Course Content (sections & lessons)
-   Lesson contents with RichTextEditor
-   Partial Done--
-   Initial browser storage save/load -- Currently saving to local storage but needs to load back populate but it is needed for the edit / update of the course.
+Initial code for the course creation form: https://gist.github.com/madhavaraj1111/911b4a5cd924cf89dc605710663f2d0f
 
+---
 
-7.Sprint 2 start
+## 6. Sprint 1: Project Setup & Course Creation (Week 1)
 
---> Course Card Display.
---> Designing of the card like book
---> Show title,thumbnail course inner content sections and lessons
---> Pagination to show up 10 cards per page
---> Delete feature for the course
---> Update feature for the course with route
---> Validation for the Updation form
---> Course Form shared component for the Creation and Updation 
---> Added Button component
---> Added FormSelect Component
---> Added CheckBox component
+### 1. Project Setup
+**Done:**
+- Initialize project with Vite + React
+- Configure ESLint and Prettier
+- Set up project structure
+- Set up basic navigation with React Router
+- Configure Redux Toolkit store with initial slices
 
-Folder Structure Update 
+### 2. Course Creation Form
+**Done:**
+- Title with validation (10–60 chars)
+- Description with Quill.js RichTextEditor
+- Thumbnail (URL)
+- Category dropdown
+- Difficulty dropdown
+- Course Content (sections & lessons)
+- Lesson contents with RichTextEditor
 
-course-management-system/
-├── src/
-│ ├── components/
-│ │ ├── Button.jsx
-│ │ ├── Modal.jsx
-│ │ ├── CourseCard.jsx
-│ │ ├── RichTextEditor.jsx
-│ │ ├── CourseForm.jsx           
-│ │ ├── FormSelect.jsx          
-│ │ └── CheckBox.jsx             
-│ │
-│ ├── pages/
-│ │ ├── Dashboard.jsx
-│ │ ├── CourseList.jsx
-│ │ ├── CourseDetail.jsx
-│ │ ├── CourseCreate.jsx
-│ │ ├── CourseUpdate.jsx        
-│ │ └── NotFound.jsx
-│ │
-│ ├── layouts/
-│ │ └── MainLayout.jsx
-│ │
-│ ├── store/
-│ │ ├── index.js
-│ │ ├── slices/
-│ │ │ ├── coursesSlice.js
-│ │ │ ├── progressSlice.js
-│ │ │ └── uiSlice.js
-│ │ └── middleware/
-│ │ └── storageMiddleware.js
-│ │
-│ ├── hooks/
-│ │ ├── useLocalStorage.js
-│ │ └── useDebounce.js
-│ │
-│ ├── utils/
-│ │ ├── storage.js
-│ │ ├── validation.js
-│ │ └── sanitize.js
-│ │
-│ ├── styles/
-│ │ ├── globals.css
-│ │ └── components.css
-│ │
-│ ├── routes/
-│ │ └── AppRoutes.jsx
-│ │
-│ ├── assets/
-│ │ └── logo.png
-│ │
-│ ├── App.jsx
-│ ├── main.jsx
-│ └── index.css
-│
-├── .eslintrc.js
-├── tailwind.config.js
-├── vite.config.js
-├── package.json
-└── README.md
+**Partial Done:**
+- Initial browser storage save/load -- Currently saving to local storage but needs to load back and populate, which is needed for the edit/update of the course.
 
+---
 
-8.Sprint 2 continue
+## 7. Sprint 2 Start
 
---> Course Detail Page
---> Layout Bg changed 
---> Global Header Added
---> Make responsivity changes where needed
+- Course Card Display
+- Designing of the card like a book
+- Show title, thumbnail, course inner content, sections and lessons
+- Pagination to show up to 10 cards per page
+- Delete feature for the course
+- Update feature for the course with route
+- Validation for the update form
+- Course Form shared component for the creation and update
+- Added Button component
+- Added FormSelect component
+- Added CheckBox component
 
-Sprint 3 Course Detail Page
---> Course Header Thumbnail , title , section count and lesson count , who created the course , Progress bar.
--->About this course
---> QUick Navigation
--->Course struture, sections and lessons
--->Completion of lesson while clicked on the lesson
+---
 
-Sprint 4 Dashboard and auth for student and admin
---> Students Completed course, enrolled course , Average progress and my courses that the student enrolled
+## 8. Sprint 2 Continue
 
--> Admin Total Courses created , total Students , Active enrollements and my courses that the admin created , and there also having quick actions to create new course and manage all course to the courses created and also have the course distribution chart of the own admin course that he created . 
+- Course Detail Page
+- Layout background changed
+- Global Header added
+- Make responsivity changes where needed
 
--->IMplemented React memo to optimize recalculations
---> Lazy loading for routes
---> Error boundaries for component crashes,Responsive design for mobile and desktop
+---
 
+## Sprint 3: Course Detail Page
 
+- Course Header: Thumbnail, title, section count and lesson count, who created the course, progress bar
+- About this course
+- Quick Navigation
+- Course structure, sections and lessons
+- Completion of lesson when clicked on the lesson
 
-Additional Important Added
-JWT for authentication 
-Added AskAi using weaviate and gemini
-Student and admin roles 
-Course Preview while createing and updating course
+---
 
+## Sprint 4: Dashboard and Auth for Student and Admin
+
+### Students
+- Completed courses
+- Enrolled courses
+- Average progress
+- My courses that the student enrolled in
+
+### Admin
+- Total courses created
+- Total students
+- Active enrollments
+- My courses that the admin created
+- Quick actions to create new course and manage all courses created
+- Course distribution chart of the admin's own courses that they created
+
+### Optimization & Additional Features
+- Implemented React memo to optimize recalculations
+- Lazy loading for routes
+- Error boundaries for component crashes
+- Responsive design for mobile and desktop
+
+---
+
+## Additional Important Added
+
+- JWT for authentication
+- Added AskAI using Weaviate and Gemini
+- Student and admin roles
+- Course preview while creating and updating course
