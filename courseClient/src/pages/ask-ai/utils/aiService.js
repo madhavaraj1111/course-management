@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || "https://course-management-backe
 export const sendMessageToAI = async (query) => {
   const token = localStorage.getItem("token");
   
-  const response = await fetch(`${API_URL}/api/rag/search`, {
+  const response = await fetch(`${API_URL}/rag/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
