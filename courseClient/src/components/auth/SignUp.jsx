@@ -26,6 +26,7 @@ const Signup = () => {
     dispatch(clearError());
 
     try {
+      navigate("/login");
       // Prepare clean data (exclude confirmPassword from API call)
       const { confirmPassword, ...formData } = data;
       const cleanData = {
@@ -37,7 +38,6 @@ const Signup = () => {
 
       await dispatch(signupUser(cleanData)).unwrap();
       setSuccess(true);
-      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       // Error handled by Redux
       console.error("Signup failed:", err);
