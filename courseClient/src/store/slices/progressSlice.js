@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://course-management-backend-m7fc.onrender.com/api";
 
 export const markLessonComplete = createAsyncThunk(
   "progress/markComplete",
